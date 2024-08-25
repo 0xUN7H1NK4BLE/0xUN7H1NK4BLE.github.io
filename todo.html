@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1c1c1c; /* Dark background */
+            color: #e0e0e0; /* Light text color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Container Styles */
+        .container {
+            background: #2e2e2e; /* Slightly lighter dark background */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            width: 400px;
+            max-width: 90%;
+            animation: fadeIn 0.6s forwards;
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* To-Do List Styles */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff4d4d; /* Dark red color */
+            font-size: 2.5em;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        form input[type="text"],
+        form input[type="date"] {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ff4d4d; /* Dark red border */
+            border-radius: 6px;
+            background-color: #333; /* Dark input background */
+            color: #e0e0e0; /* Light text color */
+            font-size: 16px;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        form input[type="text"]:focus,
+        form input[type="date"]:focus {
+            border-color: #ff6f6f; /* Lighter red on focus */
+            background-color: #444; /* Slightly lighter dark background on focus */
+            outline: none;
+        }
+
+        form button {
+            padding: 12px;
+            background-color: #ff4d4d; /* Dark red button */
+            color: #121212; /* Dark text color */
+            border: 2px solid #ff4d4d; /* Dark red border */
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #ff6f6f; /* Lighter red on hover */
+            color: #121212; /* Dark text color */
+        }
+
+        ul#todo-list {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        ul#todo-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ul#todo-list::-webkit-scrollbar-thumb {
+            background-color: #ff4d4d; /* Dark red scrollbar */
+            border-radius: 4px;
+        }
+
+        li.todo-item {
+            background-color: #3a3a3a; /* Dark gray background */
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, transform 0.2s;
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: slideIn 0.6s forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        li.todo-item:hover {
+            background-color: #4a4a4a; /* Slightly lighter dark gray */
+            transform: translateY(-2px);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-text {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .deadline-text {
+            font-size: 14px;
+        }
+
+        .button-group {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .button-group button {
+            padding: 8px 16px;
+            border: 2px solid #ff4d4d; /* Dark red border */
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, color 0.3s;
+            margin-left: 10px;
+        }
+
+        .button-group button.done {
+            background-color: #ff4d4d; /* Dark red button */
+            color: #121212; /* Dark text color */
+        }
+
+        .button-group button.done:hover {
+            background-color: #ff6f6f; /* Lighter red on hover */
+        }
+
+        .button-group button.delete {
+            background-color: #ff6f6f; /* Lighter red button */
+            color: #121212; /* Dark text color */
+        }
+
+        .button-group button.delete:hover {
+            background-color: #ff8a8a; /* Even lighter red on hover */
+        }
+
+        li.todo-item.completed .task-text {
+            text-decoration: line-through;
+            color: #888; /* Gray text for completed tasks */
+        }
+
+        li.todo-item.completed {
+            background-color: #4a4a4a; /* Slightly lighter gray for completed tasks */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 500px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .task-text {
+                font-size: 16px;
+            }
+
+            .deadline-text {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- To-Do Container -->
+    <div class="container" id="todo-container">
+        <h1>To-Do List</h1>
+        <form id="todo-form">
+            <input type="text" id="todo-input" placeholder="Task" required>
+            <input type="date" id="deadline-input" required>
+            <button type="submit">Add Task</button>
+        </form>
+        <ul id="todo-list"></ul>
+    </div>
+
+    <script>
+        // DOM Elements
+        const todoForm = document.getElementById('todo-form');
+        const todoInput = document.getElementById('todo-input');
+        const deadlineInput = document.getElementById('deadline-input');
+        const todoList = document.getElementById('todo-list');
+
+        // Load Todos from localStorage
+        document.addEventListener('DOMContentLoaded', loadTodos);
+
+        // Handle To-Do Form Submission
+        todoForm.addEventListener('submit', addTodo);
+
+        // Load Todos from localStorage
+        function loadTodos() {
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            todoList.innerHTML = ''; // Clear existing list
+            todos.forEach(todo => addTodoToList(todo));
+        }
+
+        // Add a new Todo
+        function addTodo(e) {
+            e.preventDefault();
+            const taskText = todoInput.value.trim();
+            const deadline = deadlineInput.value;
+
+            if (taskText && deadline) {
+                const todo = {
+                    id: Date.now(),
+                    text: taskText,
+                    deadline: deadline,
+                    completed: false
+                };
+                addTodoToList(todo);
+                saveTodoToLocalStorage(todo);
+                todoForm.reset();
+            }
+        }
+
+        // Add Todo to the DOM
+        function addTodoToList(todo) {
+            const li = document.createElement('li');
+            li.classList.add('todo-item');
+            if (todo.completed) {
+                li.classList.add('completed');
+            }
+
+            // Task Text
+            const taskText = document.createElement('div');
+            taskText.classList.add('task-text');
+            taskText.textContent = todo.text;
+
+            // Deadline Text
+            const deadlineText = document.createElement('div');
+            deadlineText.classList.add('deadline-text');
+            deadlineText.textContent = `Deadline: ${formatDate(todo.deadline)}`;
+
+            // Button Group
+            const buttonGroup = document.createElement('div');
+            buttonGroup.classList.add('button-group');
+
+            // Done Button
+            if (!todo.completed) {
+                const doneButton = document.createElement('button');
+                doneButton.classList.add('done');
+                doneButton.textContent = 'Done';
+                doneButton.addEventListener('click', () => completeTodoTask(todo.id, li));
+                buttonGroup.appendChild(doneButton);
+            }
+
+            // Delete Button
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('delete');
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', () => deleteTodoTask(todo.id, li));
+            buttonGroup.appendChild(deleteButton);
+
+            // Assemble Todo Item
+            li.appendChild(taskText);
+            li.appendChild(deadlineText);
+            li.appendChild(buttonGroup);
+            todoList.appendChild(li);
+        }
+
+        // Format Date
+        function formatDate(dateStr) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateStr).toLocaleDateString(undefined, options);
+        }
+
+        // Save Todo to localStorage
+        function saveTodoToLocalStorage(todo) {
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            todos.push(todo);
+            localStorage.setItem('todos', JSON.stringify(todos));
+        }
+
+        // Complete Todo Task
+        function completeTodoTask(id, listItem) {
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            const updatedTodos = todos.map(todo => {
+                if (todo.id === id) {
+                    todo.completed = true;
+                }
+                return todo;
+            });
+            localStorage.setItem('todos', JSON.stringify(updatedTodos));
+            listItem.classList.add('completed');
+            const doneButton = listItem.querySelector('button.done');
+            if (doneButton) {
+                doneButton.remove();
+            }
+        }
+
+        // Delete Todo Task
+        function deleteTodoTask(id, listItem) {
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            const updatedTodos = todos.filter(todo => todo.id !== id);
+            localStorage.setItem('todos', JSON.stringify(updatedTodos));
+            listItem.remove();
+        }
+    </script>
+</body>
+</html>
