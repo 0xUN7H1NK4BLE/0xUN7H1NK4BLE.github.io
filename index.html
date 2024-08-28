@@ -17,6 +17,10 @@
     --tab-hover-bg: #555;
     --tab-active-bg: #00bcd4;
     --tab-active-color: #000;
+    --button-bg: #282828;
+            --button-color: #00bcd4;
+            --button-border: #00bcd4;
+            --button-hover-bg: #555;
 }
 
 body {
@@ -159,6 +163,32 @@ textarea {
     font-family: monospace;
 }
 
+.top-buttons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: calc(100% - 40px);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .top-buttons a {
+            text-decoration: none;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 2px solid var(--button-border);
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+        }
+
+        .top-buttons a:hover {
+            background-color: var(--button-hover-bg);
+            transform: scale(1.05);
+        }
+
 
     </style>
 </head>
@@ -170,6 +200,10 @@ textarea {
       window.location.href = redirectUrl;
     }
       </script>
+    <div class="top-buttons">
+        <a href="https://blog.unthinkable.me/WHOAMI/">Whoami</a>
+        <a href="https://blog.unthinkable.me">Blog</a>
+    </div>
         <p class="glitch" data-text="welcome to 0xUN7H1NK4BLE world">welcome to 0xUN7H1NK4BLE world</p>
 
     <div class="container">
