@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerability Report Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #3f37c9;
+            --background-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #2b2d42;
+            --text-light: #8d99ae;
+            --border-color: #e9ecef;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #f72585;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        h1 i {
+            color: var(--primary-color);
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            padding: 1.5rem;
+            gap: 1.5rem;
+        }
+
+        .input-container {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-group button {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .list-container {
+            flex: 1;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-width: 350px;
+        }
+
+        .report-container {
+            flex: 2;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .list-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .list-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-header-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-container {
+            position: relative;
+            width: 60%;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-container input {
+            width: 100%;
+            padding-left: 2.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+        }
+
+        .search-container input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-container input:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+            box-shadow: none;
+        }
+
+        .sort-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .sort-container select {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+        }
+
+        .sort-container select:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .sort-container option {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .list-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .list-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .list-item:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .list-item.selected {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .program-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+
+        .report-title {
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .severity {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+
+        .severity.high {
+            background-color: rgba(247, 37, 133, 0.1);
+            color: var(--danger-color);
+        }
+
+        .severity.medium {
+            background-color: rgba(248, 150, 30, 0.1);
+            color: var(--warning-color);
+        }
+
+        .severity.low {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success-color);
+        }
+
+        .report-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .report-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .report-content h1, 
+        .report-content h2, 
+        .report-content h3, 
+        .report-content h4, 
+        .report-content h5, 
+        .report-content h6 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .report-content p {
+            margin-bottom: 1rem;
+        }
+
+        .report-content pre {
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        .report-content code {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .report-content ul, 
+        .report-content ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .report-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .report-content blockquote {
+            border-left: 3px solid var(--primary-color);
+            padding-left: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .loading {
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            color: var(--danger-color);
+            background-color: rgba(247, 37, 133, 0.1);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .error i {
+            font-size: 1.2rem;
+        }
+
+        .empty-state {
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-light);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .report-meta-container {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .meta-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .domain-tag {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .list-container, 
+            .report-container {
+                min-width: auto;
+            }
+
+            .input-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .list-header {
+                gap: 0.5rem;
+            }
+
+            .list-header-top, 
+            .list-header-bottom {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .sort-container {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-shield-alt"></i> Vulnerability Report Viewer</h1>
+    </header>
+
+    <div class="input-container">
+        <input type="text" id="csvUrl" placeholder="Enter Google Sheets CSV URL" 
+               value="https://docs.google.com/spreadsheets/d/{YOUR_SHEET_ID}/edit#gid=0">
+        <button onclick="loadCSV()"><i class="fas fa-cloud-download-alt"></i> Load Data</button>
+    </div>
+    
+    <div id="error" class="error" style="display: none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <div id="error-message"></div>
+    </div>
+    
+    <div class="main-container">
+        <div class="list-container">
+            <div class="list-header">
+                <div class="list-header-top">
+                    <div>Vulnerability Reports</div>
+                    <div class="btn-group">
+                        <button class="btn-outline" onclick="sortBy('Severity')">
+                            <i class="fas fa-arrow-down-a-z"></i> Severity
+                        </button>
+                        <button class="btn-outline" onclick="sortBy('Domain')">
+                            <i class="fas fa-globe"></i> Domain
+                        </button>
+                    </div>
+                </div>
+                <div class="list-header-bottom">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search reports..." oninput="filterReports()">
+                    </div>
+                    <div class="sort-container">
+                        <span>Sort:</span>
+                        <select id="sortSelect" onchange="applySort()">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="severity-desc">High Severity First</option>
+                            <option value="severity-asc">Low Severity First</option>
+                            <option value="title-asc">Title (A-Z)</option>
+                            <option value="title-desc">Title (Z-A)</option>
+                            <option value="domain-asc">Domain (A-Z)</option>
+                            <option value="domain-desc">Domain (Z-A)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="list-items" id="reportList">
+                <div class="empty-state">
+                    <i class="fas fa-file-import"></i>
+                    <h3>No Data Loaded</h3>
+                    <p>Enter a CSV URL and click "Load Data" to view reports</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="report-container">
+            <div class="report-header">
+                <h2 id="reportTitle">Select a report to view details</h2>
+                <div class="report-meta-container" id="reportMeta" style="display: none;">
+                    <div class="meta-item">
+                        <span class="meta-label">Program</span>
+                        <span class="meta-value" id="metaProgram">-</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Severity</span>
+                        <span class="meta-value" id="metaSeverity">-</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Status</span>
+                        <span class="meta-value" id="metaStatus">-</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Type</span>
+                        <span class="meta-value" id="metaType">-</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Date</span>
+                        <span class="meta-value" id="metaDate">-</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Domain</span>
+                        <span class="meta-value" id="metaDomain">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="report-content" id="reportContent">
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>No Report Selected</h3>
+                    <p>Select a report from the list to view its details</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let reports = [];
+        let filteredReports = [];
+        let currentSort = 'date-desc';
+        
+        // Configure marked to sanitize output
+        marked.setOptions({
+            sanitizer: DOMPurify.sanitize,
+            breaks: true,
+            gfm: true
+        });
+
+        function loadCSV() {
+            const urlInput = document.getElementById('csvUrl').value;
+            const errorDiv = document.getElementById('error');
+            const errorMessage = document.getElementById('error-message');
+            errorDiv.style.display = 'none';
+            
+            // Convert Google Sheets URL to CSV export URL
+            let csvUrl;
+            try {
+                const match = urlInput.match(/\/d\/([^\/]+)/);
+                if (!match) throw new Error('Invalid Google Sheets URL');
+                
+                const sheetId = match[1];
+                csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
+            } catch (e) {
+                errorMessage.textContent = 'Please enter a valid Google Sheets URL';
+                errorDiv.style.display = 'flex';
+                return;
+            }
+            
+            document.getElementById('reportList').innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>Loading data...</p>
+                </div>
+            `;
+            
+            Papa.parse(csvUrl, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    reports = results.data.map(report => {
+                        // Extract domain from URL if available
+                        let domain = '';
+                        if (report['Full Report']) {
+                            const urlMatch = report['Full Report'].match(/(?:https?:\/\/)?(?:www\.)?([^\/\s]+)/i);
+                            if (urlMatch && urlMatch[1]) {
+                                domain = urlMatch[1].toLowerCase();
+                            }
+                        }
+                        return {
+                            ...report,
+                            Domain: domain || 'unknown'
+                        };
+                    });
+                    filteredReports = [...reports];
+                    applySort();
+                    displayReportList();
+                },
+                error: function(error) {
+                    errorMessage.textContent = 'Error loading CSV: ' + error.message;
+                    errorDiv.style.display = 'flex';
+                    document.getElementById('reportList').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h3>Error Loading Data</h3>
+                            <p>Could not load data from the provided URL</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+        
+        function filterReports() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (!searchTerm) {
+                filteredReports = [...reports];
+            } else {
+                filteredReports = reports.filter(report => {
+                    const matchesProgram = report['Program Name'] && report['Program Name'].toLowerCase().includes(searchTerm);
+                    const matchesTitle = report['Title'] && report['Title'].toLowerCase().includes(searchTerm);
+                    const matchesType = report['Vulnerability Type'] && report['Vulnerability Type'].toLowerCase().includes(searchTerm);
+                    const matchesDomain = report['Domain'] && report['Domain'].includes(searchTerm);
+                    
+                    return matchesProgram || matchesTitle || matchesType || matchesDomain;
+                });
+            }
+            applySort();
+        }
+        
+        function sortBy(criteria) {
+            if (criteria === 'Severity') {
+                currentSort = currentSort === 'severity-desc' ? 'severity-asc' : 'severity-desc';
+            } else if (criteria === 'Domain') {
+                currentSort = currentSort === 'domain-asc' ? 'domain-desc' : 'domain-asc';
+            }
+            document.getElementById('sortSelect').value = currentSort;
+            applySort();
+        }
+        
+        function applySort() {
+            currentSort = document.getElementById('sortSelect').value;
+            
+            filteredReports.sort((a, b) => {
+                switch(currentSort) {
+                    case 'date-desc':
+                        return new Date(b['Date'] || 0) - new Date(a['Date'] || 0);
+                    case 'date-asc':
+                        return new Date(a['Date'] || 0) - new Date(b['Date'] || 0);
+                    case 'severity-desc':
+                        return getSeverityValue(b['Severity']) - getSeverityValue(a['Severity']);
+                    case 'severity-asc':
+                        return getSeverityValue(a['Severity']) - getSeverityValue(b['Severity']);
+                    case 'title-asc':
+                        return (a['Title'] || '').localeCompare(b['Title'] || '');
+                    case 'title-desc':
+                        return (b['Title'] || '').localeCompare(a['Title'] || '');
+                    case 'domain-asc':
+                        return (a['Domain'] || '').localeCompare(b['Domain'] || '');
+                    case 'domain-desc':
+                        return (b['Domain'] || '').localeCompare(a['Domain'] || '');
+                    default:
+                        return 0;
+                }
+            });
+            
+            displayReportList();
+        }
+        
+        function getSeverityValue(severity) {
+            if (!severity) return 0;
+            severity = severity.toLowerCase();
+            if (severity.includes('high')) return 3;
+            if (severity.includes('medium')) return 2;
+            if (severity.includes('low')) return 1;
+            return 0;
+        }
+        
+        function displayReportList() {
+            const listContainer = document.getElementById('reportList');
+            
+            if (filteredReports.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No Reports Found</h3>
+                        <p>Try adjusting your search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            listContainer.innerHTML = '';
+            
+            // Group by domain if domain sort is active
+            let currentDomain = null;
+            let isGroupingDomains = currentSort.includes('domain');
+            
+            filteredReports.forEach((report, index) => {
+                // Add domain header if grouping by domain
+                if (isGroupingDomains && report['Domain'] !== currentDomain) {
+                    currentDomain = report['Domain'];
+                    const domainHeader = document.createElement('div');
+                    domainHeader.className = 'list-item';
+                    domainHeader.style.background = 'rgba(67, 97, 238, 0.05)';
+                    domainHeader.style.cursor = 'default';
+                    domainHeader.innerHTML = `
+                        <div style="font-weight: 600; color: var(--primary-color);">
+                            <i class="fas fa-globe"></i> ${currentDomain || 'Unknown Domain'}
+                        </div>
+                    `;
+                    listContainer.appendChild(domainHeader);
+                }
+                
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                
+                // Determine severity class
+                let severityClass = '';
+                if (report['Severity']) {
+                    const severity = report['Severity'].toLowerCase();
+                    if (severity.includes('high')) severityClass = 'high';
+                    else if (severity.includes('medium')) severityClass = 'medium';
+                    else if (severity.includes('low')) severityClass = 'low';
+                }
+                
+                item.innerHTML = `
+                    <div class="program-name">${escapeHtml(report['Program Name'] || 'Unnamed Program')}</div>
+                    <div class="report-title">${escapeHtml(report['Title'] || 'Untitled Report')}</div>
+                    <div class="report-meta">
+                        ${report['Severity'] ? `<span class="severity ${severityClass}">${escapeHtml(report['Severity'])}</span>` : ''}
+                        ${!isGroupingDomains && report['Domain'] && report['Domain'] !== 'unknown' ? 
+                          `<span class="domain-tag">${escapeHtml(report['Domain'])}</span>` : ''}
+                        ${report['Date'] ? `<span>${escapeHtml(report['Date'])}</span>` : ''}
+                    </div>
+                `;
+                
+                item.addEventListener('click', () => {
+                    // Remove selected class from all items
+                    document.querySelectorAll('.list-item').forEach(el => {
+                        el.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked item
+                    item.classList.add('selected');
+                    
+                    // Display the full report
+                    displayFullReport(report);
+                });
+                
+                listContainer.appendChild(item);
+            });
+            
+            // Select first non-header item by default if none selected
+            if (!document.querySelector('.list-item.selected') && filteredReports.length > 0) {
+                const firstItem = listContainer.querySelector('.list-item:not([style*="background"])');
+                if (firstItem) {
+                    firstItem.classList.add('selected');
+                    const firstReport = filteredReports.find(report => 
+                        escapeHtml(report['Title'] || '') === firstItem.querySelector('.report-title').textContent
+                    );
+                    if (firstReport) displayFullReport(firstReport);
+                }
+            }
+        }
+        
+        function displayFullReport(report) {
+            document.getElementById('reportTitle').textContent = escapeHtml(report['Title'] || 'Untitled Report');
+            
+            // Update metadata
+            document.getElementById('metaProgram').textContent = escapeHtml(report['Program Name'] || '-');
+            document.getElementById('metaSeverity').textContent = escapeHtml(report['Severity'] || '-');
+            document.getElementById('metaStatus').textContent = escapeHtml(report['Status'] || '-');
+            document.getElementById('metaType').textContent = escapeHtml(report['Vulnerability Type'] || '-');
+            document.getElementById('metaDate').textContent = escapeHtml(report['Date'] || '-');
+            document.getElementById('metaDomain').textContent = escapeHtml(report['Domain'] === 'unknown' ? '-' : report['Domain'] || '-');
+            document.getElementById('reportMeta').style.display = 'flex';
+            
+            const reportContent = document.getElementById('reportContent');
+            const fullReport = report['Full Report'] || '*No report content available*';
+            
+            // Sanitize and convert markdown to HTML
+            const cleanHtml = DOMPurify.sanitize(marked.parse(fullReport));
+            reportContent.innerHTML = cleanHtml;
+        }
+        
+        // Helper function to escape HTML
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
