@@ -12,7 +12,7 @@
     <style>
         :root {
             --primary: #3a86ff;
-            --critical: #d90429;
+            --critical: #d904Box;
             --high: #ef233c;
             --medium: #ff9e00;
             --low: #4cc9f0;
@@ -177,11 +177,11 @@
             font-size: 0.9rem;
         }
 
-        .severity-filter {
+        .severity-filter, .status-filter {
             min-width: 150px;
         }
 
-        .severity-filter select {
+        .severity-filter select, .status-filter select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid var(--border);
@@ -193,7 +193,7 @@
             transition: border-color 0.2s;
         }
 
-        .severity-filter select:focus {
+        .severity-filter select:focus, .status-filter select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
@@ -486,7 +486,7 @@
                 gap: 0.75rem;
             }
 
-            .search-container, .severity-filter {
+            .search-container, .severity-filter, .status-filter {
                 min-width: auto;
             }
 
@@ -553,6 +553,11 @@
                         <option value="info">Informative</option>
                     </select>
                 </div>
+                <div class="status-filter">
+                    <select id="statusFilter" onchange="filterReports()">
+                        <option value="">All Statuses</option>
+                    </select>
+                </div>
                 <div class="report-count" id="reportCount">Reports: 0</div>
             </div>
             <div class="list-items" id="reportList">
@@ -577,13 +582,11 @@
         let reports = [];
         let filteredReports = [];
         
-        // Configure marked for better markdown rendering
         marked.setOptions({
             breaks: true,
             gfm: true
         });
 
-        // Add event listener for load button
         document.getElementById('loadButton').addEventListener('click', loadCSV);
 
         function loadCSV() {
@@ -592,12 +595,10 @@
             const errorMessage = document.getElementById('error-message');
             errorDiv.style.display = 'none';
             
-            // Convert Google Sheets URL to CSV export URL
             let csvUrl;
             try {
                 const match = urlInput.match(/\/d\/([^\/]+)/);
                 if (!match) throw new Error('Invalid Google Sheets URL');
-                
                 const sheetId = match[1];
                 csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
             } catch (e) {
@@ -620,6 +621,7 @@
                 complete: function(results) {
                     reports = results.data;
                     filteredReports = [...reports];
+                    populateStatusFilter();
                     filterReports();
                 },
                 error: function(error) {
@@ -634,13 +636,31 @@
                 }
             });
         }
+
+        function populateStatusFilter() {
+            const statusFilter = document.getElementById('statusFilter');
+            statusFilter.innerHTML = '<option value="">All Statuses</option>';
+            
+            const uniqueStatuses = [...new Set(
+                reports
+                    .map(report => report['Status'] ? report['Status'].toLowerCase().trim() : '')
+                    .filter(status => status)
+            )].sort();
+            
+            uniqueStatuses.forEach(status => {
+                const option = document.createElement('option');
+                option.value = status;
+                option.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                statusFilter.appendChild(option);
+            });
+        }
         
         function filterReports() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const severityFilter = document.getElementById('severityFilter').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
             
             filteredReports = reports.filter(report => {
-                // Search filter
                 let matchesSearch = true;
                 if (searchTerm) {
                     matchesSearch = false;
@@ -652,7 +672,6 @@
                     }
                 }
                 
-                // Severity filter
                 let matchesSeverity = true;
                 if (severityFilter) {
                     const severity = report['Severity'] ? report['Severity'].toLowerCase() : '';
@@ -660,12 +679,17 @@
                                      (severityFilter === 'info' && severity.includes('informative'));
                 }
                 
-                return matchesSearch && matchesSeverity;
+                let matchesStatus = true;
+                if (statusFilter) {
+                    const status = report['Status'] ? report['Status'].toLowerCase().trim() : '';
+                    matchesStatus = status === statusFilter;
+                }
+                
+                return matchesSearch && matchesSeverity && matchesStatus;
             });
             
             displayReportList();
             
-            // Clear report view if no reports match
             if (filteredReports.length === 0) {
                 document.getElementById('reportContent').innerHTML = `
                     <div class="empty-state">
@@ -680,7 +704,6 @@
             const listContainer = document.getElementById('reportList');
             const reportCount = document.getElementById('reportCount');
             
-            // Update report count
             reportCount.textContent = `Reports: ${filteredReports.length}`;
             
             if (filteredReports.length === 0) {
@@ -699,10 +722,8 @@
                 const item = document.createElement('div');
                 item.className = 'list-item';
                 
-                // Get severity class
                 const severity = getSeverityClass(report['Severity']);
                 
-                // Add number prefix
                 item.innerHTML = `
                     <div class="program-name">
                         <span class="report-number">${index + 1}.</span>
@@ -713,22 +734,16 @@
                 `;
                 
                 item.addEventListener('click', () => {
-                    // Remove selected class from all items
                     document.querySelectorAll('.list-item').forEach(el => {
                         el.classList.remove('selected');
                     });
-                    
-                    // Add selected class to clicked item
                     item.classList.add('selected');
-                    
-                    // Display the full report
                     displayFullReport(report);
                 });
                 
                 listContainer.appendChild(item);
             });
             
-            // Select first item by default if none selected
             if (!document.querySelector('.list-item.selected') && filteredReports.length > 0) {
                 const firstItem = listContainer.querySelector('.list-item');
                 if (firstItem) {
@@ -756,7 +771,6 @@
             const reportContent = document.getElementById('reportContent');
             const fullReport = report['Full Report'] || '*No report content available*';
             
-            // Create metadata section
             let metadataHtml = '<div class="metadata"><h2>Metadata</h2><dl>';
             for (const [key, value] of Object.entries(report)) {
                 if (key !== 'Full Report' && value) {
@@ -771,25 +785,22 @@
             }
             metadataHtml += '</dl></div>';
             
-            // Sanitize and convert markdown to HTML for Full Report
             const cleanReportHtml = DOMPurify.sanitize(marked.parse(fullReport));
             
-            // Combine metadata and report body
             reportContent.innerHTML = `
                 ${metadataHtml}
                 <div class="report-body">${cleanReportHtml}</div>
             `;
         }
         
-        // Helper function to escape HTML
         function escapeHtml(unsafe) {
             if (!unsafe) return '';
             return unsafe
-                .replace(/&/g, "&")
-                .replace(/</g, "<")
-                .replace(/>/g, ">")
-                .replace(/"/g, "\"")
-                .replace(/'/g, "'");
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
     </script>
 </body>
