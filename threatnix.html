@@ -153,16 +153,25 @@
             flex-wrap: wrap;
             gap: 1rem;
             background-color: var(--card);
-            align-items: center;
+            align-items: flex-start;
         }
 
-        .search-container {
+        .search-container, .program-search-container {
             flex: 1;
             position: relative;
             min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
         }
 
-        .search-container i {
+        .search-container label, .program-search-container label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .search-container i, .program-search-container i {
             position: absolute;
             left: 1rem;
             top: 50%;
@@ -171,17 +180,26 @@
             font-size: 0.9rem;
         }
 
-        .search-container input {
+        .search-container input, .program-search-container input {
             width: 100%;
             padding-left: 2.5rem;
             font-size: 0.9rem;
         }
 
-        .severity-filter, .status-filter, .sort-filter, .domain-filter {
+        .severity-filter, .status-filter, .sort-filter {
             min-width: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
         }
 
-        .severity-filter select, .status-filter select, .sort-filter select, .domain-filter select {
+        .severity-filter label, .status-filter label, .sort-filter label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .severity-filter select, .status-filter select, .sort-filter select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid var(--border);
@@ -193,7 +211,7 @@
             transition: border-color 0.2s;
         }
 
-        .severity-filter select:focus, .status-filter select:focus, .sort-filter select:focus, .domain-filter select:focus {
+        .severity-filter select:focus, .status-filter select:focus, .sort-filter select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
@@ -203,6 +221,7 @@
             font-size: 0.9rem;
             color: var(--text-light);
             font-weight: 500;
+            align-self: center;
         }
 
         .list-items {
@@ -492,9 +511,14 @@
                 gap: 0.75rem;
             }
 
-            .search-container, .severity-filter, .status-filter, .sort-filter, .domain-filter {
+            .search-container, .program-search-container, .severity-filter, .status-filter, .sort-filter {
                 min-width: auto;
                 width: 100%;
+            }
+
+            .search-container label, .program-search-container label, 
+            .severity-filter label, .status-filter label, .sort-filter label {
+                display: none;
             }
 
             .report-content {
@@ -547,16 +571,15 @@
         <div class="list-container">
             <div class="list-header">
                 <div class="search-container">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search reports..." oninput="filterReports()">
+                    <label for="searchInput">Search All Fields</label>
+                    <input type="text" id="searchInput" placeholder="Search all fields..." oninput="filterReports()">
                 </div>
-                <div class="domain-filter">
-                    <select id="domainFilter" onchange="filterReports()">
-                        <option value="">All Domains</option>
-                        <!-- Options will be populated dynamically -->
-                    </select>
+                <div class="program-search-container">
+                    <label for="programSearch">Search Program Name</label>
+                    <input type="text" id="programSearch" placeholder="Search Program Name..." oninput="filterReports()">
                 </div>
                 <div class="severity-filter">
+                    <label for="severityFilter">Severity</label>
                     <select id="severityFilter" onchange="filterReports()">
                         <option value="">All Severities</option>
                         <option value="critical">Critical</option>
@@ -567,12 +590,14 @@
                     </select>
                 </div>
                 <div class="status-filter">
+                    <label for="statusFilter">Status</label>
                     <select id="statusFilter" onchange="filterReports()">
                         <option value="">All Statuses</option>
                         <!-- Status options will be populated dynamically -->
                     </select>
                 </div>
                 <div class="sort-filter">
+                    <label for="sortFilter">Sort</label>
                     <select id="sortFilter" onchange="sortReports()">
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
@@ -602,7 +627,6 @@
         let reports = [];
         let filteredReports = [];
         let statusOptions = new Set();
-        let domainOptions = new Set();
         let dateFields = ['Date', 'Created', 'Submitted', 'Reported'];
 
         // Configure marked for better markdown rendering
@@ -648,7 +672,7 @@
                 complete: function(results) {
                     reports = results.data;
                     
-                    // Process reports to identify date fields, status, and domain options
+                    // Process reports to identify date fields and status options
                     processReportData(reports);
                     
                     // Apply initial filters and sorting
@@ -669,7 +693,6 @@
 
         function processReportData(reports) {
             statusOptions = new Set();
-            domainOptions = new Set();
             let detectedDateField = null;
             
             reports.forEach(report => {
@@ -679,11 +702,6 @@
                     if (normalizedStatus) {
                         statusOptions.add(report['Status'].toString().trim());
                     }
-                }
-                
-                // Find domain values from Program Name
-                if (report['Program Name'] && report['Program Name'].toString().trim()) {
-                    domainOptions.add(report['Program Name'].toString().trim());
                 }
 
                 // Try to detect date field if not already found
@@ -697,9 +715,6 @@
                 }
             });
             
-            // Log for debugging
-            console.log('Detected domains from Program Name:', Array.from(domainOptions));
-            
             // Populate status filter dropdown
             const statusFilter = document.getElementById('statusFilter');
             while (statusFilter.options.length > 1) {
@@ -711,26 +726,6 @@
                 option.value = status.toLowerCase();
                 option.textContent = status;
                 statusFilter.appendChild(option);
-            });
-            
-            // Populate domain filter dropdown
-            const domainFilter = document.getElementById('domainFilter');
-            while (domainFilter.options.length > 0) {
-                domainFilter.remove(0);
-            }
-            
-            // Add "All Domains" option
-            const allOption = document.createElement('option');
-            allOption.value = '';
-            allOption.textContent = 'All Domains';
-            domainFilter.appendChild(allOption);
-            
-            // Add sorted domain options
-            Array.from(domainOptions).sort().forEach(domain => {
-                const option = document.createElement('option');
-                option.value = domain.toLowerCase();
-                option.textContent = domain;
-                domainFilter.appendChild(option);
             });
 
             // Process dates in all reports
@@ -809,14 +804,14 @@
 
         function filterReports() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const programSearch = document.getElementById('programSearch').value.toLowerCase();
             const severityFilter = document.getElementById('severityFilter').value.toLowerCase();
             const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-            const domainFilter = document.getElementById('domainFilter').value.toLowerCase();
             
-            console.log('Applying filters:', { searchTerm, severityFilter, statusFilter, domainFilter });
+            console.log('Applying filters:', { searchTerm, programSearch, severityFilter, statusFilter });
             
             filteredReports = reports.filter(report => {
-                // Search filter
+                // Global search filter (all fields)
                 let matchesSearch = true;
                 if (searchTerm) {
                     matchesSearch = false;
@@ -826,6 +821,13 @@
                             break;
                         }
                     }
+                }
+                
+                // Program Name search filter
+                let matchesProgram = true;
+                if (programSearch) {
+                    matchesProgram = report['Program Name'] && 
+                                     report['Program Name'].toString().toLowerCase().includes(programSearch);
                 }
                 
                 // Severity filter
@@ -843,14 +845,7 @@
                     matchesStatus = status.includes(statusFilter);
                 }
                 
-                // Domain filter (case-insensitive, from Program Name)
-                let matchesDomain = true;
-                if (domainFilter) {
-                    matchesDomain = report['Program Name'] && 
-                                    report['Program Name'].toString().toLowerCase().trim() === domainFilter;
-                }
-                
-                return matchesSearch && matchesSeverity && matchesStatus && matchesDomain;
+                return matchesSearch && matchesProgram && matchesSeverity && matchesStatus;
             });
             
             console.log('Filtered reports count:', filteredReports.length);
@@ -995,7 +990,7 @@
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#39;");
+                .replace(/'/g, "&#039;");
         }
     </script>
 </body>
