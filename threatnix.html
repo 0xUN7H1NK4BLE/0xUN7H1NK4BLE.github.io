@@ -12,7 +12,7 @@
     <style>
         :root {
             --primary: #3a86ff;
-            --critical: #d904Box;
+            --critical: #d90429;
             --high: #ef233c;
             --medium: #ff9e00;
             --low: #4cc9f0;
@@ -177,11 +177,11 @@
             font-size: 0.9rem;
         }
 
-        .severity-filter, .status-filter {
+        .severity-filter, .status-filter, .sort-filter {
             min-width: 150px;
         }
 
-        .severity-filter select, .status-filter select {
+        .severity-filter select, .status-filter select, .sort-filter select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid var(--border);
@@ -193,7 +193,7 @@
             transition: border-color 0.2s;
         }
 
-        .severity-filter select:focus, .status-filter select:focus {
+        .severity-filter select:focus, .status-filter select:focus, .sort-filter select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
@@ -263,6 +263,12 @@
         .medium { background-color: rgba(255, 158, 0, 0.1); color: var(--medium); }
         .low { background-color: rgba(76, 201, 240, 0.1); color: var(--low); }
         .info { background-color: rgba(141, 153, 174, 0.1); color: var(--info); }
+
+        .report-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
 
         .report-content {
             flex: 1;
@@ -486,7 +492,7 @@
                 gap: 0.75rem;
             }
 
-            .search-container, .severity-filter, .status-filter {
+            .search-container, .severity-filter, .status-filter, .sort-filter {
                 min-width: auto;
             }
 
@@ -556,6 +562,13 @@
                 <div class="status-filter">
                     <select id="statusFilter" onchange="filterReports()">
                         <option value="">All Statuses</option>
+                        <!-- Status options will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="sort-filter">
+                    <select id="sortFilter" onchange="sortReports()">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
                     </select>
                 </div>
                 <div class="report-count" id="reportCount">Reports: 0</div>
@@ -581,12 +594,16 @@
     <script>
         let reports = [];
         let filteredReports = [];
+        let statusOptions = new Set();
+        let dateFields = ['Date', 'Created', 'Submitted', 'Reported']; // Common date field names
         
+        // Configure marked for better markdown rendering
         marked.setOptions({
             breaks: true,
             gfm: true
         });
 
+        // Add event listener for load button
         document.getElementById('loadButton').addEventListener('click', loadCSV);
 
         function loadCSV() {
@@ -595,10 +612,12 @@
             const errorMessage = document.getElementById('error-message');
             errorDiv.style.display = 'none';
             
+            // Convert Google Sheets URL to CSV export URL
             let csvUrl;
             try {
                 const match = urlInput.match(/\/d\/([^\/]+)/);
                 if (!match) throw new Error('Invalid Google Sheets URL');
+                
                 const sheetId = match[1];
                 csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
             } catch (e) {
@@ -620,8 +639,11 @@
                 skipEmptyLines: true,
                 complete: function(results) {
                     reports = results.data;
-                    filteredReports = [...reports];
-                    populateStatusFilter();
+                    
+                    // Process reports to identify date fields and status options
+                    processReportData(reports);
+                    
+                    // Apply initial filters and sorting
                     filterReports();
                 },
                 error: function(error) {
@@ -636,23 +658,121 @@
                 }
             });
         }
-
-        function populateStatusFilter() {
+        
+        function processReportData(reports) {
+            statusOptions = new Set();
+            let detectedDateField = null;
+            
+            reports.forEach(report => {
+                // Find status values
+                if (report['Status']) {
+                    const normalizedStatus = report['Status'].toString().trim().toLowerCase();
+                    if (normalizedStatus) {
+                        statusOptions.add(report['Status'].toString().trim());
+                    }
+                }
+                
+                // Try to detect date field if not already found
+                if (!detectedDateField) {
+                    for (const field of dateFields) {
+                        if (report[field] && isDateLike(report[field])) {
+                            detectedDateField = field;
+                            break;
+                        }
+                    }
+                }
+            });
+            
+            // Store the detected date field name
+            if (detectedDateField) {
+                console.log(`Detected date field: ${detectedDateField}`);
+            }
+            
+            // Populate status filter dropdown
             const statusFilter = document.getElementById('statusFilter');
-            statusFilter.innerHTML = '<option value="">All Statuses</option>';
+            while (statusFilter.options.length > 1) {
+                statusFilter.remove(1);
+            }
             
-            const uniqueStatuses = [...new Set(
-                reports
-                    .map(report => report['Status'] ? report['Status'].toLowerCase().trim() : '')
-                    .filter(status => status)
-            )].sort();
-            
-            uniqueStatuses.forEach(status => {
+            statusOptions.forEach(status => {
                 const option = document.createElement('option');
-                option.value = status;
-                option.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                option.value = status.toLowerCase();
+                option.textContent = status;
                 statusFilter.appendChild(option);
             });
+            
+            // Process dates in all reports
+            reports.forEach(report => {
+                // Try to find a date field
+                let dateField = detectedDateField;
+                if (!dateField) {
+                    for (const field in report) {
+                        if (isDateLike(report[field])) {
+                            dateField = field;
+                            break;
+                        }
+                    }
+                }
+                
+                // Store the parsed date if found
+                if (dateField && report[dateField]) {
+                    report._date = parseDate(report[dateField]);
+                    report._dateField = dateField;
+                } else {
+                    report._date = new Date(0); // Default to epoch if no date found
+                }
+            });
+            
+            filteredReports = [...reports];
+        }
+        
+        function isDateLike(value) {
+            if (!value) return false;
+            const str = value.toString().trim();
+            
+            // Check for common date formats
+            return (
+                // ISO dates (2023-01-15)
+                /^\d{4}-\d{2}-\d{2}/.test(str) ||
+                // US dates (01/15/2023)
+                /^\d{1,2}\/\d{1,2}\/\d{4}/.test(str) ||
+                // European dates (15/01/2023)
+                /^\d{1,2}\.\d{1,2}\.\d{4}/.test(str) ||
+                // Month names (January 15, 2023)
+                /^[A-Za-z]{3,9} \d{1,2},? \d{4}/.test(str)
+            );
+        }
+        
+        function parseDate(dateStr) {
+            if (!dateStr) return new Date(0);
+            
+            // Try parsing as ISO date first
+            let date = new Date(dateStr);
+            if (!isNaN(date.getTime())) return date;
+            
+            // Try parsing as US date (MM/DD/YYYY)
+            const usDateParts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (usDateParts) {
+                date = new Date(`${usDateParts[3]}-${usDateParts[1]}-${usDateParts[2]}`);
+                if (!isNaN(date.getTime())) return date;
+            }
+            
+            // Try parsing as European date (DD.MM.YYYY or DD/MM/YYYY)
+            const euDateParts = dateStr.match(/^(\d{1,2})[\.\/](\d{1,2})[\.\/](\d{4})/);
+            if (euDateParts) {
+                date = new Date(`${euDateParts[3]}-${euDateParts[2]}-${euDateParts[1]}`);
+                if (!isNaN(date.getTime())) return date;
+            }
+            
+            // Try parsing with month names (January 15, 2023 or Jan 15, 2023)
+            const monthDateParts = dateStr.match(/^([A-Za-z]{3,9}) (\d{1,2}),? (\d{4})/);
+            if (monthDateParts) {
+                date = new Date(`${monthDateParts[1]} ${monthDateParts[2]}, ${monthDateParts[3]}`);
+                if (!isNaN(date.getTime())) return date;
+            }
+            
+            // Default to epoch if we can't parse
+            return new Date(0);
         }
         
         function filterReports() {
@@ -661,6 +781,7 @@
             const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
             
             filteredReports = reports.filter(report => {
+                // Search filter
                 let matchesSearch = true;
                 if (searchTerm) {
                     matchesSearch = false;
@@ -672,38 +793,45 @@
                     }
                 }
                 
+                // Severity filter
                 let matchesSeverity = true;
                 if (severityFilter) {
-                    const severity = report['Severity'] ? report['Severity'].toLowerCase() : '';
+                    const severity = report['Severity'] ? report['Severity'].toString().toLowerCase() : '';
                     matchesSeverity = severity.includes(severityFilter) || 
                                      (severityFilter === 'info' && severity.includes('informative'));
                 }
                 
+                // Status filter
                 let matchesStatus = true;
                 if (statusFilter) {
-                    const status = report['Status'] ? report['Status'].toLowerCase().trim() : '';
-                    matchesStatus = status === statusFilter;
+                    const status = report['Status'] ? report['Status'].toString().toLowerCase().trim() : '';
+                    matchesStatus = status.includes(statusFilter);
                 }
                 
                 return matchesSearch && matchesSeverity && matchesStatus;
             });
             
-            displayReportList();
+            // Apply current sorting
+            sortReports();
+        }
+        
+        function sortReports() {
+            const sortValue = document.getElementById('sortFilter').value;
             
-            if (filteredReports.length === 0) {
-                document.getElementById('reportContent').innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <p>No matching reports found</p>
-                    </div>
-                `;
+            if (sortValue === 'newest') {
+                filteredReports.sort((a, b) => b._date - a._date);
+            } else if (sortValue === 'oldest') {
+                filteredReports.sort((a, b) => a._date - b._date);
             }
+            
+            displayReportList();
         }
         
         function displayReportList() {
             const listContainer = document.getElementById('reportList');
             const reportCount = document.getElementById('reportCount');
             
+            // Update report count
             reportCount.textContent = `Reports: ${filteredReports.length}`;
             
             if (filteredReports.length === 0) {
@@ -722,8 +850,17 @@
                 const item = document.createElement('div');
                 item.className = 'list-item';
                 
+                // Get severity class
                 const severity = getSeverityClass(report['Severity']);
                 
+                // Format date if available
+                let dateHtml = '';
+                if (report._date && report._date.getTime() !== new Date(0).getTime()) {
+                    const dateStr = report._date.toLocaleDateString();
+                    dateHtml = `<div class="report-date">${dateStr}</div>`;
+                }
+                
+                // Add number prefix
                 item.innerHTML = `
                     <div class="program-name">
                         <span class="report-number">${index + 1}.</span>
@@ -731,19 +868,27 @@
                     </div>
                     <div class="report-title">${escapeHtml(report['Title'] || 'Untitled Report')}</div>
                     ${severity ? `<span class="severity ${severity.class}">${severity.text}</span>` : ''}
+                    ${report['Status'] ? `<div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light)">Status: ${escapeHtml(report['Status'])}</div>` : ''}
+                    ${dateHtml}
                 `;
                 
                 item.addEventListener('click', () => {
+                    // Remove selected class from all items
                     document.querySelectorAll('.list-item').forEach(el => {
                         el.classList.remove('selected');
                     });
+                    
+                    // Add selected class to clicked item
                     item.classList.add('selected');
+                    
+                    // Display the full report
                     displayFullReport(report);
                 });
                 
                 listContainer.appendChild(item);
             });
             
+            // Select first item by default if none selected
             if (!document.querySelector('.list-item.selected') && filteredReports.length > 0) {
                 const firstItem = listContainer.querySelector('.list-item');
                 if (firstItem) {
@@ -771,28 +916,33 @@
             const reportContent = document.getElementById('reportContent');
             const fullReport = report['Full Report'] || '*No report content available*';
             
+            // Create metadata section
             let metadataHtml = '<div class="metadata"><h2>Metadata</h2><dl>';
             for (const [key, value] of Object.entries(report)) {
-                if (key !== 'Full Report' && value) {
-                    const severityClass = key === 'Severity' ? getSeverityClass(value)?.class : '';
-                    metadataHtml += `
-                        <dt>${escapeHtml(key)}</dt>
-                        <dd>${key === 'Severity' && severityClass ? 
-                            `<span class="severity ${severityClass}">${escapeHtml(value)}</span>` : 
-                            escapeHtml(value)}</dd>
-                    `;
-                }
+                // Skip internal fields and empty values
+                if (key.startsWith('_') || !value || key === 'Full Report') continue;
+                
+                const severityClass = key === 'Severity' ? getSeverityClass(value)?.class : '';
+                metadataHtml += `
+                    <dt>${escapeHtml(key)}</dt>
+                    <dd>${key === 'Severity' && severityClass ? 
+                        `<span class="severity ${severityClass}">${escapeHtml(value)}</span>` : 
+                        escapeHtml(value)}</dd>
+                `;
             }
             metadataHtml += '</dl></div>';
             
+            // Sanitize and convert markdown to HTML for Full Report
             const cleanReportHtml = DOMPurify.sanitize(marked.parse(fullReport));
             
+            // Combine metadata and report body
             reportContent.innerHTML = `
                 ${metadataHtml}
                 <div class="report-body">${cleanReportHtml}</div>
             `;
         }
         
+        // Helper function to escape HTML
         function escapeHtml(unsafe) {
             if (!unsafe) return '';
             return unsafe
