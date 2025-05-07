@@ -177,11 +177,11 @@
             font-size: 0.9rem;
         }
 
-        .severity-filter, .status-filter, .sort-filter {
+        .severity-filter, .status-filter, .sort-filter, .domain-filter {
             min-width: 150px;
         }
 
-        .severity-filter select, .status-filter select, .sort-filter select {
+        .severity-filter select, .status-filter select, .sort-filter select, .domain-filter select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid var(--border);
@@ -193,7 +193,7 @@
             transition: border-color 0.2s;
         }
 
-        .severity-filter select:focus, .status-filter select:focus, .sort-filter select:focus {
+        .severity-filter select:focus, .status-filter select:focus, .sort-filter select:focus, .domain-filter select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
@@ -492,8 +492,9 @@
                 gap: 0.75rem;
             }
 
-            .search-container, .severity-filter, .status-filter, .sort-filter {
+            .search-container, .severity-filter, .status-filter, .sort-filter, .domain-filter {
                 min-width: auto;
+                width: 100%;
             }
 
             .report-content {
@@ -549,6 +550,12 @@
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchInput" placeholder="Search reports..." oninput="filterReports()">
                 </div>
+                <div class="domain-filter">
+                    <select id="domainFilter" onchange="filterReports()">
+                        <option value="">All Domains</option>
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
                 <div class="severity-filter">
                     <select id="severityFilter" onchange="filterReports()">
                         <option value="">All Severities</option>
@@ -595,8 +602,9 @@
         let reports = [];
         let filteredReports = [];
         let statusOptions = new Set();
-        let dateFields = ['Date', 'Created', 'Submitted', 'Reported']; // Common date field names
-        
+        let domainOptions = new Set();
+        let dateFields = ['Date', 'Created', 'Submitted', 'Reported'];
+
         // Configure marked for better markdown rendering
         marked.setOptions({
             breaks: true,
@@ -640,7 +648,7 @@
                 complete: function(results) {
                     reports = results.data;
                     
-                    // Process reports to identify date fields and status options
+                    // Process reports to identify date fields, status, and domain options
                     processReportData(reports);
                     
                     // Apply initial filters and sorting
@@ -658,9 +666,10 @@
                 }
             });
         }
-        
+
         function processReportData(reports) {
             statusOptions = new Set();
+            domainOptions = new Set();
             let detectedDateField = null;
             
             reports.forEach(report => {
@@ -672,6 +681,11 @@
                     }
                 }
                 
+                // Find domain values from Program Name
+                if (report['Program Name'] && report['Program Name'].toString().trim()) {
+                    domainOptions.add(report['Program Name'].toString().trim());
+                }
+
                 // Try to detect date field if not already found
                 if (!detectedDateField) {
                     for (const field of dateFields) {
@@ -683,10 +697,8 @@
                 }
             });
             
-            // Store the detected date field name
-            if (detectedDateField) {
-                console.log(`Detected date field: ${detectedDateField}`);
-            }
+            // Log for debugging
+            console.log('Detected domains from Program Name:', Array.from(domainOptions));
             
             // Populate status filter dropdown
             const statusFilter = document.getElementById('statusFilter');
@@ -701,6 +713,26 @@
                 statusFilter.appendChild(option);
             });
             
+            // Populate domain filter dropdown
+            const domainFilter = document.getElementById('domainFilter');
+            while (domainFilter.options.length > 0) {
+                domainFilter.remove(0);
+            }
+            
+            // Add "All Domains" option
+            const allOption = document.createElement('option');
+            allOption.value = '';
+            allOption.textContent = 'All Domains';
+            domainFilter.appendChild(allOption);
+            
+            // Add sorted domain options
+            Array.from(domainOptions).sort().forEach(domain => {
+                const option = document.createElement('option');
+                option.value = domain.toLowerCase();
+                option.textContent = domain;
+                domainFilter.appendChild(option);
+            });
+
             // Process dates in all reports
             reports.forEach(report => {
                 // Try to find a date field
@@ -725,7 +757,7 @@
             
             filteredReports = [...reports];
         }
-        
+
         function isDateLike(value) {
             if (!value) return false;
             const str = value.toString().trim();
@@ -742,7 +774,7 @@
                 /^[A-Za-z]{3,9} \d{1,2},? \d{4}/.test(str)
             );
         }
-        
+
         function parseDate(dateStr) {
             if (!dateStr) return new Date(0);
             
@@ -774,11 +806,14 @@
             // Default to epoch if we can't parse
             return new Date(0);
         }
-        
+
         function filterReports() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const severityFilter = document.getElementById('severityFilter').value.toLowerCase();
             const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+            const domainFilter = document.getElementById('domainFilter').value.toLowerCase();
+            
+            console.log('Applying filters:', { searchTerm, severityFilter, statusFilter, domainFilter });
             
             filteredReports = reports.filter(report => {
                 // Search filter
@@ -808,13 +843,22 @@
                     matchesStatus = status.includes(statusFilter);
                 }
                 
-                return matchesSearch && matchesSeverity && matchesStatus;
+                // Domain filter (case-insensitive, from Program Name)
+                let matchesDomain = true;
+                if (domainFilter) {
+                    matchesDomain = report['Program Name'] && 
+                                    report['Program Name'].toString().toLowerCase().trim() === domainFilter;
+                }
+                
+                return matchesSearch && matchesSeverity && matchesStatus && matchesDomain;
             });
+            
+            console.log('Filtered reports count:', filteredReports.length);
             
             // Apply current sorting
             sortReports();
         }
-        
+
         function sortReports() {
             const sortValue = document.getElementById('sortFilter').value;
             
@@ -826,7 +870,7 @@
             
             displayReportList();
         }
-        
+
         function displayReportList() {
             const listContainer = document.getElementById('reportList');
             const reportCount = document.getElementById('reportCount');
@@ -897,7 +941,7 @@
                 }
             }
         }
-        
+
         function getSeverityClass(severityText) {
             if (!severityText) return null;
             
@@ -911,7 +955,7 @@
             
             return null;
         }
-        
+
         function displayFullReport(report) {
             const reportContent = document.getElementById('reportContent');
             const fullReport = report['Full Report'] || '*No report content available*';
@@ -941,16 +985,17 @@
                 <div class="report-body">${cleanReportHtml}</div>
             `;
         }
-        
+
         // Helper function to escape HTML
         function escapeHtml(unsafe) {
             if (!unsafe) return '';
             return unsafe
+                .toString()
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+                .replace(/'/g, "&#39;");
         }
     </script>
 </body>
