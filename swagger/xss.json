@@ -1,0 +1,10 @@
+{
+    "url": "https://unthinkable.me/swagger/test.yaml",
+    "urls": [{
+        "url": "https://unthinkable.me/swagger/test.yaml",
+        "name": "Foo"
+    },{
+        "url": "https://unthinkable.me/swagger/test1.yaml",
+        "name": "Foo2"
+    }]
+}
