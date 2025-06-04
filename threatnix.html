@@ -905,7 +905,7 @@
                         <span class="report-number">${index + 1}.</span>
                         ${escapeHtml(report['Program Name'] || 'Unnamed Program')}
                     </div>
-                    <div class="report-title">${escapeHtml(report['Title'] || 'Untitled Report')}</div>
+                    <div class="report-title">${escapeHtml(report['Report Title'] || 'Untitled Report')}</div>
                     ${severity ? `<span class="severity ${severity.class}">${severity.text}</span>` : ''}
                     ${report['Status'] ? `<div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light)">Status: ${escapeHtml(report['Status'])}</div>` : ''}
                     ${dateHtml}
