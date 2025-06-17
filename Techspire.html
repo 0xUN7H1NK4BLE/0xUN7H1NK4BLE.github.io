@@ -62,12 +62,21 @@
   </div>
 
   <script>
+    // Base64 Encoded Credentials
+    const encUsername = "VGVjaHNwaXJl";
+    const encPassword = "VGVjaHNwaXJlX3N0dWRlbnRfbGVhbmluZw==";
+    const encFlag = "dG8gZ2V0IGZsYWcgdHJ5IHlvdXJzZWxmICA=";
+
+    function decodeBase64(encoded) {
+      return atob(encoded);
+    }
+
     function login() {
       const user = document.getElementById("username").value;
       const pass = document.getElementById("password").value;
 
-      if (user === "Techspire" && pass === "Techspire_student_leaning") {
-        document.getElementById("flag").innerText = "Techspire{H0w_1s_the_f0rensics_g0ing_0n}";
+      if (user === decodeBase64(encUsername) && pass === decodeBase64(encPassword)) {
+        document.getElementById("flag").innerText = decodeBase64(encFlag);
       } else {
         alert("Invalid credentials. Try again.");
       }
