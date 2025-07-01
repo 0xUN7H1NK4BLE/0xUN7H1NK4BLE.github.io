@@ -627,7 +627,7 @@
         let reports = [];
         let filteredReports = [];
         let statusOptions = new Set();
-        let dateFields = ['Date', 'Created', 'Submitted', 'Reported'];
+        let dateFields = ['Published Date', 'Date', 'Created', 'Submitted', 'Reported'];
 
         // Configure marked for better markdown rendering
         marked.setOptions({
@@ -670,7 +670,8 @@
                 header: true,
                 skipEmptyLines: true,
                 complete: function(results) {
-                    reports = results.data;
+                    // Process the data to ensure standard column names
+                    reports = standardizeColumnNames(results.data);
                     
                     // Process reports to identify date fields and status options
                     processReportData(reports);
@@ -688,6 +689,46 @@
                         </div>
                     `;
                 }
+            });
+        }
+
+        function standardizeColumnNames(data) {
+            return data.map(row => {
+                const newRow = {};
+                
+                // Get all column names from the row
+                const columns = Object.keys(row);
+                
+                // Try to identify the standard columns based on common patterns
+                const programNameCol = columns.find(col => 
+                    col.toLowerCase().includes('program') && col.toLowerCase().includes('name'));
+                const titleCol = columns.find(col => 
+                    col.toLowerCase().includes('title') || col.toLowerCase().includes('name'));
+                const statusCol = columns.find(col => 
+                    col.toLowerCase().includes('status'));
+                const severityCol = columns.find(col => 
+                    col.toLowerCase().includes('severity'));
+                const dateCol = columns.find(col => 
+                    dateFields.some(df => col.toLowerCase().includes(df.toLowerCase())));
+                const fullReportCol = columns.find(col => 
+                    col.toLowerCase().includes('full') && col.toLowerCase().includes('report'));
+                
+                // Assign to standard column names
+                newRow['Program Name'] = programNameCol ? row[programNameCol] : '';
+                newRow['Report Title'] = titleCol ? row[titleCol] : '';
+                newRow['Status'] = statusCol ? row[statusCol] : '';
+                newRow['Severity'] = severityCol ? row[severityCol] : '';
+                newRow['Published Date'] = dateCol ? row[dateCol] : '';
+                newRow['Full Report'] = fullReportCol ? row[fullReportCol] : '';
+                
+                // Copy all other columns as-is
+                columns.forEach(col => {
+                    if (![programNameCol, titleCol, statusCol, severityCol, dateCol, fullReportCol].includes(col)) {
+                        newRow[col] = row[col];
+                    }
+                });
+                
+                return newRow;
             });
         }
 
@@ -957,18 +998,42 @@
             
             // Create metadata section
             let metadataHtml = '<div class="metadata"><h2>Metadata</h2><dl>';
-            for (const [key, value] of Object.entries(report)) {
-                // Skip internal fields and empty values
-                if (key.startsWith('_') || !value || key === 'Full Report') continue;
-                
-                const severityClass = key === 'Severity' ? getSeverityClass(value)?.class : '';
-                metadataHtml += `
-                    <dt>${escapeHtml(key)}</dt>
-                    <dd>${key === 'Severity' && severityClass ? 
-                        `<span class="severity ${severityClass}">${escapeHtml(value)}</span>` : 
-                        escapeHtml(value)}</dd>
-                `;
-            }
+            
+            // Always show standard columns first in a specific order
+            const standardColumns = [
+                'Program Name',
+                'Report Title',
+                'Status',
+                'Severity',
+                'Published Date'
+            ];
+            
+            standardColumns.forEach(key => {
+                if (report[key]) {
+                    const severityClass = key === 'Severity' ? getSeverityClass(report[key])?.class : '';
+                    metadataHtml += `
+                        <dt>${escapeHtml(key)}</dt>
+                        <dd>${key === 'Severity' && severityClass ? 
+                            `<span class="severity ${severityClass}">${escapeHtml(report[key])}</span>` : 
+                            escapeHtml(report[key])}</dd>
+                    `;
+                }
+            });
+            
+            // Then show all other columns in alphabetical order
+            const otherColumns = Object.keys(report)
+                .filter(key => !standardColumns.includes(key) && !key.startsWith('_') && key !== 'Full Report')
+                .sort();
+            
+            otherColumns.forEach(key => {
+                if (report[key]) {
+                    metadataHtml += `
+                        <dt>${escapeHtml(key)}</dt>
+                        <dd>${escapeHtml(report[key])}</dd>
+                    `;
+                }
+            });
+            
             metadataHtml += '</dl></div>';
             
             // Sanitize and convert markdown to HTML for Full Report
