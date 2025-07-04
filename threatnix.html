@@ -648,11 +648,15 @@
             <div class="list-header">
                 <div class="search-container">
                     <label for="searchInput">Search All Fields</label>
-                    <input type="text" id="searchInput" placeholder="Search all fields..." oninput="filterReports()">
+                    <input type="text" id="searchInput" placeholder="Search all fields (regex supported)..." oninput="filterReports()">
                 </div>
                 <div class="program-search-container">
                     <label for="programSearch">Search Program Name</label>
                     <input type="text" id="programSearch" placeholder="Search Program Name..." oninput="filterReports()">
+                </div>
+                <div class="search-container">
+                    <label for="regexInput">Negative Regex Search</label>
+                    <input type="text" id="regexInput" placeholder="Exclude pattern (regex)..." oninput="filterReports()">
                 </div>
                 <div class="severity-filter">
                     <label for="severityFilter">Severity</label>
@@ -953,33 +957,68 @@
         }
 
         function filterReports() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const searchTerm = document.getElementById('searchInput').value;
             const programSearch = document.getElementById('programSearch').value.toLowerCase();
             const severityFilter = document.getElementById('severityFilter').value.toLowerCase();
             const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-            
-            console.log('Applying filters:', { searchTerm, programSearch, severityFilter, statusFilter });
-            
+            const regexInput = document.getElementById('regexInput').value;
+            // Regex for Search All Fields
+            let searchRegex = null;
+            let searchRegexError = '';
+            if (searchTerm) {
+                try {
+                    searchRegex = new RegExp(searchTerm, 'i');
+                } catch (e) {
+                    searchRegexError = e.message;
+                }
+            }
+            // Regex for Negative Regex Search
+            let negativeRegex = null;
+            let negativeRegexError = '';
+            if (regexInput) {
+                try {
+                    negativeRegex = new RegExp(regexInput, 'i');
+                } catch (e) {
+                    negativeRegexError = e.message;
+                }
+            }
+            // Hide error by default
+            document.getElementById('error').style.display = 'none';
+            // Show regex error if any
+            if (searchRegexError) {
+                document.getElementById('error-message').textContent = 'Invalid Search All Fields regex: ' + searchRegexError;
+                document.getElementById('error').style.display = 'flex';
+            } else if (negativeRegexError) {
+                document.getElementById('error-message').textContent = 'Invalid Negative Regex: ' + negativeRegexError;
+                document.getElementById('error').style.display = 'flex';
+            }
             filteredReports = reports.filter(report => {
-                // Global search filter (all fields)
+                // Search All Fields (regex positive match or fallback to substring)
                 let matchesSearch = true;
                 if (searchTerm) {
                     matchesSearch = false;
                     for (const key in report) {
-                        if (report[key] && report[key].toString().toLowerCase().includes(searchTerm)) {
-                            matchesSearch = true;
-                            break;
+                        if (report[key]) {
+                            if (searchRegex && !searchRegexError) {
+                                if (searchRegex.test(report[key].toString())) {
+                                    matchesSearch = true;
+                                    break;
+                                }
+                            } else if (!searchRegex) { // fallback to substring if regex invalid
+                                if (report[key].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                                    matchesSearch = true;
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
-                
                 // Program Name search filter
                 let matchesProgram = true;
                 if (programSearch) {
                     matchesProgram = report['Program Name'] && 
                                      report['Program Name'].toString().toLowerCase().includes(programSearch);
                 }
-                
                 // Severity filter
                 let matchesSeverity = true;
                 if (severityFilter) {
@@ -987,20 +1026,26 @@
                     matchesSeverity = severity.includes(severityFilter) || 
                                      (severityFilter === 'info' && severity.includes('informative'));
                 }
-                
                 // Status filter
                 let matchesStatus = true;
                 if (statusFilter) {
                     const status = report['Status'] ? report['Status'].toString().toLowerCase().trim() : '';
                     matchesStatus = status.includes(statusFilter);
                 }
-                
-                return matchesSearch && matchesProgram && matchesSeverity && matchesStatus;
+                // Negative Regex filter (exclude matches)
+                let matchesNegativeRegex = true;
+                if (negativeRegex && !negativeRegexError) {
+                    let anyFieldMatches = false;
+                    for (const key in report) {
+                        if (report[key] && negativeRegex.test(report[key].toString())) {
+                            anyFieldMatches = true;
+                            break;
+                        }
+                    }
+                    matchesNegativeRegex = !anyFieldMatches;
+                }
+                return matchesSearch && matchesProgram && matchesSeverity && matchesStatus && matchesNegativeRegex;
             });
-            
-            console.log('Filtered reports count:', filteredReports.length);
-            
-            // Apply current sorting
             sortReports();
         }
 
@@ -1020,7 +1065,6 @@
             const listContainer = document.getElementById('reportList');
             const reportCount = document.getElementById('reportCount');
             
-            // Update report count
             reportCount.textContent = `Reports: ${filteredReports.length}`;
             
             if (filteredReports.length === 0) {
@@ -1039,17 +1083,14 @@
                 const item = document.createElement('div');
                 item.className = 'list-item';
                 
-                // Get severity class
                 const severity = getSeverityClass(report['Severity']);
                 
-                // Format date if available
                 let dateHtml = '';
                 if (report._date && report._date.getTime() !== new Date(0).getTime()) {
                     const dateStr = report._date.toLocaleDateString();
                     dateHtml = `<div class="report-date">${dateStr}</div>`;
                 }
                 
-                // Add number prefix
                 item.innerHTML = `
                     <div class="program-name">
                         <span class="report-number">${index + 1}.</span>
@@ -1062,22 +1103,18 @@
                 `;
                 
                 item.addEventListener('click', () => {
-                    // Remove selected class from all items
                     document.querySelectorAll('.list-item').forEach(el => {
                         el.classList.remove('selected');
                     });
                     
-                    // Add selected class to clicked item
                     item.classList.add('selected');
                     
-                    // Display the full report
                     displayFullReport(report);
                 });
                 
                 listContainer.appendChild(item);
             });
             
-            // Select first item by default if none selected
             if (!document.querySelector('.list-item.selected') && filteredReports.length > 0) {
                 const firstItem = listContainer.querySelector('.list-item');
                 if (firstItem) {
@@ -1105,16 +1142,14 @@
             const reportContent = document.getElementById('reportContent');
             const fullReport = report['Full Report'] || '*No report content available*';
             
-            // Create metadata section
             let metadataHtml = '<div class="metadata"><h2>Metadata</h2><dl>';
             
-            // Always show standard columns first in a specific order
             const standardColumns = [
-                'Program Name',    // 1st column
-                'Report Title',    // 2nd column
-                'Status',          // 3rd column
-                'Severity',        // 4th column
-                'Published Date'   // 5th column
+                'Program Name',
+                'Report Title',
+                'Status',
+                'Severity',
+                'Published Date'
             ];
             
             standardColumns.forEach(key => {
@@ -1129,7 +1164,6 @@
                 }
             });
             
-            // Then show all other columns in alphabetical order
             const otherColumns = Object.keys(report)
                 .filter(key => !standardColumns.includes(key) && !key.startsWith('_') && key !== 'Full Report')
                 .sort();
@@ -1145,28 +1179,22 @@
             
             metadataHtml += '</dl></div>';
             
-            // Convert custom link formats to proper markdown
             const processedReport = convertCustomLinks(fullReport);
             
-            // Sanitize and convert markdown to HTML for Full Report
             const cleanReportHtml = DOMPurify.sanitize(marked.parse(processedReport));
             
-            // Combine metadata and report body
             reportContent.innerHTML = `
                 ${metadataHtml}
                 <div class="report-body">${cleanReportHtml}</div>
             `;
         }
 
-        // Function to convert custom link formats to proper markdown
         function convertCustomLinks(text) {
             if (!text) return text;
             
-            // Convert custom link format: [text|url] to [text](url)
             return text.replace(/\[([^|\]]+)\|([^\]]+)\]/g, '[$1]($2)');
         }
 
-        // Helper function to escape HTML
         function escapeHtml(unsafe) {
             if (!unsafe) return '';
             return unsafe
