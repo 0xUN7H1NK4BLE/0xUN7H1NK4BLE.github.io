@@ -185,13 +185,11 @@
             flex-direction: column;
             gap: 0.25rem;
         }
-
         .search-container label, .program-search-container label {
             font-size: 0.85rem;
             font-weight: 500;
             color: var(--text-light);
         }
-
         .search-container i, .program-search-container i {
             position: absolute;
             left: 1rem;
@@ -200,26 +198,22 @@
             color: var(--text-light);
             font-size: 0.9rem;
         }
-
         .search-container input, .program-search-container input {
             width: 100%;
             padding-left: 2.5rem;
             font-size: 0.9rem;
         }
-
         .severity-filter, .status-filter, .sort-filter {
             min-width: 150px;
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
         }
-
         .severity-filter label, .status-filter label, .sort-filter label {
             font-size: 0.85rem;
             font-weight: 500;
             color: var(--text-light);
         }
-
         .severity-filter select, .status-filter select, .sort-filter select {
             width: 100%;
             padding: 0.75rem;
@@ -231,18 +225,30 @@
             cursor: pointer;
             transition: border-color 0.2s;
         }
-
         .severity-filter select:focus, .status-filter select:focus, .sort-filter select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
         }
-
         .report-count {
             font-size: 0.9rem;
             color: var(--text-light);
             font-weight: 500;
             align-self: center;
+        }
+        @media (max-width: 768px) {
+            .list-header {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .search-container, .program-search-container, .severity-filter, .status-filter, .sort-filter {
+                min-width: auto;
+                width: 100%;
+            }
+            .search-container label, .program-search-container label, 
+            .severity-filter label, .status-filter label, .sort-filter label {
+                display: none;
+            }
         }
 
         .list-items {
@@ -622,6 +628,108 @@
             color: #f1f5f9;
             background-color: #1e293b;
         }
+
+        /* Custom dropdown styles for multi-select checkboxes */
+        .custom-multiselect {
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            background: var(--bg);
+            cursor: pointer;
+            min-width: 150px;
+            position: relative;
+            user-select: none;
+            margin-bottom: 0.25rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .custom-multiselect:focus, .custom-multiselect.open {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+        }
+        .custom-multiselect:hover {
+            border-color: var(--primary);
+        }
+        .selected-summary {
+            padding: 0.75rem 1rem;
+            color: var(--text);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .dropdown-arrow {
+            margin-left: 0.5rem;
+            font-size: 1rem;
+            color: var(--text-light);
+            transition: transform 0.2s;
+        }
+        .custom-multiselect.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+        .dropdown-panel {
+            position: absolute;
+            left: 0;
+            top: 100%;
+            z-index: 10;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            min-width: 100%;
+            padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+            margin-top: 0.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            animation: fadeIn 0.15s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-panel label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.4rem 0.2rem;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .dropdown-panel label:hover, .dropdown-panel label:focus-within {
+            background: var(--bg);
+        }
+        .dropdown-panel input[type=checkbox] {
+            accent-color: var(--primary);
+            width: 1.1em;
+            height: 1.1em;
+        }
+        .dropdown-panel .clear-btn {
+            margin-top: 0.5rem;
+            align-self: flex-end;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.95rem;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .dropdown-panel .clear-btn:hover {
+            background: var(--bg);
+        }
+        @media (max-width: 768px) {
+            .dropdown-panel {
+                min-width: 220px;
+                left: 0;
+                right: 0;
+            }
+            .custom-multiselect {
+                min-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -658,29 +766,29 @@
                     <label for="regexInput">Negative Regex Search</label>
                     <input type="text" id="regexInput" placeholder="Exclude pattern (regex)..." oninput="filterReports()">
                 </div>
-                <div class="severity-filter">
-                    <label for="severityFilter">Severity</label>
-                    <select id="severityFilter" onchange="filterReports()">
-                        <option value="">All Severities</option>
-                        <option value="critical">Critical</option>
-                        <option value="high">High</option>
-                        <option value="medium">Medium</option>
-                        <option value="low">Low</option>
-                        <option value="info">Informative</option>
-                    </select>
+                <div class="severity-filter" id="severityFilterGroup" style="position: relative;">
+                    <label>Severity</label>
+                    <div class="custom-multiselect" id="severityDropdown" tabindex="0">
+                        <div class="selected-summary" id="severitySummary">All Severities <span class="dropdown-arrow"><i class="fas fa-chevron-down"></i></span></div>
+                        <div class="dropdown-panel" id="severityPanel" style="display: none;"></div>
+                    </div>
                 </div>
-                <div class="status-filter">
-                    <label for="statusFilter">Status</label>
-                    <select id="statusFilter" onchange="filterReports()">
-                        <option value="">All Statuses</option>
-                        <!-- Status options will be populated dynamically -->
-                    </select>
+                <div class="status-filter" id="statusFilterGroup" style="position: relative;">
+                    <label>Status</label>
+                    <div class="custom-multiselect" id="statusDropdown" tabindex="0">
+                        <div class="selected-summary" id="statusSummary">All Statuses <span class="dropdown-arrow"><i class="fas fa-chevron-down"></i></span></div>
+                        <div class="dropdown-panel" id="statusPanel" style="display: none;"></div>
+                    </div>
                 </div>
                 <div class="sort-filter">
                     <label for="sortFilter">Sort</label>
                     <select id="sortFilter" onchange="sortReports()">
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
+                        <option value="severity">Severity (Critical > Info)</option>
+                        <option value="program">Program Name (A-Z)</option>
+                        <option value="status">Status (A-Z)</option>
+                        <option value="title">Report Title (A-Z)</option>
                     </select>
                 </div>
                 <div class="report-count" id="reportCount">Reports: 0</div>
@@ -869,18 +977,7 @@
                 }
             });
             
-            // Populate status filter dropdown
-            const statusFilter = document.getElementById('statusFilter');
-            while (statusFilter.options.length > 1) {
-                statusFilter.remove(1);
-            }
-            
-            statusOptions.forEach(status => {
-                const option = document.createElement('option');
-                option.value = status.toLowerCase();
-                option.textContent = status;
-                statusFilter.appendChild(option);
-            });
+            renderStatusCheckboxes();
 
             // Process dates in all reports
             reports.forEach(report => {
@@ -959,8 +1056,10 @@
         function filterReports() {
             const searchTerm = document.getElementById('searchInput').value;
             const programSearch = document.getElementById('programSearch').value.toLowerCase();
-            const severityFilter = document.getElementById('severityFilter').value.toLowerCase();
-            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+            // Severity checkboxes
+            const severityChecked = Array.from(document.querySelectorAll('#severityPanel input[type=checkbox]:checked')).map(cb => cb.value);
+            // Status checkboxes
+            const statusChecked = Array.from(document.querySelectorAll('#statusPanel input[type=checkbox]:checked')).map(cb => cb.value);
             const regexInput = document.getElementById('regexInput').value;
             // Regex for Search All Fields
             let searchRegex = null;
@@ -1019,18 +1118,19 @@
                     matchesProgram = report['Program Name'] && 
                                      report['Program Name'].toString().toLowerCase().includes(programSearch);
                 }
-                // Severity filter
+                // Severity filter (multi)
                 let matchesSeverity = true;
-                if (severityFilter) {
+                if (severityChecked.length > 0) {
                     const severity = report['Severity'] ? report['Severity'].toString().toLowerCase() : '';
-                    matchesSeverity = severity.includes(severityFilter) || 
-                                     (severityFilter === 'info' && severity.includes('informative'));
+                    matchesSeverity = severityChecked.some(val =>
+                        severity.includes(val) || (val === 'info' && severity.includes('informative'))
+                    );
                 }
-                // Status filter
+                // Status filter (multi)
                 let matchesStatus = true;
-                if (statusFilter) {
+                if (statusChecked.length > 0) {
                     const status = report['Status'] ? report['Status'].toString().toLowerCase().trim() : '';
-                    matchesStatus = status.includes(statusFilter);
+                    matchesStatus = statusChecked.some(val => status.includes(val));
                 }
                 // Negative Regex filter (exclude matches)
                 let matchesNegativeRegex = true;
@@ -1051,13 +1151,39 @@
 
         function sortReports() {
             const sortValue = document.getElementById('sortFilter').value;
-            
             if (sortValue === 'newest') {
                 filteredReports.sort((a, b) => b._date - a._date);
             } else if (sortValue === 'oldest') {
                 filteredReports.sort((a, b) => a._date - b._date);
+            } else if (sortValue === 'severity') {
+                // Custom order: Critical > High > Medium > Low > Info
+                const sevOrder = { 'critical': 1, 'high': 2, 'medium': 3, 'low': 4, 'info': 5, 'informative': 5 };
+                filteredReports.sort((a, b) => {
+                    const aSev = (a['Severity'] || '').toLowerCase();
+                    const bSev = (b['Severity'] || '').toLowerCase();
+                    const aVal = Object.keys(sevOrder).find(key => aSev.includes(key)) ? sevOrder[Object.keys(sevOrder).find(key => aSev.includes(key))] : 99;
+                    const bVal = Object.keys(sevOrder).find(key => bSev.includes(key)) ? sevOrder[Object.keys(sevOrder).find(key => bSev.includes(key))] : 99;
+                    return aVal - bVal;
+                });
+            } else if (sortValue === 'program') {
+                filteredReports.sort((a, b) => {
+                    const aName = (a['Program Name'] || '').toLowerCase();
+                    const bName = (b['Program Name'] || '').toLowerCase();
+                    return aName.localeCompare(bName);
+                });
+            } else if (sortValue === 'status') {
+                filteredReports.sort((a, b) => {
+                    const aStatus = (a['Status'] || '').toLowerCase();
+                    const bStatus = (b['Status'] || '').toLowerCase();
+                    return aStatus.localeCompare(bStatus);
+                });
+            } else if (sortValue === 'title') {
+                filteredReports.sort((a, b) => {
+                    const aTitle = (a['Report Title'] || '').toLowerCase();
+                    const bTitle = (b['Report Title'] || '').toLowerCase();
+                    return aTitle.localeCompare(bTitle);
+                });
             }
-            
             displayReportList();
         }
 
@@ -1205,6 +1331,140 @@
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
         }
+
+        // Populate severity checkboxes in dropdown
+        function renderSeverityCheckboxes() {
+            const severities = [
+                { value: 'critical', label: 'Critical' },
+                { value: 'high', label: 'High' },
+                { value: 'medium', label: 'Medium' },
+                { value: 'low', label: 'Low' },
+                { value: 'info', label: 'Informative' }
+            ];
+            const panel = document.getElementById('severityPanel');
+            panel.innerHTML = '';
+            severities.forEach(sev => {
+                const id = `sev_${sev.value}`;
+                const box = document.createElement('label');
+                box.innerHTML = `<input type="checkbox" value="${sev.value}" id="${id}" onchange="updateSummary('severity'); filterReports(); event.stopPropagation();"> ${sev.label}`;
+                panel.appendChild(box);
+            });
+            // Add clear button
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'clear-btn';
+            clearBtn.type = 'button';
+            clearBtn.textContent = 'Clear';
+            clearBtn.onclick = function(e) {
+                e.stopPropagation();
+                Array.from(panel.querySelectorAll('input[type=checkbox]')).forEach(cb => cb.checked = false);
+                updateSummary('severity');
+                filterReports();
+            };
+            panel.appendChild(clearBtn);
+            updateSummary('severity');
+        }
+        renderSeverityCheckboxes();
+
+        // Populate status checkboxes in dropdown
+        function renderStatusCheckboxes() {
+            const panel = document.getElementById('statusPanel');
+            panel.innerHTML = '';
+            statusOptions.forEach(status => {
+                const value = status.toLowerCase();
+                const id = `status_${value.replace(/[^a-z0-9]/g, '_')}`;
+                const box = document.createElement('label');
+                box.innerHTML = `<input type="checkbox" value="${value}" id="${id}" onchange="updateSummary('status'); filterReports(); event.stopPropagation();"> ${status}`;
+                panel.appendChild(box);
+            });
+            // Add clear button
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'clear-btn';
+            clearBtn.type = 'button';
+            clearBtn.textContent = 'Clear';
+            clearBtn.onclick = function(e) {
+                e.stopPropagation();
+                Array.from(panel.querySelectorAll('input[type=checkbox]')).forEach(cb => cb.checked = false);
+                updateSummary('status');
+                filterReports();
+            };
+            panel.appendChild(clearBtn);
+            updateSummary('status');
+        }
+
+        // Update summary text for dropdowns
+        function updateSummary(type) {
+            let checked, summary, allText;
+            if (type === 'severity') {
+                checked = Array.from(document.querySelectorAll('#severityPanel input[type=checkbox]:checked'));
+                summary = document.getElementById('severitySummary');
+                allText = 'All Severities';
+            } else {
+                checked = Array.from(document.querySelectorAll('#statusPanel input[type=checkbox]:checked'));
+                summary = document.getElementById('statusSummary');
+                allText = 'All Statuses';
+            }
+            if (checked.length === 0) {
+                summary.textContent = allText;
+            } else if (checked.length === 1) {
+                summary.textContent = checked[0].parentElement.textContent.trim();
+            } else {
+                summary.textContent = `${checked.length} selected`;
+            }
+        }
+
+        // Dropdown open/close logic and accessibility
+        function setDropdownHandlers(type) {
+            const dropdown = document.getElementById(type + 'Dropdown');
+            const panel = document.getElementById(type + 'Panel');
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Toggle open/close
+                const isOpen = dropdown.classList.contains('open');
+                closeDropdown('severity');
+                closeDropdown('status');
+                if (!isOpen) {
+                    dropdown.classList.add('open');
+                    panel.style.display = 'flex';
+                    panel.querySelector('input[type=checkbox]')?.focus();
+                } else {
+                    dropdown.classList.remove('open');
+                    panel.style.display = 'none';
+                }
+            });
+            dropdown.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    dropdown.click();
+                } else if (e.key === 'Escape') {
+                    closeDropdown(type);
+                }
+            });
+        }
+        function closeDropdown(type) {
+            const dropdown = document.getElementById(type + 'Dropdown');
+            const panel = document.getElementById(type + 'Panel');
+            if (dropdown) dropdown.classList.remove('open');
+            if (panel) panel.style.display = 'none';
+        }
+        // Close dropdowns when clicking outside or pressing Escape
+        document.addEventListener('mousedown', function(e) {
+            ['severity', 'status'].forEach(type => {
+                const dropdown = document.getElementById(type + 'Dropdown');
+                const panel = document.getElementById(type + 'Panel');
+                if (dropdown && panel && !dropdown.contains(e.target)) {
+                    dropdown.classList.remove('open');
+                    panel.style.display = 'none';
+                }
+            });
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDropdown('severity');
+                closeDropdown('status');
+            }
+        });
+        setDropdownHandlers('severity');
+        setDropdownHandlers('status');
     </script>
 </body>
 </html>
