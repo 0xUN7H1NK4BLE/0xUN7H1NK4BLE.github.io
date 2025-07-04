@@ -91,30 +91,29 @@
             display: flex;
             flex: 1;
             overflow: hidden;
-            padding: 1.5rem;
-            gap: 1.5rem;
+            padding: 1.5rem 0;
+            gap: 0;
+            position: relative;
         }
 
         .input-container {
             background-color: var(--card);
-            padding: 0.5rem 1rem;
-            margin: 0 1.5rem 0.5rem;
+            padding: 1.25rem;
+            margin: 0 1.5rem 1.5rem;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             display: flex;
-            gap: 0.5rem;
+            gap: 1rem;
             align-items: center;
-            font-size: 0.97rem;
         }
 
         input {
             flex: 1;
-            padding: 0.5rem 0.75rem;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border);
             border-radius: var(--border-radius);
             font-size: 0.95rem;
             transition: border-color 0.2s, box-shadow 0.2s;
-            height: 2.1rem;
         }
 
         input:focus {
@@ -124,7 +123,7 @@
         }
 
         button {
-            padding: 0.5rem 1.1rem;
+            padding: 0.75rem 1.5rem;
             background-color: var(--primary);
             color: white;
             border: none;
@@ -136,7 +135,6 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            height: 2.1rem;
         }
 
         button:hover {
@@ -149,18 +147,6 @@
             box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.3);
         }
 
-        @media (max-width: 600px) {
-            .input-container {
-                flex-direction: column;
-                gap: 0.5rem;
-                padding: 0.5rem 0.5rem;
-            }
-            input, button {
-                width: 100%;
-                min-width: 0;
-            }
-        }
-
         .list-container {
             flex: 1;
             background-color: var(--card);
@@ -169,8 +155,24 @@
             display: flex;
             flex-direction: column;
             min-width: 320px;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            overflow-x: hidden;
+            transition: width 0.4s cubic-bezier(.4,1.4,.6,1), min-width 0.4s, max-width 0.4s, flex 0.4s, opacity 0.3s;
         }
-
+        .list-container .list-header, .list-container .list-items {
+            transition: opacity 0.3s cubic-bezier(.4,1.4,.6,1);
+        }
+        .list-container.fading-out .list-header,
+        .list-container.fading-out .list-items {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .list-container.fading-in .list-header,
+        .list-container.fading-in .list-items {
+            opacity: 1;
+            pointer-events: auto;
+        }
         .report-container {
             flex: 2;
             background-color: var(--card);
@@ -276,6 +278,9 @@
             border-bottom: 1px solid var(--border);
             cursor: pointer;
             transition: background-color 0.2s;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            overflow-x: hidden;
         }
 
         .list-item:hover {
@@ -746,25 +751,106 @@
             }
         }
 
-        .resizer {
-            width: 7px;
-            background: linear-gradient(to right, var(--border) 40%, var(--primary) 60%);
-            cursor: col-resize;
-            margin: 0 0.25rem;
-            border-radius: 6px;
-            transition: background 0.2s;
+        /* Minimize/Maximize styles - SLIM version */
+        #minMaxDivider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            width: 4px;
+            min-width: 4px;
+            background: transparent;
+            border: none;
+            outline: none;
+            z-index: 2;
             position: relative;
-            z-index: 10;
+            transition: background 0.2s;
         }
-        .resizer:hover, .resizer.active {
-            background: linear-gradient(to right, var(--primary) 30%, var(--primary) 70%);
+        #minMaxDivider::before {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+            border-radius: 2px;
+            opacity: 0.5;
+            transform: translateX(-50%);
+            transition: background 0.2s, opacity 0.2s;
         }
-        @media (max-width: 900px) {
-            .container {
-                flex-direction: column;
+        #minMaxBtn {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none;
+            cursor: pointer;
+            opacity: 0.7;
+            pointer-events: auto;
+            padding: 0;
+            transition: background 0.15s, color 0.15s, transform 0.15s;
+        }
+        #minMaxDivider:hover #minMaxBtn,
+        #minMaxBtn:focus {
+            opacity: 1;
+            pointer-events: auto;
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        #minMaxBtn i {
+            font-size: 11px;
+            transition: color 0.2s;
+        }
+        .container.minimized #minMaxBtn {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            opacity: 1;
+        }
+        .container.minimized #minMaxDivider::before {
+            background: var(--primary);
+            opacity: 0.3;
+        }
+        .container #listContainer {
+            transition: width 0.3s cubic-bezier(.4,2,.6,1), min-width 0.3s, max-width 0.3s, flex 0.3s, padding 0.2s;
+        }
+        .container.minimized #listContainer {
+            width: 0 !important;
+            min-width: 0 !important;
+            max-width: 0 !important;
+            flex: 0 0 0 !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+            border: none !important;
+            opacity: 0.2;
+        }
+        .container.minimized .report-container {
+            flex: 1 1 100%;
+            max-width: 100%;
+            transition: flex 0.4s cubic-bezier(.4,1.4,.6,1), max-width 0.4s;
+        }
+        @media (max-width: 768px) {
+            #minMaxDivider {
+                width: 2px;
+                min-width: 2px;
             }
-            .resizer {
-                display: none;
+            #minMaxBtn {
+                width: 14px;
+                height: 14px;
+            }
+            #minMaxBtn i {
+                font-size: 11px;
             }
         }
     </style>
@@ -789,7 +875,7 @@
     </div>
     
     <div class="container">
-        <div class="list-container">
+        <div class="list-container" id="listContainer">
             <div class="list-header">
                 <div class="search-container">
                     <label for="searchInput">Search All Fields</label>
@@ -837,7 +923,12 @@
                 </div>
             </div>
         </div>
-       <div class="resizer" id="resizer"></div>
+        <!-- Minimize/Maximize Button -->
+        <div id="minMaxDivider" style="display: flex; align-items: center; justify-content: center; cursor: pointer; width: 32px; background: transparent; border: none; outline: none; z-index: 2;">
+            <button id="minMaxBtn" title="Minimize left panel" style="background: var(--card); border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); cursor: pointer; transition: background 0.2s;">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
         <div class="report-container">
             <div class="report-content" id="reportContent">
                 <div class="empty-state">
@@ -1304,7 +1395,10 @@
         function displayFullReport(report) {
             const reportContent = document.getElementById('reportContent');
             const fullReport = report['Full Report'] || '*No report content available*';
-            
+            let processedReport = convertCustomLinks(fullReport);
+            // Encode < and > only outside code blocks and inline code
+            processedReport = encodeAngleBracketsOutsideCode(processedReport);
+            const reportBodyHtml = DOMPurify.sanitize(marked.parse(processedReport));
             let metadataHtml = '<div class="metadata"><h2>Metadata</h2><dl>';
             
             const standardColumns = [
@@ -1342,13 +1436,9 @@
             
             metadataHtml += '</dl></div>';
             
-            const processedReport = convertCustomLinks(fullReport);
-            
-            const cleanReportHtml = DOMPurify.sanitize(marked.parse(processedReport));
-            
             reportContent.innerHTML = `
                 ${metadataHtml}
-                <div class="report-body">${cleanReportHtml}</div>
+                <div class="report-body">${reportBodyHtml}</div>
             `;
         }
 
@@ -1367,6 +1457,34 @@
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
+        }
+
+        // Encode < and > outside code blocks and inline code
+        function encodeAngleBracketsOutsideCode(text) {
+            // Split by code blocks (```...```)
+            const codeBlockRegex = /(```[\s\S]*?```)/g;
+            let segments = text.split(codeBlockRegex);
+            segments = segments.map(segment => {
+                if (segment.startsWith('```') && segment.endsWith('```')) {
+                    // Code block, leave as is
+                    return segment;
+                } else {
+                    // Now handle inline code (`...`)
+                    // Split by inline code
+                    const inlineCodeRegex = /(`[^`]*`)/g;
+                    let parts = segment.split(inlineCodeRegex);
+                    parts = parts.map(part => {
+                        if (part.startsWith('`') && part.endsWith('`')) {
+                            return part; // inline code, leave as is
+                        } else {
+                            // Encode < and >
+                            return part.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        }
+                    });
+                    return parts.join('');
+                }
+            });
+            return segments.join('');
         }
 
         // Populate severity checkboxes in dropdown
@@ -1503,36 +1621,33 @@
         setDropdownHandlers('severity');
         setDropdownHandlers('status');
 
-        // Draggable resizer logic
-        const resizer = document.getElementById('resizer');
-        const leftPanel = document.querySelector('.list-container');
-        const rightPanel = document.querySelector('.report-container');
-        let isResizing = false;
-        let startX = 0;
-        let startLeftWidth = 0;
-        resizer.addEventListener('mousedown', function(e) {
-            isResizing = true;
-            startX = e.clientX;
-            startLeftWidth = leftPanel.offsetWidth;
-            resizer.classList.add('active');
-            document.body.style.cursor = 'col-resize';
-        });
-        document.addEventListener('mousemove', function(e) {
-            if (!isResizing) return;
-            const dx = e.clientX - startX;
-            let newLeftWidth = startLeftWidth + dx;
-            const minLeft = 220;
-            const maxLeft = Math.max(320, window.innerWidth - 320);
-            newLeftWidth = Math.max(minLeft, Math.min(maxLeft, newLeftWidth));
-            leftPanel.style.flex = 'none';
-            leftPanel.style.width = newLeftWidth + 'px';
-            rightPanel.style.flex = '1 1 0%';
-        });
-        document.addEventListener('mouseup', function() {
-            if (isResizing) {
-                isResizing = false;
-                resizer.classList.remove('active');
-                document.body.style.cursor = '';
+        // Minimize/Maximize logic
+        const minMaxBtn = document.getElementById('minMaxBtn');
+        const minMaxDivider = document.getElementById('minMaxDivider');
+        const container = document.querySelector('.container');
+        let isMinimized = false;
+
+        minMaxBtn.addEventListener('click', function() {
+            const listContainer = document.getElementById('listContainer');
+            isMinimized = !isMinimized;
+            if (isMinimized) {
+                // Fade out contents, then minimize
+                listContainer.classList.add('fading-out');
+                setTimeout(() => {
+                    container.classList.add('minimized');
+                    minMaxBtn.title = 'Maximize left panel';
+                    minMaxBtn.querySelector('i').className = 'fas fa-angle-right';
+                    listContainer.classList.remove('fading-out');
+                }, 220);
+            } else {
+                // Un-minimize, then fade in contents
+                container.classList.remove('minimized');
+                listContainer.classList.add('fading-in');
+                minMaxBtn.title = 'Minimize left panel';
+                minMaxBtn.querySelector('i').className = 'fas fa-angle-left';
+                setTimeout(() => {
+                    listContainer.classList.remove('fading-in');
+                }, 220);
             }
         });
     </script>
