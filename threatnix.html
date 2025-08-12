@@ -751,79 +751,103 @@
             }
         }
 
-        /* Minimize/Maximize styles - SLIM version */
+        /* Minimize/Maximize styles */
         #minMaxDivider {
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            width: 4px;
-            min-width: 4px;
-            background: transparent;
-            border: none;
-            outline: none;
-            z-index: 2;
+            width: 1px;
+            min-width: 1px;
+            background: var(--border);
             position: relative;
-            transition: background 0.2s;
+            z-index: 2;
+            transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         #minMaxDivider::before {
             content: '';
-            display: block;
             position: absolute;
-            left: 50%;
             top: 0;
             bottom: 0;
+            left: 50%;
             width: 2px;
-            background: var(--border);
-            border-radius: 2px;
-            opacity: 0.5;
-            transform: translateX(-50%);
-            transition: background 0.2s, opacity 0.2s;
+            background: var(--primary);
+            transform: translateX(-50%) scaleY(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1px;
+        }
+        .container.minimized #minMaxDivider::before {
+            transform: translateX(-50%) scaleY(1);
         }
         #minMaxBtn {
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            background: transparent;
-            border: none;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 28px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            opacity: 0.7;
-            pointer-events: auto;
-            padding: 0;
-            transition: background 0.15s, color 0.15s, transform 0.15s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-light);
+            font-size: 12px;
+            overflow: hidden;
         }
-        #minMaxDivider:hover #minMaxBtn,
-        #minMaxBtn:focus {
-            opacity: 1;
-            pointer-events: auto;
+        #minMaxBtn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: var(--primary);
-            color: #fff;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+        #minMaxBtn:hover::before {
+            transform: translateY(0);
+        }
+        #minMaxBtn:hover {
+            color: white;
             border-color: var(--primary);
+            box-shadow: 0 6px 20px rgba(58, 134, 255, 0.3);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        #minMaxBtn:active {
+            transform: translate(-50%, -50%) scale(0.98);
+            transition: all 0.1s ease;
+        }
+        #minMaxBtn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.2);
         }
         #minMaxBtn i {
-            font-size: 11px;
-            transition: color 0.2s;
+            font-size: 12px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
         }
         .container.minimized #minMaxBtn {
             background: var(--primary);
-            color: #fff;
+            color: white;
             border-color: var(--primary);
-            opacity: 1;
+            box-shadow: 0 6px 20px rgba(58, 134, 255, 0.3);
         }
-        .container.minimized #minMaxDivider::before {
-            background: var(--primary);
-            opacity: 0.3;
+        .container.minimized #minMaxBtn::before {
+            transform: translateY(0);
+        }
+        .container.minimized #minMaxBtn i {
+            transform: rotate(180deg);
         }
         .container #listContainer {
-            transition: width 0.3s cubic-bezier(.4,2,.6,1), min-width 0.3s, max-width 0.3s, flex 0.3s, padding 0.2s;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left center;
         }
         .container.minimized #listContainer {
             width: 0 !important;
@@ -831,26 +855,22 @@
             max-width: 0 !important;
             flex: 0 0 0 !important;
             overflow: hidden !important;
-            padding: 0 !important;
-            border: none !important;
-            opacity: 0.2;
+            opacity: 0;
+            transform: translateX(-20px) scaleX(0.95);
         }
         .container.minimized .report-container {
             flex: 1 1 100%;
             max-width: 100%;
-            transition: flex 0.4s cubic-bezier(.4,1.4,.6,1), max-width 0.4s;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scaleX(1.02);
         }
         @media (max-width: 768px) {
-            #minMaxDivider {
-                width: 2px;
-                min-width: 2px;
-            }
             #minMaxBtn {
-                width: 14px;
-                height: 14px;
+                width: 24px;
+                height: 50px;
             }
             #minMaxBtn i {
-                font-size: 11px;
+                font-size: 10px;
             }
         }
 
@@ -899,6 +919,8 @@
             font-size: 1.1rem;
             margin-left: 0.5rem;
         }
+        
+
     </style>
 </head>
 <body>
@@ -968,8 +990,8 @@
             </div>
         </div>
         <!-- Minimize/Maximize Button -->
-        <div id="minMaxDivider" style="display: flex; align-items: center; justify-content: center; cursor: pointer; width: 32px; background: transparent; border: none; outline: none; z-index: 2;">
-            <button id="minMaxBtn" title="Minimize left panel" style="background: var(--card); border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); cursor: pointer; transition: background 0.2s;">
+        <div id="minMaxDivider">
+            <button id="minMaxBtn" title="Minimize left panel">
                 <i class="fas fa-angle-left"></i>
             </button>
         </div>
@@ -991,6 +1013,33 @@
 
         // Theme management
         let currentTheme = localStorage.getItem('theme') || 'light';
+        
+        // URL and localStorage management
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        
+        function saveUrlToHistory(url) {
+            if (!url || url.trim() === '') return;
+            
+            let urlHistory = JSON.parse(localStorage.getItem('urlHistory') || '[]');
+            
+            // Remove if already exists
+            urlHistory = urlHistory.filter(item => item !== url);
+            
+            // Add to beginning
+            urlHistory.unshift(url);
+            
+            // Keep only last 10 URLs
+            urlHistory = urlHistory.slice(0, 10);
+            
+            localStorage.setItem('urlHistory', JSON.stringify(urlHistory));
+        }
+        
+        function getUrlHistory() {
+            return JSON.parse(localStorage.getItem('urlHistory') || '[]');
+        }
         
         // Initialize theme
         function initializeTheme() {
@@ -1040,12 +1089,98 @@
                 loadCSV();
             }
         });
+        
+        // Initialize URL from parameter or localStorage
+        function initializeUrl() {
+            const urlFromParam = getUrlParameter('url');
+            const urlHistory = getUrlHistory();
+            
+            if (urlFromParam) {
+                // URL parameter takes precedence
+                document.getElementById('csvUrl').value = decodeURIComponent(urlFromParam);
+                saveUrlToHistory(urlFromParam);
+                loadCSV();
+            } else if (urlHistory.length > 0) {
+                // Load the most recent URL from history
+                document.getElementById('csvUrl').value = urlHistory[0];
+                loadCSV();
+            }
+        }
+        
+        // Initialize URL on page load
+        initializeUrl();
+        
+        // URL History dropdown functionality
+        function showUrlHistory() {
+            const dropdown = document.getElementById('urlHistoryDropdown');
+            const urlHistory = getUrlHistory();
+            
+            if (urlHistory.length === 0) {
+                dropdown.innerHTML = '<div style="padding: 0.75rem; color: var(--text-light); text-align: center;">No URL history</div>';
+            } else {
+                dropdown.innerHTML = '';
+                urlHistory.forEach((url, index) => {
+                    const item = document.createElement('div');
+                    item.style.cssText = 'padding: 0.75rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 0.5rem;';
+                    item.innerHTML = `
+                        <i class="fas fa-link" style="color: var(--text-light); font-size: 0.8rem;"></i>
+                        <span style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.9rem;">${url}</span>
+                        <button onclick="removeFromHistory('${url}'); event.stopPropagation();" style="background: none; border: none; color: var(--text-light); cursor: pointer; padding: 0.25rem; font-size: 0.8rem;" title="Remove from history">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    item.addEventListener('click', () => {
+                        document.getElementById('csvUrl').value = url;
+                        dropdown.style.display = 'none';
+                        loadCSV();
+                    });
+                    item.addEventListener('mouseenter', () => {
+                        item.style.backgroundColor = 'var(--bg)';
+                    });
+                    item.addEventListener('mouseleave', () => {
+                        item.style.backgroundColor = 'transparent';
+                    });
+                    dropdown.appendChild(item);
+                });
+                
+                // Add clear all button
+                const clearAll = document.createElement('div');
+                clearAll.style.cssText = 'padding: 0.75rem; text-align: center; border-top: 1px solid var(--border); cursor: pointer; color: var(--primary); font-size: 0.9rem;';
+                clearAll.textContent = 'Clear All History';
+                clearAll.addEventListener('click', () => {
+                    localStorage.removeItem('urlHistory');
+                    dropdown.style.display = 'none';
+                });
+                dropdown.appendChild(clearAll);
+            }
+            
+            dropdown.style.display = 'block';
+        }
+        
+        function removeFromHistory(url) {
+            let urlHistory = getUrlHistory();
+            urlHistory = urlHistory.filter(item => item !== url);
+            localStorage.setItem('urlHistory', JSON.stringify(urlHistory));
+            showUrlHistory(); // Refresh the dropdown
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('urlHistoryDropdown');
+            const historyBtn = document.getElementById('historyBtn');
+            if (dropdown && historyBtn && !dropdown.contains(e.target) && !historyBtn.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
 
         function loadCSV() {
             const urlInput = document.getElementById('csvUrl').value;
             const errorDiv = document.getElementById('error');
             const errorMessage = document.getElementById('error-message');
             errorDiv.style.display = 'none';
+            
+            // Save URL to history
+            saveUrlToHistory(urlInput);
             
             // Convert Google Sheets URL to CSV export URL
             let csvUrl;
@@ -1666,32 +1801,28 @@
         setDropdownHandlers('status');
 
         // Minimize/Maximize logic
-        const minMaxBtn = document.getElementById('minMaxBtn');
-        const minMaxDivider = document.getElementById('minMaxDivider');
-        const container = document.querySelector('.container');
-        let isMinimized = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            const minMaxBtn = document.getElementById('minMaxBtn');
+            const container = document.querySelector('.container');
+            let isMinimized = false;
 
-        minMaxBtn.addEventListener('click', function() {
-            const listContainer = document.getElementById('listContainer');
-            isMinimized = !isMinimized;
-            if (isMinimized) {
-                // Fade out contents, then minimize
-                listContainer.classList.add('fading-out');
-                setTimeout(() => {
-                    container.classList.add('minimized');
-                    minMaxBtn.title = 'Maximize left panel';
-                    minMaxBtn.querySelector('i').className = 'fas fa-angle-right';
-                    listContainer.classList.remove('fading-out');
-                }, 220);
-            } else {
-                // Un-minimize, then fade in contents
-                container.classList.remove('minimized');
-                listContainer.classList.add('fading-in');
-                minMaxBtn.title = 'Minimize left panel';
-                minMaxBtn.querySelector('i').className = 'fas fa-angle-left';
-                setTimeout(() => {
-                    listContainer.classList.remove('fading-in');
-                }, 220);
+            if (minMaxBtn && container) {
+                minMaxBtn.addEventListener('click', function() {
+                    const listContainer = document.getElementById('listContainer');
+                    isMinimized = !isMinimized;
+                    
+                    if (isMinimized) {
+                        // Minimize
+                        container.classList.add('minimized');
+                        minMaxBtn.title = 'Maximize left panel';
+                        minMaxBtn.querySelector('i').className = 'fas fa-angle-right';
+                    } else {
+                        // Un-minimize
+                        container.classList.remove('minimized');
+                        minMaxBtn.title = 'Minimize left panel';
+                        minMaxBtn.querySelector('i').className = 'fas fa-angle-left';
+                    }
+                });
             }
         });
     </script>
