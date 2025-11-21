@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hanuman Chalisa Mobile</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Mobile First CSS --- */
+        :root {
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --text-main: #eeeeee;
+            --text-sec: #999999;
+            --accent: #ff9800;
+            
+            /* Default sizes */
+            --fs-hindi: 1.3rem;
+            --fs-eng: 1rem;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding-bottom: 60vh; /* Huge padding so last verse hits center */
+            overscroll-behavior-y: none; /* Prevents rubber-banding on pull */
+        }
+
+        /* --- Progress Line --- */
+        #progress-bar {
+            position: fixed; top: 0; left: 0; height: 3px; background: var(--accent);
+            width: 0%; z-index: 2000; box-shadow: 0 0 5px var(--accent);
+        }
+
+        /* --- Compact Header --- */
+        .sticky-header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+
+        .title-row {
+            text-align: center; padding: 10px 0 5px 0;
+        }
+        h1 { font-size: 1.2rem; color: var(--accent); margin: 0; letter-spacing: 1px; }
+
+        /* --- Controls Area --- */
+        .controls {
+            display: flex; flex-direction: column; gap: 8px; padding: 0 10px;
+        }
+
+        .row-1 {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .btn-group { display: flex; gap: 5px; background: #222; padding: 3px; border-radius: 8px; }
+        
+        button {
+            background: transparent; border: none; color: #777;
+            padding: 6px 10px; font-size: 0.8rem; border-radius: 6px; font-weight: 600;
+        }
+        button.active { background: var(--accent); color: #000; }
+
+        .row-2 {
+            display: flex; align-items: center; gap: 10px; 
+            background: #1a1a1a; padding: 5px 10px; border-radius: 8px;
+        }
+        
+        #btn-scroll {
+            background: transparent; border: 1px solid var(--accent); 
+            color: var(--accent); min-width: 80px; white-space: nowrap;
+        }
+        #btn-scroll.scrolling { background: #d32f2f; border-color: #d32f2f; color: #fff; }
+
+        /* Slider */
+        input[type=range] {
+            flex-grow: 1; height: 4px; accent-color: var(--accent);
+        }
+
+        /* --- Cards --- */
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+
+        .verse-card {
+            background: var(--card-bg);
+            padding: 20px 15px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border-left: 3px solid #333;
+            opacity: 0.4; /* Dim inactive */
+            transition: opacity 0.3s, border-color 0.3s, background-color 0.3s;
+        }
+
+        .verse-card.focused {
+            opacity: 1;
+            border-left-color: var(--accent);
+            background-color: #1a1a1a;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .label { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; margin-bottom: 5px; opacity: 0.8; }
+        
+        .hindi {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: var(--fs-hindi); line-height: 1.5; color: #fff; margin-bottom: 5px;
+            display: none;
+        }
+        .english {
+            font-size: var(--fs-eng); color: var(--text-sec); font-style: italic; margin-bottom: 5px;
+            display: none;
+        }
+        .meaning {
+            margin-top: 10px; padding-top: 10px; border-top: 1px solid #333;
+            font-size: 0.9rem; color: #bbb; display: none;
+        }
+
+        .show-hindi .hindi { display: block; }
+        .show-english .english { display: block; }
+        .show-meaning .meaning { display: block; }
+
+        /* --- Float Btn --- */
+        #btn-top {
+            position: fixed; bottom: 20px; right: 20px;
+            width: 45px; height: 45px; border-radius: 50%;
+            background: var(--accent); color: #000; border:none;
+            font-size: 1.2rem; display: none; z-index: 3000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        }
+    </style>
+</head>
+<body class="show-hindi show-english">
+
+    <div id="progress-bar"></div>
+
+    <div class="sticky-header">
+        <div class="title-row">
+            <h1>Hanuman Chalisa</h1>
+        </div>
+        
+        <div class="controls">
+            <div class="row-1">
+                <div class="btn-group">
+                    <button id="btn-hindi" class="active" onclick="toggle('hindi')">Hin</button>
+                    <button id="btn-english" class="active" onclick="toggle('english')">Eng</button>
+                    <button id="btn-meaning" onclick="toggle('meaning')">Mean</button>
+                </div>
+                <div class="btn-group">
+                    <button onclick="adjFont(-1)">A-</button>
+                    <button onclick="adjFont(1)">A+</button>
+                </div>
+            </div>
+
+            <div class="row-2">
+                <button id="btn-scroll" onclick="toggleScroll()">▶ Scroll</button>
+                <span style="font-size:0.7rem; color:#666;">Slow</span>
+                <input type="range" id="speed" min="1" max="10" value="3" oninput="resetScroll()" onchange="saveConfig()">
+                <span style="font-size:0.7rem; color:#666;">Fast</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="list"></div>
+    <button id="btn-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+
+    <script>
+        // --- DATA ---
+        const verses = [
+            {t:"Doha",h:"श्रीगुरु चरन सरोज रज निज मनु मुकुरु सुधारि ।\nबरनउँ रघुबर बिमल जसु जो दायकु फल चारि ॥",e:"Shri Guru Charan Saroj Raj, Nij manu mukuru sudhari,\nBarnau Raghubar Bimal Jasu, Jo dayaku phal chari.",m:"Cleaning the mirror of my mind with the dust of the lotus feet of the Guru, I describe the pure glory of Lord Rama."},
+            {t:"Doha",h:"बुद्धिहीन तनु जानिके सुमिरौं पवन-कुमार ।\nबल बुद्धि बिद्या देहु मोहिं हरहु कलेस बिकार ॥",e:"Buddhiheen tanu janike, Sumirau Pavan-Kumar,\nBal buddhi vidya dehu mohi, Harahu kalesh vikar.",m:"Considering myself devoid of intelligence, I meditate on the Son of the Wind. Give me strength, intelligence, and wisdom."},
+            {t:"Chaupai 1",h:"जय हनुमान ज्ञान गुन सागर ।\nजय कपीस तिहुँ लोक उजागर ॥",e:"Jai Hanuman gyan gun sagar,\nJai Kapis tihun lok ujagar.",m:"Victory to Hanuman, the ocean of wisdom and virtue. Victory to the Lord of Monkeys."},
+            {t:"Chaupai 2",h:"राम दूत अतुलित बल धामा ।\nअंजनि-पुत्र पवनसुत नामा ॥",e:"Ram doot atulit bal dhama,\nAnjani-putra Pavan sut nama.",m:"You are the messenger of Rama, the abode of immeasurable strength."},
+            {t:"Chaupai 3",h:"महाबीर बिक्रम बजरंगी ।\nकुमति निवार सुमति के संगी ॥",e:"Mahabir Bikram Bajrangi,\nKumati nivar sumati ke sangi.",m:"O Great Hero, mighty and strong as a thunderbolt. You dispel evil thoughts."},
+            {t:"Chaupai 4",h:"कंचन बरन बिराज सुबेसा ।\nकानन कुंडल कुंचित केसा ॥",e:"Kanchan baran biraj subesa,\nKanan Kundal Kunchit Kesa.",m:"Your complexion is that of molten gold, and you are beautifully dressed."},
+            {t:"Chaupai 5",h:"हाथ बज्र औ ध्वजा बिराजै ।\nकाँधे मूँज जनेऊ साजै ॥",e:"Hath Vajra Aur Dhvaja Biraje,\nKandhe moonj janeu saaje.",m:"You hold in your hand a thunderbolt and a flag."},
+            {t:"Chaupai 6",h:"शंकर सुवन केसरीनंदन ।\nतेज प्रताप महा जग बन्दन ॥",e:"Shankar suvan Kesari Nandan,\nTej pratap maha jag vandan.",m:"You are the incarnation of Lord Shiva and son of Kesari."},
+            {t:"Chaupai 7",h:"विद्यावान गुनी अति चातुर ।\nराम काज करिबे को आतुर ॥",e:"Vidyavan guni ati chatur,\nRam kaj karibe ko aatur.",m:"You are the repository of learning, virtuous, very wise."},
+            {t:"Chaupai 8",h:"प्रभु चरित्र सुनिबे को रसिया ।\nराम लखन सीता मन बसिया ॥",e:"Prabhu charitra sunibe ko rasiya,\nRam Lakhan Sita man Basiya.",m:"You are intensely greedy for listening to the narration of Lord Rama's life story."},
+            {t:"Chaupai 9",h:"सूक्ष्म रूप धरि सियहिं दिखावा ।\nबिकट रूप धरि लंक जरावा ॥",e:"Sukshma roop dhari Siyahi dikhava,\nBikat roop dhari Lank jarava.",m:"You appeared before Sita in a diminutive form and spoke to her."},
+            {t:"Chaupai 10",h:"भीम रूप धरि असुर संहारे ।\nरामचन्द्र के काज सँवारे ॥",e:"Bhim roop dhari asur sanhare,\nRamachandra ke kaj sanvare.",m:"You assumed a colossal form and killed the demons."},
+            {t:"Chaupai 11",h:"लाय सजीवन लखन जियाये ।\nश्रीरघुबीर हरषि उर लाये ॥",e:"Laye Sanjivan Lakhan Jiyaye,\nShri Raghubir Harashi ur laye.",m:"You brought the Sanjivani herb and restored Lakshmana to life."},
+            {t:"Chaupai 12",h:"रघुपति कीन्ही बहुत बड़ाई ।\nतुम मम प्रिय भरतहि सम भाई ॥",e:"Raghupati Kinhi bahut badai,\nTum mam priya Bharatahi sam bhai.",m:"Lord Rama praised you very highly."},
+            {t:"Chaupai 13",h:"सहस बदन तुम्हरो जस गावैं ।\nअस कहि श्रीपति कंठ लगावैं ॥",e:"Sahas badan tumharo yash gave,\nAsa kahi Shripati kanth lagave.",m:"'The thousand-mouthed Sheshnag sings your glories.'"},
+            {t:"Chaupai 14",h:"सनकादिक ब्रह्मादि मुनीसा ।\nनारद सारद सहित अहीसा ॥",e:"Sanakadik Brahmadi Muneesa,\nNarad Sarad sahit Aheesa.",m:"Sanaka, Brahma and other sages, Narada, Saraswati sing your glory."},
+            {t:"Chaupai 15",h:"जम कुबेर दिगपाल जहाँ ते ।\nकबि कोबिद कहि सके कहाँ ते ॥",e:"Jam Kuber Digpal Jahan te,\nKavi kovid kahi sake kahan te.",m:"Yama, Kubera and the guardians; poets and scholars – none can express your glory."},
+            {t:"Chaupai 16",h:"तुम उपकार सुग्रीवहिं कीन्हा ।\nराम मिलाय राज पद दीन्हा ॥",e:"Tum upkar Sugreevahi kinha,\nRam milaye rajpad dinha.",m:"You did a great favor to Sugriva by introducing him to Rama."},
+            {t:"Chaupai 17",h:"तुम्हरो मंत्र बिभीषन माना ।\nलंकेस्वर भए सब जग जाना ॥",e:"Tumharo mantra Vibhishan mana,\nLankeshwar Bhaye Sab jag jana.",m:"Vibhishana accepted your counsel, became the King of Lanka."},
+            {t:"Chaupai 18",h:"जुग सहस्र जोजन पर भानू ।\nलील्यो ताहि मधुर फल जानू ॥",e:"Yug sahasra yojan par Bhanu,\nLeelyo tahi madhur phal janu.",m:"You swallowed the sun, thinking it to be a sweet fruit."},
+            {t:"Chaupai 19",h:"प्रभु मुद्रिका मेलि मुख माहीं ।\nजलधि लाँघि गये अचरज नाहीं ॥",e:"Prabhu mudrika meli mukh mahi,\nJaladhi langhi gaye achraj nahi.",m:"Carrying the Lord's ring in your mouth, you crossed the ocean."},
+            {t:"Chaupai 20",h:"दुर्गम काज जगत के जेते ।\nसुगम अनुग्रह तुम्हरे तेते ॥",e:"Durgam kaj jagat ke jete,\nSugam anugraha tumhre tete.",m:"All the difficult tasks in the world become easy with your grace."},
+            {t:"Chaupai 21",h:"राम दुआरे तुम रखवारे ।\nहोत न आज्ञा बिनु पैसारे ॥",e:"Ram duare tum rakhvare,\nHot na agya binu paisare.",m:"You are the gatekeeper of Rama's court."},
+            {t:"Chaupai 22",h:"सब सुख लहै तुम्हारी सरना ।\nतुम रक्षक काहू को डर ना ॥",e:"Sab sukh lahai tumhari sarna,\nTum rakshak kahu ko dar na.",m:"When you are the protector, there is nothing to fear."},
+            {t:"Chaupai 23",h:"आपन तेज सम्हारो आपै ।\nतीनों लोक हाँक तें काँपै ॥",e:"Aapan tej samharo aapai,\nTeenhon lok hank te kanpai.",m:"You alone can withstand your own power."},
+            {t:"Chaupai 24",h:"भूत पिसाच निकट नहिं आवै ।\nमहाबीर जब नाम सुनावै ॥",e:"Bhoot pishach Nikat nahi aavai,\nMahavir jab naam sunavai.",m:"Ghosts and evil spirits do not come near when one utters your name."},
+            {t:"Chaupai 25",h:"नासै रोग हरै सब पीरा ।\nजपत निरंतर हनुमत बीरा ॥",e:"Nase rog harai sab peera,\nJapat nirantar Hanumant beera.",m:"Diseases are destroyed and all pain is removed by the constant repetition of the name of the brave Hanuman."},
+            {t:"Chaupai 26",h:"संकट तें हनुमान छुड़ावै ।\nमन क्रम बचन ध्यान जो लावै ॥",e:"Sankat te Hanuman chhudavai,\nMan Kram Bachan dhyan jo lavai.",m:"Hanuman releases those from difficulties who meditate upon him."},
+            {t:"Chaupai 27",h:"सब पर राम तपस्वी राजा ।\nतिन के काज सकल तुम साजा ॥",e:"Sab par Ram tapasvi raja,\nTin ke kaj sakal Tum saja.",m:"Rama is the ascetic king and the Lord of all. You accomplished all his tasks."},
+            {t:"Chaupai 28",h:"और मनोरथ जो कोई लावै ।\nसोइ अमित जीवन फल पावै ॥",e:"Aur manorath jo koi lavai,\nSohi amit jivan phal pavai.",m:"Whoever brings any other desire to you, that also bears the fruit of immortal life."},
+            {t:"Chaupai 29",h:"चारों जुग परताप तुम्हारा ।\nहै परसिद्ध जगत उजियारा ॥",e:"Charon Yug partap tumhara,\nHai persidh jagat ujiyara.",m:"Your glory prevails in all the four ages."},
+            {t:"Chaupai 30",h:"साधु संत के तुम रखवारे ।\nअसुर निकंदन राम दुलारे ॥",e:"Sadhu Sant ke tum Rakhvare,\nAsur nikandan Ram dulare.",m:"You are the protector of sages and saints."},
+            {t:"Chaupai 31",h:"अष्ट सिद्धि नौ निधि के दाता ।\nअस बर दीन जानकी माता ॥",e:"Ashta siddhi nav nidhi ke data,\nAs var deen Janaki mata.",m:"Mother Janaki has granted you the boon to become the dispenser of Siddhis."},
+            {t:"Chaupai 32",h:"राम रसायन तुम्हरे पासा ।\nसदा रहो रघुपति के दासा ॥",e:"Ram rasayan tumhare pasa,\nSada raho Raghupati ke dasa.",m:"You hold the essence of devotion to Rama."},
+            {t:"Chaupai 33",h:"तुम्हरे भजन राम को पावै ।\nजनम जनम के दुख बिसरावै ॥",e:"Tumhare bhajan Ram ko pavai,\nJanam janam ke dukh bisravai.",m:"Through hymns sung in your praise, one finds Rama."},
+            {t:"Chaupai 34",h:"अंत काल रघुबर पुर जाई ।\nजहाँ जन्म हरि-भक्त कहाई ॥",e:"Ant kaal Raghubar pur jayee,\nJahan janam Hari-Bhakt Kahayee.",m:"At the end of life, he goes to the abode of Rama."},
+            {t:"Chaupai 35",h:"और देवता चित्त न धरई ।\nहनुमत सेइ सर्ब सुख करई ॥",e:"Aur Devta Chitt na dharayi,\nHanumat sei sarv sukh karayi.",m:"There is no need to worship any other deity."},
+            {t:"Chaupai 36",h:"संकट कटै मिटै सब पीरा ।\nजो सुमिरै हनुमत बलबीरा ॥",e:"Sankat kate mite sab peera,\nJo sumirai Hanumat Balbeera.",m:"All difficulties are removed and all pains disappear."},
+            {t:"Chaupai 37",h:"जय जय जय हनुमान गोसाईं ।\nकृपा करहु गुरु देव की नाईं ॥",e:"Jai Jai Jai Hanuman Gosai,\nKripa Karahu Gurudev ki nai.",m:"Victory, Victory, Victory to Lord Hanuman!"},
+            {t:"Chaupai 38",h:"जो सत बार पाठ कर कोई ।\nछूटहि बंदि महा सुख होई ॥",e:"Jo sat bar path kare koi,\nChhutahi bandi maha sukh hoi.",m:"He who recites this a hundred times is released from bondage."},
+            {t:"Chaupai 39",h:"जो यह पढ़ै हनुमान चालीसा ।\nहोय सिद्धि साखी गौरीसा ॥",e:"Jo yah padhe Hanuman Chalisa,\nHoy siddhi sakhi Gaureesa.",m:"He who reads this Hanuman Chalisa gains abilities and success."},
+            {t:"Chaupai 40",h:"तुलसीदास सदा हरि चेरा ।\nकीजै नाथ हृदय मँह डेरा ॥",e:"Tulsidas sada hari chera,\nKijai Nath Hriday mah dera.",m:"Tulsidas is always the servant of the Lord."},
+            {t:"Doha",h:"पवनतनय संकट हरन मंगल मूरति रूप ।\nराम लखन सीता सहित हृदय बसहु सुर भूप ॥",e:"Pavantanay sankat haran, Mangal murti roop,\nRam Lakhan Sita sahit, Hriday basahu Sur Bhup.",m:"O Son of the Wind, destroyer of sorrows. Live in my heart."}
+        ];
+
+        // --- RENDER ---
+        const list = document.getElementById('list');
+        verses.forEach((v, i) => {
+            list.innerHTML += `
+            <div class="verse-card" id="v-${i}">
+                <div class="label">${v.t}</div>
+                <div class="hindi">${v.h.replace(/\n/g,'<br>')}</div>
+                <div class="english">${v.e.replace(/\n/g,'<br>')}</div>
+                <div class="meaning">${v.m}</div>
+            </div>`;
+        });
+
+        // --- LOGIC ---
+        let sizeStep = 0;
+        
+        function toggle(type) {
+            document.body.classList.toggle('show-'+type);
+            document.getElementById('btn-'+type).classList.toggle('active');
+        }
+
+        function adjFont(n) {
+            sizeStep += n;
+            if(sizeStep > 4) sizeStep=4; if(sizeStep < -3) sizeStep=-3;
+            document.documentElement.style.setProperty('--fs-hindi', (1.3 + (sizeStep*0.15))+'rem');
+            document.documentElement.style.setProperty('--fs-eng', (1 + (sizeStep*0.1))+'rem');
+            localStorage.setItem("h_size", sizeStep);
+        }
+
+        // --- SCROLL & FOCUS ---
+        let scrollTimer;
+        let isAuto = false;
+
+        function toggleScroll() {
+            const btn = document.getElementById('btn-scroll');
+            if(isAuto) {
+                clearInterval(scrollTimer); isAuto = false;
+                btn.innerHTML = "▶ Scroll"; btn.classList.remove('scrolling');
+            } else {
+                isAuto = true;
+                btn.innerHTML = "⏹ Stop"; btn.classList.add('scrolling');
+                runScroll();
+            }
+        }
+
+        function resetScroll() { if(isAuto) { clearInterval(scrollTimer); runScroll(); } }
+        function saveConfig() { localStorage.setItem("h_speed", document.getElementById('speed').value); }
+
+        function runScroll() {
+            const speed = parseInt(document.getElementById('speed').value);
+            const ms = 70 - (speed * 6); // Mobile tuned speed
+            scrollTimer = setInterval(() => {
+                window.scrollBy(0, 1);
+                if((window.innerHeight+window.scrollY) >= document.body.offsetHeight) toggleScroll();
+            }, ms);
+        }
+
+        // --- FOCUS ENGINE ---
+        window.onscroll = () => {
+            // Progress
+            let scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progress-bar').style.width = scrolled + "%";
+
+            // Top Btn
+            document.getElementById('btn-top').style.display = window.scrollY > 300 ? 'block' : 'none';
+            
+            // Save
+            localStorage.setItem("h_pos", window.scrollY);
+
+            // Focus (Center Detection)
+            const center = window.innerHeight / 2.5; // Higher than center for mobile headers
+            const cards = document.querySelectorAll('.verse-card');
+            
+            cards.forEach(card => {
+                const box = card.getBoundingClientRect();
+                const cardMid = box.top + (box.height/2);
+                const dist = Math.abs(center - cardMid);
+                
+                // Active if within 150px of visual center
+                if(dist < 150) card.classList.add('focused');
+                else card.classList.remove('focused');
+            });
+        };
+
+        // --- INIT ---
+        window.onload = () => {
+            // Load Config
+            if(localStorage.getItem("h_size")) { sizeStep = parseInt(localStorage.getItem("h_size")) - (parseInt(localStorage.getItem("h_size")) > 0 ? 1 : -1); adjFont(parseInt(localStorage.getItem("h_size")) > 0 ? 1 : -1); }
+            if(localStorage.getItem("h_speed")) document.getElementById('speed').value = localStorage.getItem("h_speed");
+            
+            // Restore Pos
+            const pos = localStorage.getItem("h_pos");
+            if(pos) setTimeout(()=> window.scrollTo(0, parseInt(pos)), 100);
+        };
+    </script>
+</body>
+</html>
