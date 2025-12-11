@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Realtime Writer — Live Word Count</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --muted:#9aa4b2;
+      --accent:#7c5cff;
+      --accent-2:#33d6a6;
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      --gap:12px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(800px 400px at 10% 10%, rgba(124,92,255,0.06), transparent 8%),
+        radial-gradient(600px 300px at 90% 90%, rgba(51,214,166,0.03), transparent 6%),
+        var(--bg);
+      color: #e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* container */
+    .container{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 1fr 340px;
+      gap:20px;
+      padding:18px;
+      border-radius: calc(var(--radius) + 4px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.005));
+      box-shadow: 0 8px 30px rgba(2,6,23,0.7);
+      border: 1px solid rgba(255,255,255,0.02);
+    }
+
+    /* editor card */
+    .editor{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      padding:14px;
+      border-radius:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:520px;
+    }
+
+    .toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .toolbar-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+    .btn{
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,0.03);
+      color:var(--muted);
+      padding:8px 12px;
+      border-radius:10px;
+      font-weight:600;
+      font-size:13px;
+      cursor:pointer;
+      transition:all .14s ease;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.strong{background:linear-gradient(90deg,var(--accent),#6b7bff);color:white;border:none;box-shadow:0 8px 28px rgba(124,92,255,0.14)}
+    .btn.warn{background:linear-gradient(90deg,#ff7a7a,#ffb27a);color:#1a0f07;border:none}
+
+    .target-input{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.02);padding:6px;border-radius:10px}
+    .target-input input{width:86px;padding:6px;border-radius:8px;border:none;background:transparent;color:inherit;font-weight:700}
+
+    textarea#editor{
+      width:100%;flex:1;min-height:320px;resize:vertical;background:transparent;color:inherit;border:none;outline:none;
+      font-size:16px;line-height:1.6;padding:10px;border-radius:8px;caret-color:var(--accent);font-family:inherit;
+      border: 1px solid rgba(255,255,255,0.02);
+    }
+
+    /* right panel */
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      padding:14px;border-radius:10px;display:flex;flex-direction:column;gap:12px;min-height:520px;
+      border: 1px solid rgba(255,255,255,0.02);
+    }
+
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:rgba(255,255,255,0.01)}
+    .stat{display:flex;flex-direction:column}
+    .stat .muted{color:var(--muted);font-size:13px}
+    .stat strong{font-size:20px}
+
+    .progress-wrap{padding:6px;border-radius:12px;background:rgba(255,255,255,0.01)}
+    .progress{height:12px;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden}
+    .progress > i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .18s linear}
+
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    .small{font-size:13px;color:var(--muted)}
+
+    footer.footer{margin-top:auto;display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+
+    /* responsive: stack on small screens */
+    @media (max-width:980px){
+      .container{grid-template-columns:1fr;padding:12px;gap:12px}
+      .panel{order:2;min-height:220px}
+      .editor{min-height:320px}
+    }
+
+    /* very small screens: compact toolbar */
+    @media (max-width:520px){
+      body{padding:12px}
+      .container{padding:10px;gap:10px}
+      .btn{padding:8px 10px;font-size:13px}
+      .target-input input{width:68px}
+      .stat-row{padding:8px}
+      .stat strong{font-size:18px}
+      textarea#editor{font-size:15px}
+    }
+
+    /* accessibility focus */
+    .btn:focus, input:focus, textarea:focus{outline:2px solid rgba(124,92,255,0.18);outline-offset:2px}
+  </style>
+</head>
+<body>
+  <main class="container" role="main" aria-label="Realtime writing app">
+    <section class="editor" aria-label="Editor section">
+      <div class="toolbar" role="toolbar">
+        <div class="toolbar-left">
+          <button class="btn strong" id="downloadBtn" title="Download (Ctrl/Cmd+S)">Download</button>
+          <button class="btn" id="copyBtn" title="Copy to clipboard">Copy</button>
+          <button class="btn warn" id="clearBtn" title="Clear editor">Clear</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="small">Target</div>
+          <div class="target-input">
+            <input id="targetInput" type="number" min="50" step="50" value="500" aria-label="Target words">
+            <div class="small">words</div>
+          </div>
+        </div>
+      </div>
+
+      <textarea id="editor" placeholder="Start typing... (Ctrl/Cmd+S to download, Ctrl/Cmd+K to focus)"></textarea>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div class="small">Autosaves locally. Your text stays in the browser.</div>
+        <div class="small" id="liveSaveHint">Saved</div>
+      </div>
+    </section>
+
+    <aside class="panel" aria-label="Statistics and controls">
+      <div class="stat-row">
+        <div class="stat">
+          <div class="muted">Words</div>
+          <strong id="wordCount">0</strong>
+        </div>
+        <div class="stat">
+          <div class="muted">Characters</div>
+          <strong id="charCount">0</strong>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="muted">Estimated reading time</div>
+          <strong id="readTime">0.0 min</strong>
+        </div>
+        <div class="stat">
+          <div class="muted">Sentences</div>
+          <strong id="sentences">0</strong>
+        </div>
+      </div>
+
+      <div>
+        <div class="muted" style="margin-bottom:8px">Progress toward target</div>
+        <div class="progress-wrap">
+          <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px">
+          <div class="small" id="progressText">0 / 500 words</div>
+          <div class="small" id="percentText">0%</div>
+        </div>
+      </div>
+
+      <div class="stat-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div class="muted">Quick actions</div>
+        <div class="controls">
+          <button class="btn" id="boldBtn" title="Wrap selection with ** for markdown bold">Bold (MD)</button>
+          <button class="btn" id="ulBtn" title="Start unordered list">UL</button>
+          <button class="btn" id="downloadTxtBtn">.txt</button>
+          <button class="btn" id="downloadMdBtn">.md</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <div class="muted">Theme & accessibility</div>
+        <div class="controls" style="margin-left:auto">
+          <button class="btn" id="increaseFont">A+</button>
+          <button class="btn" id="decreaseFont">A-</button>
+          <button class="btn" id="resetFont">Reset</button>
+        </div>
+      </div>
+
+      <footer class="footer" aria-hidden="true">
+        <div>Realtime Writer</div>
+        <div class="small">Local • No servers</div>
+      </footer>
+    </aside>
+  </main>
+
+<script>
+  // Elements
+  const editor = document.getElementById('editor');
+  const wordCountEl = document.getElementById('wordCount');
+  const charCountEl = document.getElementById('charCount');
+  const readTimeEl = document.getElementById('readTime');
+  const sentencesEl = document.getElementById('sentences');
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+  const percentText = document.getElementById('percentText');
+  const targetInput = document.getElementById('targetInput');
+  const liveSaveHint = document.getElementById('liveSaveHint');
+
+  const downloadBtn = document.getElementById('downloadBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const downloadTxtBtn = document.getElementById('downloadTxtBtn');
+  const downloadMdBtn = document.getElementById('downloadMdBtn');
+  const boldBtn = document.getElementById('boldBtn');
+  const ulBtn = document.getElementById('ulBtn');
+  const increaseFont = document.getElementById('increaseFont');
+  const decreaseFont = document.getElementById('decreaseFont');
+  const resetFont = document.getElementById('resetFont');
+
+  // Robust word/token counting:
+  // - Normalize newlines/spaces, split on whitespace, filter out empty tokens.
+  function countStats(text) {
+    // Replace NBSP and other whitespace variants with simple spaces, trim
+    const normalized = text.replace(/\u00A0/g,' ').replace(/\r\n/g,'\n').trim();
+    // split by any whitespace sequence
+    const tokens = normalized === '' ? [] : normalized.split(/\s+/).filter(t => t.length > 0);
+    // additionally treat tokens that are only punctuation as zero-length words (optional)
+    const wordsArr = tokens.filter(t => /[A-Za-z0-9\u00C0-\u024F]/.test(t) || /[^.,!?;:()<>[\]'"`]/.test(t));
+    const words = wordsArr.length;
+    const chars = text.length;
+    const sentences = (text.match(/[.!?]+/g) || []).length;
+    const readingMins = words / 200;
+    return { words, chars, sentences, readingMins };
+  }
+
+  function updateUI() {
+    const text = editor.value || '';
+    const stats = countStats(text);
+    const target = Math.max(1, parseInt(targetInput.value || 500, 10));
+
+    wordCountEl.textContent = stats.words.toLocaleString();
+    charCountEl.textContent = stats.chars.toLocaleString();
+    sentencesEl.textContent = stats.sentences.toLocaleString();
+    readTimeEl.textContent = stats.readingMins >= 0.1 ? stats.readingMins.toFixed(1) + ' min' : '< 0.1 min';
+
+    const pctRaw = (stats.words / target) * 100;
+    const pct = Math.min(100, Math.max(0, Math.round(pctRaw)));
+    progressBar.style.width = pct + '%';
+    progressText.textContent = `${stats.words.toLocaleString()} / ${target.toLocaleString()} words`;
+    percentText.textContent = pct + '%';
+
+    // subtle visual cue when goal reached
+    if (pct >= 100) {
+      progressBar.style.boxShadow = '0 8px 28px rgba(51,214,166,0.12)';
+    } else {
+      progressBar.style.boxShadow = 'none';
+    }
+  }
+
+  // Debounced autosave
+  let saveTimer = null;
+  function scheduleSave() {
+    liveSaveHint.textContent = 'Saving...';
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      try {
+        localStorage.setItem('realtime-writer-draft', editor.value);
+        localStorage.setItem('realtime-writer-fontSize', editor.style.fontSize || '');
+        localStorage.setItem('realtime-writer-target', targetInput.value || '');
+        liveSaveHint.textContent = 'Saved';
+      } catch (e) {
+        liveSaveHint.textContent = 'Save failed';
+      }
+    }, 420);
+  }
+
+  // Load saved data reliably and ensure UI updates
+  function loadSaved() {
+    try {
+      const saved = localStorage.getItem('realtime-writer-draft');
+      if (saved !== null) editor.value = saved;
+      const savedFont = localStorage.getItem('realtime-writer-fontSize');
+      if (savedFont) editor.style.fontSize = savedFont;
+      const savedTarget = localStorage.getItem('realtime-writer-target');
+      if (savedTarget) targetInput.value = savedTarget;
+    } catch (e) {
+      /* noop */
+    }
+    // Ensure update runs after DOM has set value
+    updateUI();
+  }
+
+  // Download helpers
+  function downloadText(filename='writing.txt') {
+    const blob = new Blob([editor.value], {type:'text/plain;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+  }
+
+  async function copyToClipboard() {
+    try {
+      await navigator.clipboard.writeText(editor.value);
+      copyBtn.textContent = 'Copied ✓';
+      setTimeout(()=> copyBtn.textContent = 'Copy', 1200);
+    } catch {
+      copyBtn.textContent = 'Failed';
+      setTimeout(()=> copyBtn.textContent = 'Copy', 1200);
+    }
+  }
+
+  // selection helpers
+  function wrapSelection(prefix, suffix) {
+    const s = editor.selectionStart, e = editor.selectionEnd;
+    const before = editor.value.slice(0,s), sel = editor.value.slice(s,e), after = editor.value.slice(e);
+    editor.value = before + prefix + sel + suffix + after;
+    editor.setSelectionRange(s + prefix.length, e + prefix.length);
+    editor.focus();
+    updateUI(); scheduleSave();
+  }
+
+  // Event wiring: input covers typing, paste, drop etc (more reliable than key events)
+  editor.addEventListener('input', () => { updateUI(); scheduleSave(); });
+  // also update on selection changes (for toolbar actions) and resize
+  editor.addEventListener('keyup', updateUI);
+  editor.addEventListener('mouseup', updateUI);
+
+  targetInput.addEventListener('input', () => { updateUI(); scheduleSave(); });
+
+  // Buttons
+  downloadBtn.addEventListener('click', () => { downloadText('writing.txt'); });
+  downloadTxtBtn.addEventListener('click', () => { downloadText('writing.txt'); });
+  downloadMdBtn.addEventListener('click', () => { downloadText('writing.md'); });
+  copyBtn.addEventListener('click', copyToClipboard);
+  clearBtn.addEventListener('click', () => {
+    if (!confirm('Clear editor? This cannot be undone.')) return;
+    editor.value = '';
+    updateUI(); scheduleSave();
+  });
+
+  boldBtn.addEventListener('click', () => wrapSelection('**','**'));
+  ulBtn.addEventListener('click', () => {
+    const s = editor.selectionStart, e = editor.selectionEnd;
+    const selected = editor.value.slice(s,e) || '';
+    // if nothing selected, insert "- "
+    if (!selected) {
+      const before = editor.value.slice(0,s), after = editor.value.slice(e);
+      editor.value = before + '- ' + after;
+      const newPos = s + 2;
+      editor.setSelectionRange(newPos,newPos);
+    } else {
+      // prefix each selected line with "- "
+      const lines = selected.split(/\r?\n/).map(l => l.trim() ? '- ' + l : l);
+      const replaced = lines.join('\n');
+      const before = editor.value.slice(0,s), after = editor.value.slice(e);
+      editor.value = before + replaced + after;
+      editor.setSelectionRange(s, s + replaced.length);
+    }
+    updateUI(); scheduleSave();
+    editor.focus();
+  });
+
+  increaseFont.addEventListener('click', () => {
+    const cur = parseFloat(getComputedStyle(editor).fontSize) || 16;
+    editor.style.fontSize = (cur + 1) + 'px';
+    scheduleSave();
+  });
+  decreaseFont.addEventListener('click', () => {
+    const cur = parseFloat(getComputedStyle(editor).fontSize) || 16;
+    editor.style.fontSize = Math.max(12, cur - 1) + 'px';
+    scheduleSave();
+  });
+  resetFont.addEventListener('click', () => {
+    editor.style.fontSize = '';
+    localStorage.removeItem('realtime-writer-fontSize');
+    scheduleSave();
+  });
+
+  // Keyboard shortcuts
+  window.addEventListener('keydown', (e) => {
+    // Download: Ctrl/Cmd+S
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+      e.preventDefault();
+      downloadText('writing.txt');
+      downloadBtn.textContent = 'Saved ✓';
+      setTimeout(()=>downloadBtn.textContent = 'Download',900);
+      return;
+    }
+    // Focus editor: Ctrl/Cmd+K
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      editor.focus();
+      return;
+    }
+    // Ctrl/Cmd+B => bold wrap
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+      e.preventDefault();
+      wrapSelection('**','**');
+      return;
+    }
+  });
+
+  // Initialize: load saved and ensure UI is up-to-date.
+  loadSaved();
+
+  // Focus editor on load for convenience
+  setTimeout(()=>editor.focus(), 250);
+</script>
+</body>
+</html>
