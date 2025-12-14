@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISFT Practical Masterclass</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --slide-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent-primary: #38bdf8; /* Cyan */
+            --accent-secondary: #818cf8; /* Indigo */
+            --accent-success: #4ade80; /* Green */
+            --accent-danger: #f43f5e; /* Red */
+            --accent-warning: #facc15; /* Yellow */
+            --terminal-bg: #000000;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- CONTROLS --- */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn {
+            background: var(--accent-primary);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn:hover { opacity: 0.9; }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent-success);
+            width: 0%;
+            transition: width 0.3s;
+            z-index: 1000;
+        }
+
+        /* --- SLIDE STYLES --- */
+        .slide {
+            display: none;
+            height: 100%;
+            width: 100%;
+            padding: 40px 80px; /* Adjusted padding for more content */
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .slide-header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        h1 { font-size: 64px; margin: 0; background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 42px; margin: 0; color: var(--accent-primary); }
+        h3 { font-size: 28px; color: var(--text-main); margin-bottom: 10px; }
+        p, li { font-size: 22px; color: var(--text-muted); line-height: 1.5; }
+        
+        .slide-number {
+            font-family: 'JetBrains Mono', monospace;
+            color: #475569;
+            font-size: 16px;
+        }
+
+        /* --- CONTENT LAYOUTS --- */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; height: 100%; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
+        
+        .card {
+            background: var(--slide-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            height: 100%;
+        }
+
+        /* --- TERMINAL STYLING --- */
+        .terminal {
+            background: var(--terminal-bg);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #333;
+            font-family: 'JetBrains Mono', monospace;
+            color: #4ade80; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            font-size: 18px;
+        }
+        .terminal::before {
+            content: 'kali@linux:~';
+            display: block;
+            color: #3b82f6;
+            margin-bottom: 10px;
+            font-size: 14px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        .cmd { color: #fff; font-weight: bold; }
+        .comment { color: #64748b; font-style: italic; }
+        .error { color: var(--accent-danger); }
+
+        /* --- INTERACTIVE QUIZ --- */
+        .quiz-option {
+            background: #334155;
+            padding: 15px 25px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 20px;
+        }
+        .quiz-option:hover { background: #475569; }
+        .quiz-answer {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid var(--accent-success);
+            color: var(--accent-success);
+            border-radius: 8px;
+        }
+
+        /* --- BADGES --- */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 10px;
+        }
+        .badge-linux { background: var(--accent-primary); }
+        .badge-iam { background: var(--accent-secondary); }
+        .badge-crypto { background: var(--accent-success); }
+        .badge-compliance { background: var(--accent-danger); }
+
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Prev</button>
+        <span id="slideIndicator" style="color: white; padding: 10px;">1 / 75</span>
+        <button class="btn" onclick="nextSlide()">Next <i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+
+    <!-- ================================================================= -->
+    <!--                           INTRO SECTION                           -->
+    <!-- ================================================================= -->
+
+    <div class="slide active">
+        <div style="text-align: center;">
+            <div style="font-family: 'JetBrains Mono'; color: var(--accent-primary); margin-bottom: 20px;">MODULE: CT046-3-1</div>
+            <h1>Introduction to Security &<br>Forensic Technologies</h1>
+            <h2 style="margin-top: 30px; color: var(--text-main);">Practical Laboratory Guide</h2>
+            <p style="margin-top: 40px;">75+ Interactive Slides covering Linux, IAM, Crypto & Compliance</p>
+            <div style="margin-top: 50px;">
+                <i class="fa-brands fa-linux fa-3x" style="margin: 0 20px;"></i>
+                <i class="fa-solid fa-shield-halved fa-3x" style="margin: 0 20px;"></i>
+                <i class="fa-solid fa-key fa-3x" style="margin: 0 20px;"></i>
+            </div>
+            <p style="margin-top: 40px; font-size: 18px;">Press <strong>Next</strong> to start</p>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!--                              PART 1: LINUX                        -->
+    <!-- ================================================================= -->
+
+    <div class="slide">
+        <div class="grid-2">
+            <div>
+                <span class="badge badge-linux">PART 1</span>
+                <h1 style="color: var(--accent-primary);">Linux Essentials</h1>
+                <p>The Operating System of Cyber Security</p>
+                <p><em>Slides 3 - 30</em></p>
+            </div>
+            <div style="font-size: 200px; text-align: center; color: var(--accent-primary);">
+                <i class="fa-brands fa-linux"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Why Linux?</h2><span class="slide-number">FUNDAMENTALS</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <i class="fa-solid fa-code-branch fa-2x" style="color: var(--accent-primary);"></i>
+                <h3>Open Source</h3>
+                <p>Visible code means no hidden backdoors. 90% of the internet runs on Linux.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-toolbox fa-2x" style="color: var(--accent-secondary);"></i>
+                <h3>The Tools</h3>
+                <p>Kali Linux (our lab OS) comes pre-installed with 600+ forensic tools.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-microchip fa-2x" style="color: var(--accent-success);"></i>
+                <h3>Hardware Access</h3>
+                <p>Direct access to hardware (WiFi, RAM) essential for forensics.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILESYSTEM -->
+    <div class="slide">
+        <div class="slide-header"><h2>The File System Hierarchy</h2><span class="slide-number">STRUCTURE</span></div>
+        <p>Windows has <code>C:\</code>. Linux has <code>/</code> (Root). It is a tree structure.</p>
+        <div class="terminal">
+            <span class="cmd">$ ls /</span><br>
+            bin   dev   home   lib64   mnt   proc   run   srv   tmp   var<br>
+            boot  etc   lib    media   opt   root   sbin  sys   usr
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Critical Directories</h2><span class="slide-number">STRUCTURE</span></div>
+        <div class="grid-2">
+            <div class="card">
+                <h3>/bin (Binaries)</h3>
+                <p>Contains the programs you run like <code>ls</code>, <code>cp</code>, <code>cat</code>.</p>
+            </div>
+            <div class="card">
+                <h3>/etc (Configuration)</h3>
+                <p>Settings files. E.g., <code>/etc/passwd</code> (users), <code>/etc/ssh</code> (remote access).</p>
+            </div>
+            <div class="card">
+                <h3>/home (Users)</h3>
+                <p>Personal files for users. E.g., <code>/home/alex</code>.</p>
+            </div>
+            <div class="card">
+                <h3>/var (Variable)</h3>
+                <p>Logs and Websites. E.g., <code>/var/log</code> (Forensics Goldmine!).</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>/tmp and Malware</h2><span class="slide-number">SECURITY INSIGHT</span></div>
+        <div class="grid-2">
+            <div class="card" style="border-left: 5px solid var(--accent-danger);">
+                <h3>The /tmp Danger</h3>
+                <p>The <code>/tmp</code> directory is one of the few places ANY user can write files to.</p>
+                <p><strong>Forensic Tip:</strong> Hackers often hide scripts here because permissions are open.</p>
+            </div>
+            <div class="terminal">
+                <span class="comment"># Checking for hidden scripts in tmp</span><br>
+                <span class="cmd">$ ls -la /tmp</span><br>
+                .X11-unix<br>
+                .ice-unix<br>
+                <span class="error">.hidden_miner.sh</span> &lt;-- Suspicious!
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="slide">
+        <div class="slide-header"><h2>Navigation: pwd</h2><span class="slide-number">COMMANDS</span></div>
+        <div class="grid-2">
+            <div>
+                <h3>pwd</h3>
+                <p><strong>P</strong>rint <strong>W</strong>orking <strong>D</strong>irectory.</p>
+                <p>Tells you exactly where you are in the tree.</p>
+            </div>
+            <div class="terminal">
+                <span class="comment"># Where am I?</span><br>
+                <span class="cmd">$ pwd</span><br>
+                /home/kali/Desktop
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Navigation: cd</h2><span class="slide-number">COMMANDS</span></div>
+        <div class="grid-2">
+            <div>
+                <h3>cd (Change Directory)</h3>
+                <ul>
+                    <li><code>cd Documents</code>: Enter folder.</li>
+                    <li><code>cd ..</code>: Go UP one level.</li>
+                    <li><code>cd ~</code>: Go HOME.</li>
+                    <li><code>cd /</code>: Go to ROOT.</li>
+                    <li><code>cd -</code>: Go to previous folder.</li>
+                </ul>
+            </div>
+            <div class="terminal">
+                <span class="cmd">$ cd /etc</span><br>
+                <span class="cmd">$ pwd</span><br>
+                /etc<br>
+                <span class="cmd">$ cd ..</span><br>
+                <span class="cmd">$ pwd</span><br>
+                /
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Listing Files: ls</h2><span class="slide-number">COMMANDS</span></div>
+        <div class="terminal">
+            <span class="comment"># 1. Simple List</span><br>
+            <span class="cmd">$ ls</span><br>
+            Desktop  Documents<br><br>
+            
+            <span class="comment"># 2. Long List (Permissions, Owner, Size)</span><br>
+            <span class="cmd">$ ls -l</span><br>
+            drwxr-xr-x 2 kali kali 4096 Jan 10 10:00 Desktop<br><br>
+
+            <span class="comment"># 3. All Files (Hidden files starting with .)</span><br>
+            <span class="cmd">$ ls -a</span><br>
+            .  ..  .bashrc  .secret
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Interactive Lab 1</h2><span class="slide-number">TRY IT NOW</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-success);">
+            <h3><i class="fa-solid fa-keyboard"></i> Your Turn</h3>
+            <p>Open your Kali Terminal and perform the following:</p>
+            <ol>
+                <li>Check where you are (<code>pwd</code>).</li>
+                <li>Navigate to the root directory (<code>cd /</code>).</li>
+                <li>List all files in <code>/var</code> (<code>ls /var</code>).</li>
+                <li>Navigate to <code>/tmp</code>.</li>
+                <li>Return to your home folder (<code>cd ~</code>).</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- FILE OPS -->
+    <div class="slide">
+        <div class="slide-header"><h2>Creating Files</h2><span class="slide-number">FILE OPS</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>mkdir</h3>
+                <p>Create Folder</p>
+                <div class="terminal"><span class="cmd">$ mkdir evidence</span></div>
+            </div>
+            <div class="card">
+                <h3>touch</h3>
+                <p>Create Empty File</p>
+                <div class="terminal"><span class="cmd">$ touch notes.txt</span></div>
+            </div>
+            <div class="card">
+                <h3>echo</h3>
+                <p>Create with text</p>
+                <div class="terminal"><span class="cmd">$ echo "Suspect A" > case.txt</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Copying and Moving</h2><span class="slide-number">FILE OPS</span></div>
+        <div class="grid-2">
+            <div class="card">
+                <h3>cp (Copy)</h3>
+                <p><code>cp source destination</code></p>
+                <p><code>cp -r folder folder_backup</code> (Recursive)</p>
+            </div>
+            <div class="card">
+                <h3>mv (Move/Rename)</h3>
+                <p><code>mv file.txt /tmp/</code> (Move)</p>
+                <p><code>mv old.txt new.txt</code> (Rename)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Deleting Files</h2><span class="slide-number">FILE OPS</span></div>
+        <p style="color: var(--accent-danger);">WARNING: No Recycle Bin in CLI.</p>
+        <div class="grid-2">
+            <div class="terminal">
+                <span class="comment"># Delete a single file</span><br>
+                <span class="cmd">$ rm file.txt</span><br><br>
+                
+                <span class="comment"># Delete a folder (Recursive)</span><br>
+                <span class="cmd">$ rm -r myfolder/</span>
+            </div>
+            <div>
+                <p><strong>Safety Tip:</strong> Always run <code>ls</code> before <code>rm</code> to make sure you are deleting the right thing.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEWING -->
+    <div class="slide">
+        <div class="slide-header"><h2>Viewing: cat & less</h2><span class="slide-number">VIEWING</span></div>
+        <div class="grid-2">
+            <div class="card">
+                <h3>cat</h3>
+                <p>Dumps WHOLE file.</p>
+                <code>$ cat /etc/hostname</code>
+            </div>
+            <div class="card">
+                <h3>less</h3>
+                <p>Scrollable viewer. Use for logs.</p>
+                <code>$ less /var/log/syslog</code>
+                <p><small>Press 'q' to quit.</small></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Viewing: head & tail</h2><span class="slide-number">VIEWING</span></div>
+        <div class="grid-2">
+            <div class="terminal">
+                <span class="comment"># First 10 lines</span><br>
+                <span class="cmd">$ head /etc/passwd</span><br><br>
+                <span class="comment"># First 5 lines</span><br>
+                <span class="cmd">$ head -n 5 /etc/passwd</span>
+            </div>
+            <div class="terminal">
+                <span class="comment"># Last 10 lines (Great for recent logs)</span><br>
+                <span class="cmd">$ tail /var/log/auth.log</span><br><br>
+                <span class="comment"># Follow LIVE (Real-time monitoring)</span><br>
+                <span class="cmd">$ tail -f /var/log/auth.log</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCHING -->
+    <div class="slide">
+        <div class="slide-header"><h2>Searching: grep</h2><span class="slide-number">SEARCHING</span></div>
+        <p><strong>G</strong>lobal <strong>R</strong>egular <strong>E</strong>xpression <strong>P</strong>rint.</p>
+        <div class="terminal">
+            <span class="comment"># Syntax: grep "keyword" [filename]</span><br><br>
+            
+            <span class="comment"># Search for "password" in notes</span><br>
+            <span class="cmd">$ grep "password" notes.txt</span><br><br>
+            
+            <span class="comment"># Case insensitive search for "Error"</span><br>
+            <span class="cmd">$ grep -i "error" /var/log/syslog</span><br><br>
+            
+            <span class="comment"># Recursive search in folder</span><br>
+            <span class="cmd">$ grep -r "192.168.1.1" /var/log/</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Searching: find</h2><span class="slide-number">SEARCHING</span></div>
+        <p>Locate files by attribute (name, size, time).</p>
+        <div class="terminal">
+            <span class="comment"># Find all JPGs in current folder (.)</span><br>
+            <span class="cmd">$ find . -name "*.jpg"</span><br><br>
+            
+            <span class="comment"># Find files larger than 10MB</span><br>
+            <span class="cmd">$ find /home -size +10M</span><br><br>
+            
+            <span class="comment"># Find files modified in last 24h</span><br>
+            <span class="cmd">$ find . -mtime -1</span>
+        </div>
+    </div>
+
+    <!-- ADVANCED LINUX -->
+    <div class="slide">
+        <div class="slide-header"><h2>Archiving: tar & zip</h2><span class="slide-number">ADVANCED</span></div>
+        <p>Forensics often involves bundling evidence.</p>
+        <div class="grid-2">
+            <div class="card">
+                <h3>tar (Tape Archive)</h3>
+                <p>Create: <code>tar -cvf archive.tar folder/</code></p>
+                <p>Extract: <code>tar -xvf archive.tar</code></p>
+                <p><small>c=create, x=extract, v=verbose, f=file</small></p>
+            </div>
+            <div class="card">
+                <h3>zip</h3>
+                <p>Create: <code>zip -r data.zip folder/</code></p>
+                <p>Extract: <code>unzip data.zip</code></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Downloading: wget & curl</h2><span class="slide-number">ADVANCED</span></div>
+        <div class="grid-2">
+            <div class="terminal">
+                <span class="comment"># Download a file</span><br>
+                <span class="cmd">$ wget http://site.com/malware.exe</span><br><br>
+                <span class="comment"># Save as specific name</span><br>
+                <span class="cmd">$ wget -O sample.exe http://site.com/x</span>
+            </div>
+            <div class="terminal">
+                <span class="comment"># Get webpage content</span><br>
+                <span class="cmd">$ curl http://google.com</span><br><br>
+                <span class="comment"># Inspect Headers (Forensics)</span><br>
+                <span class="cmd">$ curl -I http://site.com</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Command History</h2><span class="slide-number">ADVANCED</span></div>
+        <p>Linux remembers what you typed. Useful for checking what a suspect did.</p>
+        <div class="terminal">
+            <span class="cmd">$ history</span><br>
+            1  ls<br>
+            2  cd /etc<br>
+            3  cat shadow<br>
+            4  rm -rf /logs<br><br>
+            <span class="comment"># Run command #3 again</span><br>
+            <span class="cmd">$ !3</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Redirection & Piping</h2><span class="slide-number">ADVANCED</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>> (Overwrite)</h3>
+                <p><code>ls > list.txt</code></p>
+                <p>Saves output to file.</p>
+            </div>
+            <div class="card">
+                <h3>>> (Append)</h3>
+                <p><code>echo "Done" >> log.txt</code></p>
+                <p>Adds to end of file.</p>
+            </div>
+            <div class="card">
+                <h3>| (Pipe)</h3>
+                <p><code>cat log | grep "Error"</code></p>
+                <p>Pass output to next command.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Process Management</h2><span class="slide-number">SYSTEM</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>top / htop</h3>
+                <p>Task Manager. View CPU/RAM usage live.</p>
+            </div>
+            <div class="card">
+                <h3>ps aux</h3>
+                <p>Snapshot of ALL running processes.</p>
+            </div>
+            <div class="card">
+                <h3>kill [PID]</h3>
+                <p>Stop a process using its ID.</p>
+                <code>kill 1234</code>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Networking: IP</h2><span class="slide-number">NETWORKING</span></div>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Check IP</h3>
+                <p>Old: <code>ifconfig</code></p>
+                <p>New: <code>ip a</code></p>
+                <p>Look for <code>eth0</code> or <code>wlan0</code>.</p>
+            </div>
+            <div class="card">
+                <h3>Connectivity</h3>
+                <p><code>ping google.com</code></p>
+                <p>Check if internet is working.</p>
+                <p><em>Ctrl+C to stop.</em></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Linux Quiz</h2><span class="slide-number">REVIEW</span></div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            1. Which command shows hidden files?
+            <div class="quiz-answer"><strong>ls -a</strong></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            2. Which command is used to rename a file?
+            <div class="quiz-answer"><strong>mv</strong> (Move)</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            3. How do you find the text "fail" inside "auth.log"?
+            <div class="quiz-answer"><strong>grep "fail" auth.log</strong></div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!--                              PART 2: IAM                          -->
+    <!-- ================================================================= -->
+
+    <div class="slide">
+        <div class="grid-2">
+            <div>
+                <span class="badge badge-iam">PART 2</span>
+                <h1 style="color: var(--accent-secondary);">Identity & Access Management</h1>
+                <p>Authentication, Authorization & Accounting</p>
+                <p><em>Slides 31 - 45</em></p>
+            </div>
+            <div style="font-size: 200px; text-align: center; color: var(--accent-secondary);">
+                <i class="fa-solid fa-id-card"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>The AAA Model</h2><span class="slide-number">CONCEPTS</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Authentication</h3>
+                <p><strong>Who are you?</strong></p>
+                <p>Username + Password / Biometrics.</p>
+            </div>
+            <div class="card">
+                <h3>Authorization</h3>
+                <p><strong>What can you do?</strong></p>
+                <p>Permissions (Read, Write, Execute).</p>
+            </div>
+            <div class="card">
+                <h3>Accounting</h3>
+                <p><strong>What did you do?</strong></p>
+                <p>Logs & Audit Trails.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>User Types</h2><span class="slide-number">USERS</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Root (UID 0)</h3>
+                <p>The Administrator. Has unrestricted access to everything.</p>
+            </div>
+            <div class="card">
+                <h3>System Users</h3>
+                <p>Run background services (e.g., www-data for web servers).</p>
+            </div>
+            <div class="card">
+                <h3>Regular Users</h3>
+                <p>Human users (UID 1000+). Have restricted access.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>User Management Commands</h2><span class="slide-number">USERS</span></div>
+        <div class="terminal">
+            <span class="comment"># 1. Create a user (with home folder)</span><br>
+            <span class="cmd">$ sudo useradd -m alex</span><br><br>
+            
+            <span class="comment"># 2. Set password</span><br>
+            <span class="cmd">$ sudo passwd alex</span><br><br>
+            
+            <span class="comment"># 3. Switch to that user</span><br>
+            <span class="cmd">$ su - alex</span><br><br>
+
+            <span class="comment"># 4. Delete user</span><br>
+            <span class="cmd">$ sudo userdel -r alex</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Permissions: rwx</h2><span class="slide-number">PERMISSIONS</span></div>
+        <p>Every file has 3 sets of permissions: <strong>User</strong>, <strong>Group</strong>, <strong>Others</strong>.</p>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Read (r)</h3>
+                <p>View file contents.</p>
+                <p>Value: <strong>4</strong></p>
+            </div>
+            <div class="card">
+                <h3>Write (w)</h3>
+                <p>Modify/Delete file.</p>
+                <p>Value: <strong>2</strong></p>
+            </div>
+            <div class="card">
+                <h3>Execute (x)</h3>
+                <p>Run file as program.</p>
+                <p>Value: <strong>1</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Octal Math</h2><span class="slide-number">PERMISSIONS</span></div>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Calculation</h3>
+                <p>rwx = 4+2+1 = <strong>7</strong></p>
+                <p>rw- = 4+2+0 = <strong>6</strong></p>
+                <p>r-x = 4+0+1 = <strong>5</strong></p>
+                <p>r-- = 4+0+0 = <strong>4</strong></p>
+            </div>
+            <div class="terminal">
+                <span class="comment"># Common Codes</span><br>
+                <span class="cmd">777</span> : Everyone Full Access (Danger)<br>
+                <span class="cmd">755</span> : Owner Full, Others Read/Run (Standard)<br>
+                <span class="cmd">700</span> : Owner Only (Private)
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Changing Permissions: chmod</h2><span class="slide-number">COMMANDS</span></div>
+        <div class="terminal">
+            <span class="comment"># Numeric Mode</span><br>
+            <span class="cmd">$ chmod 700 secret.txt</span><br>
+            <span class="comment"># Symbolic Mode (User + Execute)</span><br>
+            <span class="cmd">$ chmod u+x script.sh</span><br>
+            <span class="comment"># Symbolic Mode (Group - Write)</span><br>
+            <span class="cmd">$ chmod g-w file.txt</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Changing Ownership: chown</h2><span class="slide-number">COMMANDS</span></div>
+        <p>Give a file to another user.</p>
+        <div class="terminal">
+            <span class="comment"># Syntax: chown user:group file</span><br><br>
+            <span class="cmd">$ sudo chown alex report.pdf</span><br><br>
+            <span class="comment"># Recursive (entire folder)</span><br>
+            <span class="cmd">$ sudo chown -R alex:developers project_folder/</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Interactive Lab 2</h2><span class="slide-number">TRY IT NOW</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-secondary);">
+            <h3><i class="fa-solid fa-lock"></i> Secure the File</h3>
+            <ol>
+                <li>Create a file: <code>touch secret.txt</code></li>
+                <li>Check permissions: <code>ls -l secret.txt</code></li>
+                <li>Lock it down so ONLY you can read/write it: <code>chmod 600 secret.txt</code></li>
+                <li>Verify: <code>ls -l secret.txt</code> (Should allow rw-------)</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>IAM Quiz</h2><span class="slide-number">REVIEW</span></div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            1. What Octal value is Read + Execute?
+            <div class="quiz-answer"><strong>5</strong> (4 + 1)</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            2. Which command changes file ownership?
+            <div class="quiz-answer"><strong>chown</strong></div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!--                              PART 3: CRYPTO                       -->
+    <!-- ================================================================= -->
+
+    <div class="slide">
+        <div class="grid-2">
+            <div>
+                <span class="badge badge-crypto">PART 3</span>
+                <h1 style="color: var(--accent-success);">Cryptography</h1>
+                <p>The Science of Secrecy, Integrity & Trust</p>
+                <p><em>Slides 46 - 65</em></p>
+            </div>
+            <div style="font-size: 200px; text-align: center; color: var(--accent-success);">
+                <i class="fa-solid fa-key"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>The CIA Triad</h2><span class="slide-number">CONCEPTS</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Confidentiality</h3>
+                <p>Keep data secret.</p>
+                <p><strong>Tool:</strong> Encryption</p>
+            </div>
+            <div class="card">
+                <h3>Integrity</h3>
+                <p>Detect tampering.</p>
+                <p><strong>Tool:</strong> Hashing</p>
+            </div>
+            <div class="card">
+                <h3>Availability</h3>
+                <p>Ensure access.</p>
+                <p><strong>Tool:</strong> Backups</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Hashing (Digital Fingerprint)</h2><span class="slide-number">INTEGRITY</span></div>
+        <p>One-way math. Cannot reverse a hash to get the data.</p>
+        <div class="terminal">
+            <span class="cmd">$ echo "Hello" > msg.txt</span><br>
+            <span class="cmd">$ md5sum msg.txt</span><br>
+            b1946ac92492d2347c6235b4d2611184  msg.txt<br><br>
+            <span class="cmd">$ echo "Hello!" > msg.txt</span><br>
+            <span class="cmd">$ md5sum msg.txt</span><br>
+            5a8dd3ad0756a93ded72b823b19dd877  msg.txt
+        </div>
+        <p><em>Changing 1 character changes the entire hash.</em></p>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Salting Passwords</h2><span class="slide-number">INTEGRITY</span></div>
+        <div class="grid-2">
+            <div class="card">
+                <h3>The Problem</h3>
+                <p>If two users have the password "password123", they have the same hash. Hackers use "Rainbow Tables" to reverse these common hashes.</p>
+            </div>
+            <div class="card">
+                <h3>The Solution: Salt</h3>
+                <p>Add random data to the password before hashing.</p>
+                <p><code>Hash("password123" + "Xy9z")</code></p>
+                <p>Now every hash is unique.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Encoding vs Encryption</h2><span class="slide-number">CONCEPTS</span></div>
+        <div class="grid-2">
+            <div class="card" style="border-top: 5px solid var(--accent-warning);">
+                <h3>Encoding (Base64)</h3>
+                <p>NOT Security. Just a format change.</p>
+                <div class="terminal">
+                    <span class="cmd">$ echo "Admin" | base64</span><br>
+                    QWRtaW4K
+                </div>
+            </div>
+            <div class="card" style="border-top: 5px solid var(--accent-success);">
+                <h3>Encryption (AES)</h3>
+                <p>SECURE. Requires a key/password.</p>
+                <p>Output looks like garbage binary.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Symmetric Encryption</h2><span class="slide-number">CONFIDENTIALITY</span></div>
+        <p>Shared Key. Same password to Lock and Unlock.</p>
+        <div class="terminal">
+            <span class="comment"># Encrypt</span><br>
+            <span class="cmd">$ openssl aes-256-cbc -in data.txt -out data.enc</span><br>
+            enter aes-256-cbc encryption password:<br><br>
+            <span class="comment"># Decrypt</span><br>
+            <span class="cmd">$ openssl aes-256-cbc -d -in data.enc -out decrypted.txt</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Asymmetric Encryption (PKI)</h2><span class="slide-number">CONFIDENTIALITY</span></div>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Public Key</h3>
+                <p>Share with everyone.</p>
+                <p>Used to <strong>ENCRYPT</strong> messages sent to you.</p>
+            </div>
+            <div class="card">
+                <h3>Private Key</h3>
+                <p>Keep Secret. Never Share.</p>
+                <p>Used to <strong>DECRYPT</strong> messages.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Digital Signatures</h2><span class="slide-number">AUTHENTICITY</span></div>
+        <p>How do I know the message truly came from you?</p>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Signing</h3>
+                <p>Sender encrypts a hash of the file using their <strong>PRIVATE KEY</strong>.</p>
+            </div>
+            <div class="card">
+                <h3>Verifying</h3>
+                <p>Receiver decrypts it using the Sender's <strong>PUBLIC KEY</strong>.</p>
+            </div>
+        </div>
+        <p style="margin-top: 20px;">If it decrypts correctly, it MUST have come from the owner of the Private Key.</p>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>PKI & Certificates</h2><span class="slide-number">TRUST</span></div>
+        <p>Who do we trust? The Chain of Trust.</p>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Root CA</h3>
+                <p>Certificate Authority (e.g., DigiCert). The ultimate source of trust.</p>
+            </div>
+            <div class="card">
+                <h3>Intermediate CA</h3>
+                <p>Delegated trust.</p>
+            </div>
+            <div class="card">
+                <h3>End Entity</h3>
+                <p>The website (e.g., google.com). Has a certificate signed by the CA.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Crypto Attacks</h2><span class="slide-number">ATTACKS</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Brute Force</h3>
+                <p>Try every possible combination (aaaa, aaab...). Slow.</p>
+            </div>
+            <div class="card">
+                <h3>Dictionary Attack</h3>
+                <p>Try words from a list (password, 123456). Fast.</p>
+            </div>
+            <div class="card">
+                <h3>Rainbow Table</h3>
+                <p>Pre-computed list of hashes. Instant, if no salt is used.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Steganography</h2><span class="slide-number">HIDING DATA</span></div>
+        <p>Security through Obscurity. Hiding text inside images.</p>
+        <div class="terminal">
+            <span class="comment"># Embed</span><br>
+            <span class="cmd">$ steghide embed -cf image.jpg -ef secret.txt</span><br><br>
+            <span class="comment"># Extract</span><br>
+            <span class="cmd">$ steghide extract -sf image.jpg</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!--                              PART 4: COMPLIANCE                   -->
+    <!-- ================================================================= -->
+
+    <div class="slide">
+        <div class="grid-2">
+            <div>
+                <span class="badge badge-compliance">PART 4</span>
+                <h1 style="color: var(--accent-danger);">Compliance & Auditing</h1>
+                <p>Rules, Regulations, Response</p>
+                <p><em>Slides 66 - 75+</em></p>
+            </div>
+            <div style="font-size: 200px; text-align: center; color: var(--accent-danger);">
+                <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Why Compliance?</h2><span class="slide-number">OVERVIEW</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Legal Requirement</h3>
+                <p>Laws like GDPR (EU) and HIPAA (Health) mandate security.</p>
+            </div>
+            <div class="card">
+                <h3>Standardization</h3>
+                <p>ISO 27001 ensures a baseline of quality.</p>
+            </div>
+            <div class="card">
+                <h3>Trust</h3>
+                <p>Customers trust certified companies.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>ISO 27001</h2><span class="slide-number">STANDARDS</span></div>
+        <p>The Gold Standard for InfoSec Management.</p>
+        <div class="grid-2">
+            <div class="card">
+                <h3>PDCA Cycle</h3>
+                <ul>
+                    <li><strong>Plan:</strong> Assess risks.</li>
+                    <li><strong>Do:</strong> Implement controls.</li>
+                    <li><strong>Check:</strong> Audit and monitor.</li>
+                    <li><strong>Act:</strong> Fix and improve.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Key Concept</h3>
+                <p>It's not about being unhackable; it's about having a <strong>Process</strong> to manage risk.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>GDPR</h2><span class="slide-number">PRIVACY</span></div>
+        <p>General Data Protection Regulation (EU).</p>
+        <div class="grid-2">
+            <div class="card">
+                <h3>PII</h3>
+                <p>Personally Identifiable Information (Name, Email, IP).</p>
+            </div>
+            <div class="card">
+                <h3>Key Rights</h3>
+                <ul>
+                    <li>Right to Access.</li>
+                    <li>Right to be Forgotten (Erasure).</li>
+                    <li>Right to Data Portability.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Risk Management</h2><span class="slide-number">RISK</span></div>
+        <p>Calculation: <strong>Risk = Likelihood x Impact</strong></p>
+        <div class="grid-3">
+            <div class="card" style="background: rgba(244, 63, 94, 0.2);">
+                <h3>High Risk</h3>
+                <p>High Impact + High Likelihood.</p>
+                <p><em>Example: Public S3 bucket with passwords.</em></p>
+            </div>
+            <div class="card" style="background: rgba(250, 204, 21, 0.2);">
+                <h3>Medium Risk</h3>
+                <p>High Impact + Low Likelihood.</p>
+                <p><em>Example: Earthquake destroying data center.</em></p>
+            </div>
+            <div class="card" style="background: rgba(74, 222, 128, 0.2);">
+                <h3>Low Risk</h3>
+                <p>Low Impact + Low Likelihood.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Incident Response (NIST)</h2><span class="slide-number">RESPONSE</span></div>
+        <p>What do we do when we are hacked?</p>
+        <ol style="font-size: 24px; line-height: 2;">
+            <li><strong>Preparation:</strong> Plan and Tools ready.</li>
+            <li><strong>Detection & Analysis:</strong> Find the breach.</li>
+            <li><strong>Containment, Eradication & Recovery:</strong> Stop it, remove it, restore backups.</li>
+            <li><strong>Post-Incident Activity:</strong> Lessons learned.</li>
+        </ol>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Auditing: Password Policy</h2><span class="slide-number">AUDITING</span></div>
+        <p>Lab: Check if password aging is active.</p>
+        <div class="terminal">
+            <span class="comment"># Check status</span><br>
+            <span class="cmd">$ sudo chage -l alex</span><br><br>
+            
+            <span class="comment"># Enforce change every 90 days</span><br>
+            <span class="cmd">$ sudo chage -M 90 alex</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Auditing: File Integrity</h2><span class="slide-number">AUDITING</span></div>
+        <p>Lab: Using hashes to detect unauthorized changes.</p>
+        <div class="terminal">
+            <span class="comment"># 1. Create baseline hash of config file</span><br>
+            <span class="cmd">$ sha256sum /etc/ssh/sshd_config > baseline.txt</span><br><br>
+            
+            <span class="comment"># ... Time passes ...</span><br><br>
+
+            <span class="comment"># 2. Check if file changed</span><br>
+            <span class="cmd">$ sha256sum -c baseline.txt</span><br>
+            <span class="error">/etc/ssh/sshd_config: FAILED</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Network Hardening: UFW</h2><span class="slide-number">HARDENING</span></div>
+        <p>Uncomplicated Firewall.</p>
+        <div class="terminal">
+            <span class="comment"># Enable firewall</span><br>
+            <span class="cmd">$ sudo ufw enable</span><br><br>
+            
+            <span class="comment"># Allow only SSH</span><br>
+            <span class="cmd">$ sudo ufw allow 22/tcp</span><br><br>
+            
+            <span class="comment"># Check status</span><br>
+            <span class="cmd">$ sudo ufw status</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>SSH Hardening</h2><span class="slide-number">HARDENING</span></div>
+        <div class="card">
+            <h3>Edit <code>/etc/ssh/sshd_config</code></h3>
+            <ul>
+                <li><code>PermitRootLogin no</code> (Disable root access)</li>
+                <li><code>PasswordAuthentication no</code> (Keys only)</li>
+                <li><code>Protocol 2</code> (Use modern protocol)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Final Conclusion</h2><span class="slide-number">WRAP UP</span></div>
+        <div class="grid-2">
+            <div>
+                <h3>We Covered:</h3>
+                <ul>
+                    <li><strong>Linux:</strong> Navigation, File Ops, Search.</li>
+                    <li><strong>IAM:</strong> Permissions (700), Users, Root.</li>
+                    <li><strong>Crypto:</strong> Hash vs Encrypt, PKI.</li>
+                    <li><strong>Compliance:</strong> Audit, Logs, ISO Standards.</li>
+                </ul>
+            </div>
+            <div style="text-align: center;">
+                <h1 style="color: var(--accent-success);">YOU ARE READY</h1>
+                <p>Start your Lab.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progressBar');
+        const slideIndicator = document.getElementById('slideIndicator');
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                }
+            });
+            
+            // Update Progress Bar
+            const progress = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Update Indicator
+            slideIndicator.innerText = `${currentSlide + 1} / ${slides.length}`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Init
+        updateSlide();
+    </script>
+</body>
+</html>
