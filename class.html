@@ -435,6 +435,24 @@
         </div>
     </div>
 
+    <div class="slide">
+        <div class="slide-header"><h2>Task: File Operations Practice</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-primary);">
+            <h3><i class="fa-solid fa-tasks"></i> Complete This Exercise</h3>
+            <p>Create a folder structure and practice file operations:</p>
+            <ol>
+                <li>Create a directory called <code>forensics_lab</code> in your home folder.</li>
+                <li>Inside it, create three subdirectories: <code>evidence</code>, <code>notes</code>, and <code>backup</code>.</li>
+                <li>Create a file <code>case_001.txt</code> in the <code>notes</code> folder with the text "Initial investigation".</li>
+                <li>Copy <code>case_001.txt</code> to the <code>backup</code> folder.</li>
+                <li>Rename the file in <code>backup</code> to <code>case_001_backup.txt</code>.</li>
+                <li>Delete the original file from <code>notes</code> (be careful!).</li>
+                <li>Verify your work with <code>ls -R forensics_lab</code>.</li>
+            </ol>
+            <p style="margin-top: 15px; color: var(--accent-success);"><strong>Tip:</strong> Use <code>mkdir -p</code> to create nested directories at once!</p>
+        </div>
+    </div>
+
     <!-- VIEWING -->
     <div class="slide">
         <div class="slide-header"><h2>Viewing: cat & less</h2><span class="slide-number">VIEWING</span></div>
@@ -471,6 +489,30 @@
         </div>
     </div>
 
+    <div class="slide">
+        <div class="slide-header"><h2>Quick Check: head & tail</h2><span class="slide-number">QUIZ</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-primary); margin-bottom: 20px;">
+            <h3><i class="fa-solid fa-question-circle"></i> Test Your Understanding</h3>
+            <p>Answer these questions about the <code>head</code> and <code>tail</code> commands:</p>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            1. Which command shows the last 20 lines of a log file?
+            <div class="quiz-answer"><strong>tail -n 20 filename.log</strong> or <strong>tail -20 filename.log</strong></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            2. What does the <code>-f</code> flag do with the <code>tail</code> command?
+            <div class="quiz-answer"><strong>Follow mode</strong> - It continuously displays new lines as they are added to the file (real-time monitoring). Press Ctrl+C to stop.</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            3. If you want to see the first 3 lines of <code>/etc/passwd</code>, what command would you use?
+            <div class="quiz-answer"><strong>head -n 3 /etc/passwd</strong> or <strong>head -3 /etc/passwd</strong></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            4. Which command is better for monitoring live log files: <code>head</code> or <code>tail</code>?
+            <div class="quiz-answer"><strong>tail</strong> - Because it shows the end of the file where new log entries are appended, and with <code>-f</code> flag it can follow changes in real-time.</div>
+        </div>
+    </div>
+
     <!-- SEARCHING -->
     <div class="slide">
         <div class="slide-header"><h2>Searching: grep</h2><span class="slide-number">SEARCHING</span></div>
@@ -504,6 +546,25 @@
         </div>
     </div>
 
+    <div class="slide">
+        <div class="slide-header"><h2>Task: Search & Find Challenge</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-primary);">
+            <h3><i class="fa-solid fa-search"></i> Forensic Investigation</h3>
+            <p>You're investigating a system. Complete these tasks:</p>
+            <ol>
+                <li>Search for all files containing the word "password" in <code>/etc</code> directory.</li>
+                <li>Find all <code>.log</code> files in <code>/var/log</code> that were modified in the last 7 days.</li>
+                <li>Find all files larger than 1MB in your home directory.</li>
+                <li>Search for files with "config" in their name anywhere in <code>/etc</code>.</li>
+                <li>Use <code>grep</code> to find all lines containing "error" (case-insensitive) in <code>/var/log/syslog</code> and save the results to <code>errors.txt</code>.</li>
+            </ol>
+            <div class="terminal" style="margin-top: 15px;">
+                <span class="comment"># Example: Combine find and grep</span><br>
+                <span class="cmd">$ find /etc -type f -exec grep -l "password" {} \;</span>
+            </div>
+        </div>
+    </div>
+
     <!-- ADVANCED LINUX -->
     <div class="slide">
         <div class="slide-header"><h2>Archiving: tar & zip</h2><span class="slide-number">ADVANCED</span></div>
@@ -519,6 +580,31 @@
                 <h3>zip</h3>
                 <p>Create: <code>zip -r data.zip folder/</code></p>
                 <p>Extract: <code>unzip data.zip</code></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Task: Archiving & Compression Practice</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-primary);">
+            <h3><i class="fa-solid fa-box-archive"></i> Archive Management</h3>
+            <p>Practice archiving and extracting files. Complete these tasks:</p>
+            <ol>
+                <li>Create a folder called <code>evidence</code> and add some test files to it.</li>
+                <li>Create a tar archive of the <code>evidence</code> folder named <code>evidence.tar</code>.</li>
+                <li>List the contents of <code>evidence.tar</code> without extracting it.</li>
+                <li>Extract the tar archive to a new folder called <code>extracted_evidence</code>.</li>
+                <li>Create a compressed tar.gz archive of the <code>evidence</code> folder named <code>evidence.tar.gz</code>.</li>
+                <li>Extract the compressed <code>evidence.tar.gz</code> archive.</li>
+                <li>Create a zip archive of the <code>evidence</code> folder recursively.</li>
+                <li>View the contents of the zip file without extracting it.</li>
+                <li>Extract the zip file to a new location.</li>
+                <li>Create a hash (SHA256) of your archive file to verify its integrity: <code>sha256sum evidence.tar.gz > evidence.tar.gz.sha256</code></li>
+            </ol>
+            <div class="terminal" style="margin-top: 15px;">
+                <span class="comment"># Example: Create and verify archive</span><br>
+                <span class="cmd">$ tar -czvf evidence.tar.gz evidence/</span><br>
+                <span class="cmd">$ sha256sum evidence.tar.gz > evidence.tar.gz.sha256</span>
             </div>
         </div>
     </div>
@@ -610,6 +696,32 @@
                 <p>Check if internet is working.</p>
                 <p><em>Ctrl+C to stop.</em></p>
             </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Task: System & Network Investigation</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-primary);">
+            <h3><i class="fa-solid fa-network-wired"></i> System Analysis</h3>
+            <p>Investigate your system's processes and network connections. Complete these tasks:</p>
+            <ol>
+                <li>Check your system's IP address using <code>ip a</code> or <code>ifconfig</code>.</li>
+                <li>Identify your network interface name (eth0, wlan0, etc.) from the output.</li>
+                <li>Test internet connectivity by sending 4 packets to google.com.</li>
+                <li>View the first 20 running processes on your system.</li>
+                <li>Find the top 5 processes using the most CPU.</li>
+                <li>Check all active network connections (listening ports).</li>
+                <li>Count how many processes are currently running.</li>
+                <li>Find all processes owned by your current user.</li>
+                <li>Save a snapshot of all running processes to a file called <code>process_snapshot.txt</code>.</li>
+                <li>Create a summary file with your IP address and process count: <code>echo "IP: $(ip a | grep 'inet ' | head -1)" > system_info.txt</code></li>
+            </ol>
+            <div class="terminal" style="margin-top: 15px;">
+                <span class="comment"># Example: Get system overview</span><br>
+                <span class="cmd">$ ps aux | wc -l</span><br>
+                <span class="cmd">$ netstat -tuln | grep LISTEN</span>
+            </div>
+            <p style="margin-top: 15px; color: var(--accent-warning);"><strong>Forensic Tip:</strong> Process lists and network connections are crucial evidence in security investigations!</p>
         </div>
     </div>
 
@@ -771,12 +883,32 @@
         <div class="slide-header"><h2>Interactive Lab 2</h2><span class="slide-number">TRY IT NOW</span></div>
         <div class="card" style="border-left: 5px solid var(--accent-secondary);">
             <h3><i class="fa-solid fa-lock"></i> Secure the File</h3>
+            <p>Practice file permissions and ownership. Complete these tasks:</p>
             <ol>
                 <li>Create a file: <code>touch secret.txt</code></li>
                 <li>Check permissions: <code>ls -l secret.txt</code></li>
                 <li>Lock it down so ONLY you can read/write it: <code>chmod 600 secret.txt</code></li>
-                <li>Verify: <code>ls -l secret.txt</code> (Should allow rw-------)</li>
+                <li>Verify: <code>ls -l secret.txt</code> (Should show rw-------)</li>
+                <li>Create a script file: <code>touch script.sh</code> and add execute permission for owner: <code>chmod u+x script.sh</code></li>
+                <li>Check what permissions <code>script.sh</code> has now: <code>ls -l script.sh</code></li>
+                <li>Set permissions to 755 (owner: rwx, group: rx, others: rx): <code>chmod 755 script.sh</code></li>
+                <li>Create a folder <code>private_dir</code> and set it so only you can access it: <code>chmod 700 private_dir</code></li>
+                <li>Verify the folder permissions: <code>ls -ld private_dir</code> (note the <code>-d</code> flag for directories)</li>
+                <li>Create a file <code>shared.txt</code> and give read permission to group and others: <code>chmod 644 shared.txt</code></li>
+                <li>Check the octal value: What does <code>chmod 644</code> mean? (r--r--r--)</li>
+                <li>Remove write permission from group on <code>shared.txt</code> using symbolic mode: <code>chmod g-w shared.txt</code></li>
+                <li>Add execute permission for owner using symbolic mode: <code>chmod u+x shared.txt</code></li>
+                <li>Create a file <code>test.txt</code> and change its owner (requires sudo): <code>sudo chown root test.txt</code></li>
+                <li>Verify ownership change: <code>ls -l test.txt</code> (should show root as owner)</li>
+                <li>Change ownership back to your user: <code>sudo chown $USER test.txt</code></li>
             </ol>
+            <div class="terminal" style="margin-top: 15px;">
+                <span class="comment"># Example: Understanding permission output</span><br>
+                <span class="cmd">$ ls -l secret.txt</span><br>
+                -rw------- 1 kali kali 0 Jan 10 10:00 secret.txt<br>
+                <span class="comment"># rw------- = 600 (owner: read+write, group: none, others: none)</span>
+            </div>
+            <p style="margin-top: 15px; color: var(--accent-danger);"><strong>Security Note:</strong> Always use the minimum permissions necessary. Files with 777 (rwxrwxrwx) are a security risk!</p>
         </div>
     </div>
 
@@ -789,6 +921,54 @@
         <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
             2. Which command changes file ownership?
             <div class="quiz-answer"><strong>chown</strong></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            3. What does the AAA model stand for?
+            <div class="quiz-answer"><strong>Authentication, Authorization, and Accounting</strong><br><small>Authentication = Who are you? Authorization = What can you do? Accounting = What did you do?</small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            4. What is the UID (User ID) of the root user?
+            <div class="quiz-answer"><strong>0</strong><br><small>Root always has UID 0, giving it unrestricted access to the system.</small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            5. What does <code>chmod 755</code> mean in terms of permissions?
+            <div class="quiz-answer"><strong>Owner: rwx (7), Group: r-x (5), Others: r-x (5)</strong><br><small>Owner has full access, group and others can read and execute but not write.</small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            6. Which command creates a new user with a home directory?
+            <div class="quiz-answer"><strong>sudo useradd -m username</strong><br><small>The <code>-m</code> flag creates the home directory.</small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            7. What is the difference between <code>su</code> and <code>sudo</code>?
+            <div class="quiz-answer"><strong>su</strong> switches to another user (requires that user's password), while <strong>sudo</strong> runs a single command as another user (requires your password and sudo privileges).</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            8. What permission value represents "Read + Write"?
+            <div class="quiz-answer"><strong>6</strong> (4 + 2)<br><small>Read (4) + Write (2) = 6</small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            9. What does <code>chmod 700</code> do?
+            <div class="quiz-answer"><strong>Owner: rwx (full access), Group: --- (no access), Others: --- (no access)</strong><br><small>Only the owner can read, write, or execute the file.</small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            10. How do you change file ownership and group at the same time?
+            <div class="quiz-answer"><strong>sudo chown user:group filename</strong><br><small>Example: <code>sudo chown alex:developers file.txt</code></small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            11. What is the symbolic mode equivalent of <code>chmod 644</code>?
+            <div class="quiz-answer"><strong>chmod u=rw,go=r filename</strong> or <strong>chmod u+rw,go+r filename</strong><br><small>Owner: read+write, Group: read, Others: read</small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            12. What type of users typically have UID 1000+?
+            <div class="quiz-answer"><strong>Regular users</strong><br><small>System users usually have UIDs below 1000, while regular human users start at 1000.</small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            13. What does the "x" permission mean for a directory?
+            <div class="quiz-answer"><strong>Execute permission on a directory means you can "enter" or "cd" into it</strong><br><small>Without execute permission, you cannot access the directory even if you have read permission.</small></div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            14. Which command deletes a user and their home directory?
+            <div class="quiz-answer"><strong>sudo userdel -r username</strong><br><small>The <code>-r</code> flag removes the user's home directory and mail spool.</small></div>
         </div>
     </div>
 
@@ -862,6 +1042,24 @@
     </div>
 
     <div class="slide">
+        <div class="slide-header"><h2>Task: Hashing & Integrity Check</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-success);">
+            <h3><i class="fa-solid fa-fingerprint"></i> Verify File Integrity</h3>
+            <p>Practice hashing to detect file tampering:</p>
+            <ol>
+                <li>Create a file <code>evidence.txt</code> with the content "This is critical evidence".</li>
+                <li>Generate MD5 hash: <code>md5sum evidence.txt > evidence.md5</code></li>
+                <li>Generate SHA256 hash: <code>sha256sum evidence.txt > evidence.sha256</code></li>
+                <li>View both hash files to see the difference in hash algorithms.</li>
+                <li>Modify <code>evidence.txt</code> slightly (add a space or change one letter).</li>
+                <li>Run <code>md5sum -c evidence.md5</code> to verify - it should FAIL!</li>
+                <li>Generate new hashes and compare with the originals.</li>
+            </ol>
+            <p style="margin-top: 15px; color: var(--accent-warning);"><strong>Question:</strong> Why did the hash change completely even though you only changed one character?</p>
+        </div>
+    </div>
+
+    <div class="slide">
         <div class="slide-header"><h2>Encoding vs Encryption</h2><span class="slide-number">CONCEPTS</span></div>
         <div class="grid-2">
             <div class="card" style="border-top: 5px solid var(--accent-warning);">
@@ -889,6 +1087,53 @@
             enter aes-256-cbc encryption password:<br><br>
             <span class="comment"># Decrypt</span><br>
             <span class="cmd">$ openssl aes-256-cbc -d -in data.enc -out decrypted.txt</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Task: Encoding & Decoding Practice</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-warning);">
+            <h3><i class="fa-solid fa-code"></i> Base64 Encoding</h3>
+            <p>Practice encoding and decoding with Base64. Complete these tasks:</p>
+            <ol>
+                <li>Create a text file with a secret message: <code>echo "My Secret Password: admin123" > secret.txt</code></li>
+                <li>Encode the file using Base64: <code>base64 secret.txt > secret_encoded.txt</code></li>
+                <li>View the encoded content: <code>cat secret_encoded.txt</code></li>
+                <li>Decode it back: <code>base64 -d secret_encoded.txt</code></li>
+                <li>Encode a string directly: <code>echo -n "Hello World" | base64</code></li>
+                <li>Decode a Base64 string: <code>echo "SGVsbG8gV29ybGQ=" | base64 -d</code></li>
+                <li>Compare: Encode "password" and "Password" - notice they produce different outputs.</li>
+                <li>Create a file with multiple lines and encode it: <code>cat secret.txt | base64</code></li>
+                <li>Decode and save to a new file: <code>base64 -d secret_encoded.txt > decoded_secret.txt</code></li>
+                <li>Verify the original and decoded files match: <code>diff secret.txt decoded_secret.txt</code></li>
+            </ol>
+            <div class="terminal" style="margin-top: 15px;">
+                <span class="comment"># Example: Quick encode/decode</span><br>
+                <span class="cmd">$ echo "test" | base64</span><br>
+                dGVzdAo=<br>
+                <span class="cmd">$ echo "dGVzdAo=" | base64 -d</span><br>
+                test
+            </div>
+            <p style="margin-top: 15px; color: var(--accent-danger);"><strong>Important:</strong> Base64 is NOT encryption! It's just encoding. Anyone can decode it easily. Never use Base64 for security!</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Task: Encrypt & Decrypt Files</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-success);">
+            <h3><i class="fa-solid fa-lock"></i> Practice Encryption</h3>
+            <p>Secure sensitive data using symmetric encryption:</p>
+            <ol>
+                <li>Create a file <code>sensitive_data.txt</code> with some confidential information.</li>
+                <li>Encrypt it using AES-256-CBC: <code>openssl aes-256-cbc -in sensitive_data.txt -out sensitive_data.enc</code></li>
+                <li>Enter a strong password when prompted (remember it!).</li>
+                <li>Verify the encrypted file exists: <code>ls -lh sensitive_data.enc</code></li>
+                <li>Try to read the encrypted file: <code>cat sensitive_data.enc</code> (should be unreadable).</li>
+                <li>Decrypt the file: <code>openssl aes-256-cbc -d -in sensitive_data.enc -out decrypted_data.txt</code></li>
+                <li>Compare the original and decrypted files: <code>diff sensitive_data.txt decrypted_data.txt</code></li>
+                <li>Delete the original unencrypted file: <code>rm sensitive_data.txt</code></li>
+            </ol>
+            <p style="margin-top: 15px; color: var(--accent-danger);"><strong>Security Note:</strong> In real scenarios, always securely delete original files after encryption!</p>
         </div>
     </div>
 
@@ -1077,6 +1322,25 @@
             <li><strong>Containment, Eradication & Recovery:</strong> Stop it, remove it, restore backups.</li>
             <li><strong>Post-Incident Activity:</strong> Lessons learned.</li>
         </ol>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Task: Incident Response Simulation</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-danger);">
+            <h3><i class="fa-solid fa-shield-halved"></i> Practice Incident Response</h3>
+            <p>Simulate an incident response scenario:</p>
+            <ol>
+                <li><strong>Detection:</strong> Check recent authentication attempts: <code>tail -n 50 /var/log/auth.log | grep "Failed"</code></li>
+                <li><strong>Analysis:</strong> Find all failed login attempts and count them: <code>grep "Failed password" /var/log/auth.log | wc -l</code></li>
+                <li><strong>Containment:</strong> Check current network connections: <code>netstat -tulpn</code> or <code>ss -tulpn</code></li>
+                <li><strong>Evidence Collection:</strong> Create an evidence folder and copy suspicious log entries: <code>mkdir -p ~/incident_evidence</code></li>
+                <li>Save suspicious log entries: <code>grep "Failed password" /var/log/auth.log > ~/incident_evidence/failed_logins.txt</code></li>
+                <li><strong>Documentation:</strong> Create a report file with timestamp: <code>echo "Incident Report - $(date)" > ~/incident_evidence/report.txt</code></li>
+                <li>Add findings to the report: <code>echo "Failed login attempts found: $(grep -c 'Failed password' /var/log/auth.log)" >> ~/incident_evidence/report.txt</code></li>
+                <li><strong>Preservation:</strong> Create a hash of all evidence files: <code>sha256sum ~/incident_evidence/* > ~/incident_evidence/evidence_hashes.txt</code></li>
+            </ol>
+            <p style="margin-top: 15px; color: var(--accent-primary);"><strong>Learning:</strong> This demonstrates the NIST incident response framework in action!</p>
+        </div>
     </div>
 
     <div class="slide">
