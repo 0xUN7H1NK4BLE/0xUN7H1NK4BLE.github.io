@@ -35,6 +35,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         /* --- CONTROLS --- */
@@ -64,6 +65,26 @@
         .btn:active { transform: scale(0.95); }
         .btn:hover { opacity: 0.9; }
 
+        .page-input {
+            width: 60px;
+            padding: 8px;
+            border: 2px solid var(--accent-primary);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            outline: none;
+        }
+        .page-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--accent-secondary);
+        }
+        .page-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
         .progress-bar {
             position: fixed;
             top: 0;
@@ -78,13 +99,35 @@
         /* --- SLIDE STYLES --- */
         .slide {
             display: none;
-            height: 100%;
+            min-height: 100vh;
             width: 100%;
-            padding: 40px 80px; /* Adjusted padding for more content */
+            padding: 40px 80px 100px 80px; /* Extra bottom padding for controls */
             flex-direction: column;
             justify-content: center;
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom scrollbar styling */
+        .slide::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .slide::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .slide::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+        
+        .slide::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
         }
 
         .slide.active {
@@ -113,7 +156,7 @@
         }
 
         /* --- CONTENT LAYOUTS --- */
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; height: 100%; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
         
         .card {
@@ -122,7 +165,6 @@
             border-radius: 12px;
             border: 1px solid #334155;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            height: 100%;
         }
 
         /* --- TERMINAL STYLING --- */
@@ -195,6 +237,8 @@
     <div class="controls">
         <button class="btn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Prev</button>
         <span id="slideIndicator" style="color: white; padding: 10px;">1 / 75</span>
+        <input type="number" id="pageInput" class="page-input" placeholder="Page" min="1" max="75" onkeypress="if(event.key==='Enter') goToPage()">
+        <button class="btn" onclick="goToPage()" style="padding: 10px 15px;">Go</button>
         <button class="btn" onclick="nextSlide()">Next <i class="fa-solid fa-arrow-right"></i></button>
     </div>
 
@@ -1422,6 +1466,7 @@
         const slides = document.querySelectorAll('.slide');
         const progressBar = document.getElementById('progressBar');
         const slideIndicator = document.getElementById('slideIndicator');
+        const pageInput = document.getElementById('pageInput');
 
         function updateSlide() {
             slides.forEach((slide, index) => {
@@ -1437,6 +1482,10 @@
 
             // Update Indicator
             slideIndicator.innerText = `${currentSlide + 1} / ${slides.length}`;
+            
+            // Update Page Input
+            pageInput.value = currentSlide + 1;
+            pageInput.max = slides.length;
         }
 
         function nextSlide() {
@@ -1450,6 +1499,19 @@
             if (currentSlide > 0) {
                 currentSlide--;
                 updateSlide();
+            }
+        }
+
+        function goToPage() {
+            const pageNum = parseInt(pageInput.value);
+            if (pageNum >= 1 && pageNum <= slides.length) {
+                currentSlide = pageNum - 1;
+                updateSlide();
+                // Scroll to top of slide
+                document.querySelector('.slide.active').scrollTop = 0;
+            } else {
+                alert(`Please enter a number between 1 and ${slides.length}`);
+                pageInput.value = currentSlide + 1;
             }
         }
 
