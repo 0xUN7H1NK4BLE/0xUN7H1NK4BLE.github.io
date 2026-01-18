@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Autopsy & ExifTool: Deep Dive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Reveal.js Theme (Dark/Forensic Style) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/theme/night.min.css" id="theme">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css">
+
+    <style>
+        /* --- CORE STYLING --- */
+        body {
+            /* Subtle forensic background gradient */
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+        }
+
+        /* Typography - SCALED DOWN */
+        .reveal h1 { font-size: 2.2em; }
+        .reveal h2 { font-size: 1.6em; }
+        .reveal h3 { font-size: 1.2em; }
+        .reveal h4 { font-size: 1.0em; }
+        
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: #00d4ff; /* Cyan for headers */
+            text-shadow: 0px 0px 10px rgba(0, 212, 255, 0.4);
+            text-transform: none !important; /* Easier to read */
+        }
+        
+        .reveal p, .reveal li {
+            font-size: 0.7em; /* Reduced from 0.9em */
+            line-height: 1.5;
+            color: #e0e0e0;
+        }
+
+        .reveal ul {
+            display: block;
+            margin-left: 1.5em;
+        }
+
+        /* --- COMPONENTS --- */
+        
+        /* Command Line Box */
+        .cmd-box {
+            background-color: #111;
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #0f0;
+            text-align: left;
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            font-size: 0.65em; /* Reduced font size */
+            overflow-x: auto;
+            margin-top: 15px;
+            white-space: pre;
+        }
+
+        /* UI Highlight Box */
+        .ui-box {
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            margin: 6px;
+            border-radius: 6px;
+            transition: transform 0.2s;
+        }
+        .ui-box:hover {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .highlight {
+            color: #ff5e5e; /* Red for emphasis */
+            font-weight: bold;
+        }
+
+        /* Layout Grid */
+        .col-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .col {
+            flex: 1;
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .col-container { flex-direction: column; }
+            .reveal h1 { font-size: 1.5em !important; }
+            .reveal h2 { font-size: 1.2em !important; }
+            .reveal p, .reveal li { font-size: 0.6em !important; }
+            .cmd-box { font-size: 0.5em !important; }
+            .ui-box { margin: 5px 0; width: 100% !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- SLIDE 1: Title -->
+            <section>
+                <h1>Digital Forensics Deep Dive</h1>
+                <h3 style="color: #ccc;">Autopsy & ExifTool</h3>
+                <p>Detailed Capability Breakdown</p>
+                <br>
+                <div style="font-size: 0.6em; color: #888; border: 1px solid #444; display: inline-block; padding: 10px; border-radius: 20px;">
+                    Swipe ↔ or use Arrow Keys
+                </div>
+            </section>
+
+            <!-- =========================
+                 AUTOPSY SECTION (5 Slides)
+                 ========================= -->
+
+            <!-- AUTOPSY SLIDE 1: Introduction -->
+            <section>
+                <h2>1. Autopsy: The Foundation</h2>
+                <div class="col-container">
+                    <div class="col">
+                        <h4 style="color:#fff">What is it?</h4>
+                        <p>Autopsy is the premier open-source digital forensics platform. It serves as a graphical interface (GUI) for <strong>The Sleuth Kit (TSK)</strong>.</p>
+                        <p>It allows investigators to analyze hard drives, smartphones, and media cards efficiently without typing commands.</p>
+                    </div>
+                    <div class="col ui-box">
+                        <h4 style="color:#fff; border-bottom: 1px solid #555; padding-bottom:5px;">Key Specs</h4>
+                        <ul style="font-size: 0.9em; list-style: none; margin: 0;">
+                            <li>✅ <strong>License:</strong> Apache 2.0 (Free)</li>
+                            <li>✅ <strong>OS:</strong> Windows, Linux, macOS</li>
+                            <li>✅ <strong>Target:</strong> Law Enforcement, Corp Security</li>
+                            <li>✅ <strong>Input:</strong> E01, Raw (dd), VMDK</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AUTOPSY SLIDE 2: The Interface -->
+            <section>
+                <h2>2. The Interface</h2>
+                <p style="font-size: 0.8em;">The 3-Pane Layout maximizes efficiency.</p>
+                
+                <div class="col-container" style="align-items: stretch; height: 350px;">
+                    <!-- Pane 1 -->
+                    <div class="ui-box" style="flex: 1; border-top: 3px solid #00d4ff;">
+                        <strong style="color: #00d4ff;">1. Tree Viewer</strong>
+                        <hr style="border-color: #444;">
+                        <ul style="font-size: 0.8em; line-height: 2;">
+                            <li>Data Sources</li>
+                            <li>File Views</li>
+                            <li>Tags</li>
+                            <li>Results</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Panes 2 & 3 -->
+                    <div style="flex: 3; display: flex; flex-direction: column; gap: 10px;">
+                        <div class="ui-box" style="flex: 1; border-top: 3px solid #ff5e5e;">
+                            <strong style="color: #ff5e5e;">2. Result Viewer</strong><br>
+                            <span style="font-size: 0.8em">Top right pane. Lists files in the selected folder. Shows name, time, size, hash, and match score.</span>
+                        </div>
+                        <div class="ui-box" style="flex: 1; border-top: 3px solid #0f0;">
+                            <strong style="color: #0f0;">3. Content Viewer</strong><br>
+                            <span style="font-size: 0.8em">Bottom right pane. The "Inspector". Shows Hex, Strings, Metadata, and Images.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AUTOPSY SLIDE 3: Ingest Modules -->
+            <section>
+                <h2>3. Ingest Modules</h2>
+                <p>The automated "Engine" of Autopsy that processes data.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9em;">
+                    <div class="ui-box">
+                        <span class="highlight">Recent Activity</span><br>
+                        Extracts web history, cookies, and downloads from Chrome/Edge/Firefox.
+                    </div>
+                    <div class="ui-box">
+                        <span class="highlight">Hash Lookup</span><br>
+                        Identifies "Known Good" files (NSRL) to hide them, and "Known Bad" files to flag them.
+                    </div>
+                    <div class="ui-box">
+                        <span class="highlight">File Type Id</span><br>
+                        Ignores extensions. Finds a JPEG even if it's named <code>system.dll</code> using Magic Numbers.
+                    </div>
+                    <div class="ui-box">
+                        <span class="highlight">Keyword Search</span><br>
+                        Indexes all text on the drive using <strong>Solr</strong> for instant Google-like searching.
+                    </div>
+                </div>
+            </section>
+
+            <!-- AUTOPSY SLIDE 4: Advanced Features -->
+            <section>
+                <h2>4. Advanced Capabilities</h2>
+                <div class="col-container">
+                    <div class="col ui-box">
+                        <h4>Timeline Analysis</h4>
+                        <p>Visualizes system events in a graphical bar chart. Helps answer: <em>"What happened last Tuesday at 2 PM?"</em></p>
+                    </div>
+                    <div class="col ui-box">
+                        <h4>Central Repository</h4>
+                        <p>Correlates data across cases. If a USB drive appears in <em>Case A</em> and later in <em>Case B</em>, Autopsy alerts you.</p>
+                    </div>
+                    <div class="col ui-box">
+                        <h4>Android Analyzer</h4>
+                        <p>Parses SQLite DBs from Android backups to recover SMS, Call Logs, and Contacts.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AUTOPSY SLIDE 5: Reporting & Workflow -->
+            <section>
+                <h2>5. Reporting & Triage</h2>
+                <ul style="font-size: 0.9em;">
+                    <li style="margin-bottom: 10px;"><strong>HTML Reports:</strong> Easy-to-read, navigable reports for clients, lawyers, or HR.</li>
+                    <li style="margin-bottom: 10px;"><strong>Excel/CASE Reports:</strong> Structured data output for importing into other tools.</li>
+                    <li style="margin-bottom: 10px;"><strong>Triage Mode:</strong> Run Autopsy from a USB stick on a live computer to preview files before seizure.</li>
+                    <li style="margin-bottom: 10px;"><strong>Tagging:</strong> Bookmark specific files (e.g., "Evidence 001") and add comments for the final report.</li>
+                </ul>
+            </section>
+
+
+            <!-- =========================
+                 EXIFTOOL SECTION (2 Slides)
+                 ========================= -->
+
+            <!-- EXIFTOOL SLIDE 1: Intro -->
+            <section>
+                <h2>ExifTool: The Metadata King</h2>
+                <h4 style="color: #ff5e5e;">Beyond the Image</h4>
+                <div class="col-container">
+                    <div class="col">
+                        <p>ExifTool is a command-line application (CLI) for reading, writing, and editing meta information.</p>
+                        <p>It sees what the operating system hides.</p>
+                    </div>
+                    <div class="col">
+                         <div class="cmd-box">
+> Camera Model : iPhone 13 Pro
+> GPS Position : 40 deg 42' N
+> Software     : Adobe Photoshop 24.1
+> Create Date  : 2023:11:05 14:22:10
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-box" style="margin-top: 20px;">
+                    <strong style="color:#00d4ff">Forensic Value:</strong> Reveals camera serial numbers, lens models, editing software traces, and original creation timestamps.
+                </div>
+            </section>
+
+            <!-- EXIFTOOL SLIDE 2: Commands -->
+            <section>
+                <h2>Tactical Commands</h2>
+                <p>Essential one-liners for the investigator.</p>
+                
+                <div class="cmd-box">
+# 1. Standard Extraction
+$ exiftool evidence.jpg
+
+# 2. The "Deep Dive" (Show duplicates & unknown tags)
+$ exiftool -a -u -g1 evidence.jpg
+
+# 3. Privacy Scrub (Remove all GPS tags)
+$ exiftool -gps:all= suspect_photo.jpg
+
+# 4. Generate CSV Report for entire folder
+$ exiftool -common -csv images_folder > report.csv
+                </div>
+                <br>
+                <p><small style="color: #ff5e5e;">Pro Tip: The <code>-g1</code> flag is critical. It groups tags by location (IFD0, ExifIFD, GPS) to reveal exactly where data is stored.</small></p>
+            </section>
+
+            <!-- SLIDE: Conclusion -->
+            <section>
+                <h2>Summary</h2>
+                <div class="col-container">
+                    <div class="col ui-box" style="border-top: 4px solid #00d4ff;">
+                        <h3 style="color:#fff">Autopsy</h3>
+                        <p><strong>The Macro Tool</strong></p>
+                        <p>Use it to manage the case, index the drive, and find the relevant files.</p>
+                    </div>
+                    <div class="col ui-box" style="border-top: 4px solid #ff5e5e;">
+                        <h3 style="color:#fff">ExifTool</h3>
+                        <p><strong>The Micro Tool</strong></p>
+                        <p>Use it to surgically extract hidden metadata from specific files found by Autopsy.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Load Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/plugin/highlight/highlight.min.js"></script>
+    <script>
+        // Initialize Reveal
+        document.addEventListener('DOMContentLoaded', () => {
+             Reveal.initialize({
+                controls: true,
+                progress: true,
+                center: true,
+                hash: false,     // DISABLED: Prevents iframe security errors
+                history: false,  // DISABLED: Prevents iframe security errors
+                mouseWheel: false,
+                transition: 'convex', // none/fade/slide/convex/concave/zoom
+                plugins: [ RevealHighlight ]
+            });
+        });
+    </script>
+</body>
+</html>
