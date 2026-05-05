@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Security | Anish Bhattarai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #10b981; 
+            --bg: #0f172a;    
+            --card: #1e293b;  
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow: hidden; /* Prevent double scrollbars */
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Main Viewport Constraints */
+        #viewport {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Slide Content Area - Scrollable but hidden scrollbar */
+        .slide-content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            padding-top: 100px; /* Space for Header */
+            padding-bottom: 160px; /* Space for Footer */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        .slide-content-wrapper::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .slide-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100%; /* Ensures centering works for short content */
+        }
+
+        .active-slide { display: block; animation: fadeIn 0.4s ease-out; }
+        .hidden-slide { display: none; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-btn {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent);
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .nav-btn:disabled { opacity: 0.1; cursor: not-allowed; }
+
+        .quiz-option {
+            background: var(--card);
+            border: 2px solid transparent;
+            padding: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            width: 100%;
+            margin-bottom: 0.75rem;
+        }
+
+        .quiz-option:hover {
+            background: #334155;
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .progress-dot {
+            height: 4px;
+            flex: 1;
+            background: #334155;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active { background: var(--accent); }
+
+        .badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fixed Header -->
+    <header class="fixed top-0 w-full p-6 md:p-8 flex justify-between items-center z-50 bg-slate-900/60 backdrop-blur-md">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-emerald-500 rounded flex items-center justify-center font-bold text-slate-900">AB</div>
+            <span class="font-bold tracking-tight text-slate-400 text-sm md:text-base uppercase">Anish Bhattarai</span>
+        </div>
+        <div id="clock" class="mono text-xs md:text-sm text-slate-500">00:00:00</div>
+    </header>
+
+    <!-- Main Viewport -->
+    <main id="viewport">
+        <div class="slide-content-wrapper" id="slide-wrapper">
+            <!-- Slides injected by JS -->
+        </div>
+    </main>
+
+    <!-- Fixed Footer Navigation -->
+    <footer class="fixed bottom-0 w-full p-6 md:p-10 flex flex-col items-center z-50 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800">
+        <div id="progress-bar" class="flex space-x-1 md:space-x-2 mb-6 w-full max-w-2xl"></div>
+        <div class="flex items-center space-x-6">
+            <button id="prevBtn" onclick="change(-1)" class="nav-btn">Back</button>
+            <div id="slide-num" class="mono text-slate-500 font-bold text-sm md:text-base">01 / 20</div>
+            <button id="nextBtn" onclick="change(1)" class="nav-btn">Next</button>
+        </div>
+    </footer>
+
+    <script>
+        const pages = [
+            {
+                tag: "About Me",
+                title: "Anish Bhattarai",
+                content: `
+                    <div class="text-left space-y-6 md:space-y-8 max-w-3xl mx-auto">
+                        <div class="space-y-2">
+                            <span class="badge">Professional Profile</span>
+                            <h3 class="text-4xl md:text-5xl font-extrabold tracking-tight">Cyber Security Researcher</h3>
+                            <p class="text-xl md:text-2xl text-slate-400">3+ Years of active research and offensive security experience.</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 pt-6 border-t border-slate-800">
+                            <div>
+                                <h4 class="text-emerald-500 font-bold uppercase text-xs tracking-wider mb-2">Certification</h4>
+                                <p class="text-xl md:text-2xl font-extrabold">CPTS & ASCP</p>
+                            </div>
+                            <div>
+                                <h4 class="text-emerald-500 font-bold uppercase text-xs tracking-wider mb-2">Current Role</h4>
+                                <p class="text-xl md:text-2xl font-extrabold">Researcher @ Threatnix</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Experience",
+                title: "Credentials",
+                content: `
+                    <div class="text-left space-y-8 max-w-3xl mx-auto">
+                        <div>
+                            <span class="badge">Offensive History</span>
+                            <h3 class="text-3xl md:text-4xl font-bold mb-4">3+ Years CTF ~Hack@Sec</h3>
+                            <p class="text-lg text-slate-400 leading-relaxed">
+                                Expert player and security consultant. Participated in premier global events including 
+                                <span class="text-white font-semibold">Blackhat MEA</span> and 
+                                <span class="text-white font-semibold">Threatcon</span>.
+                            </p>
+                        </div>
+                        <div class="space-y-4">
+                            <span class="badge">Recognition</span>
+                            <h4 class="text-xl font-bold">Hall of Fames & Security Disclosures:</h4>
+                            <div class="flex flex-wrap gap-2 md:gap-3">
+                                <span class="bg-slate-800 px-4 py-2 rounded-lg font-bold border border-slate-700 text-sm md:text-base">NASA</span>
+                                <span class="bg-slate-800 px-4 py-2 rounded-lg font-bold border border-slate-700 text-sm md:text-base">Amazon</span>
+                                <span class="bg-slate-800 px-4 py-2 rounded-lg font-bold border border-slate-700 text-sm md:text-base">Snapchat</span>
+                                <span class="bg-slate-800 px-4 py-2 rounded-lg font-bold border border-slate-700 text-sm md:text-base">PlayStation</span>
+                                <span class="bg-slate-800 px-4 py-2 rounded-lg font-bold border border-slate-700 text-sm md:text-base">Indeed</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Overview",
+                title: "What is Cybersecurity?",
+                content: `
+                    <div class="text-center space-y-6 py-4">
+                        <p class="text-2xl md:text-4xl font-light leading-relaxed text-slate-200">
+                            The protection of <span class="text-emerald-500 font-bold">systems, networks, and data</span> from digital attacks.
+                        </p>
+                        <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                            It involves implementing technologies, processes, and controls to mitigate the risk of cyber attacks and protect against unauthorized exploitation.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                tag: "Importance",
+                title: "Why it Matters?",
+                content: `
+                    <div class="grid grid-cols-1 gap-6 text-left max-w-3xl mx-auto">
+                        <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-700">
+                            <h4 class="text-emerald-500 font-bold text-xl mb-3">Economic Impact</h4>
+                            <p class="text-lg text-slate-300">Global cybercrime costs are projected to hit <span class="text-white font-bold">$10.5 Trillion</span> annually by 2025. For individuals, it means protecting personal identity and savings.</p>
+                        </div>
+                        <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-700">
+                            <h4 class="text-emerald-500 font-bold text-xl mb-3">Critical Infrastructure</h4>
+                            <p class="text-lg text-slate-300">Modern society depends on digital systems for power, water, and healthcare. A breach here isn't just data loss—it's a threat to human life.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Pillars",
+                title: "Confidentiality",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <div class="flex items-center space-x-6">
+                            <div class="text-6xl md:text-7xl">🔒</div>
+                            <div>
+                                <span class="badge">CIA Pillar 01</span>
+                                <h3 class="text-3xl md:text-4xl font-extrabold">Data Privacy</h3>
+                            </div>
+                        </div>
+                        <p class="text-xl text-slate-300 leading-relaxed">
+                            Ensuring that sensitive information is <span class="text-white font-bold">ONLY</span> accessible to authorized users. 
+                            If a stranger or a hacker reads your private messages, confidentiality is broken.
+                        </p>
+                        <div class="p-4 bg-emerald-500/5 rounded-lg border border-emerald-500/20">
+                            <p class="text-sm font-bold text-emerald-500 uppercase mb-1">Defense Mechanisms:</p>
+                            <p class="text-slate-400">Encryption (AES), Multi-Factor Authentication (MFA), and Access Control Lists (ACLs).</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Pillars",
+                title: "Integrity",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <div class="flex items-center space-x-6">
+                            <div class="text-6xl md:text-7xl">✍️</div>
+                            <div>
+                                <span class="badge">CIA Pillar 02</span>
+                                <h3 class="text-3xl md:text-4xl font-extrabold">Data Accuracy</h3>
+                            </div>
+                        </div>
+                        <p class="text-xl text-slate-300 leading-relaxed">
+                            Ensuring that data has <span class="text-white font-bold">NOT</span> been altered or tampered with. 
+                            If a hacker modifies your bank balance or a medical record, integrity is broken.
+                        </p>
+                        <div class="p-4 bg-emerald-500/5 rounded-lg border border-emerald-500/20">
+                            <p class="text-sm font-bold text-emerald-500 uppercase mb-1">Defense Mechanisms:</p>
+                            <p class="text-slate-400">Hashing (MD5/SHA), Digital Signatures, and Version Control.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Pillars",
+                title: "Availability",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <div class="flex items-center space-x-6">
+                            <div class="text-6xl md:text-7xl">⚡</div>
+                            <div>
+                                <span class="badge">CIA Pillar 03</span>
+                                <h3 class="text-3xl md:text-4xl font-extrabold">System Uptime</h3>
+                            </div>
+                        </div>
+                        <p class="text-xl text-slate-300 leading-relaxed">
+                            Ensuring that systems and data are <span class="text-white font-bold">READY</span> when authorized users need them. 
+                            If a hospital portal or banking app crashes during use, availability is broken.
+                        </p>
+                        <div class="p-4 bg-emerald-500/5 rounded-lg border border-emerald-500/20">
+                            <p class="text-sm font-bold text-emerald-500 uppercase mb-1">Defense Mechanisms:</p>
+                            <p class="text-slate-400">Regular Backups, DDoS Mitigation, Redundant Servers, and Failover systems.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Quiz",
+                title: "Knowledge Test 01",
+                content: `
+                    <div class="space-y-6 max-w-2xl mx-auto py-4">
+                        <p class="text-xl md:text-2xl font-semibold leading-snug">A user intercepts a private email between two colleagues and reads the contents. What has failed?</p>
+                        <div class="grid gap-2">
+                            <button onclick="quiz(this, 1)" class="quiz-option">A) Confidentiality</button>
+                            <button onclick="quiz(this, 0)" class="quiz-option">B) Integrity</button>
+                            <button onclick="quiz(this, 0)" class="quiz-option">C) Availability</button>
+                        </div>
+                        <div id="fb" class="hidden font-bold text-lg p-4 rounded-lg bg-slate-800"></div>
+                    </div>
+                `
+            },
+            {
+                tag: "Quiz",
+                title: "Knowledge Test 02",
+                content: `
+                    <div class="space-y-6 max-w-2xl mx-auto py-4">
+                        <p class="text-xl md:text-2xl font-semibold leading-snug">A hacker gains access to a website and changes the prices of all products to $0. What has failed?</p>
+                        <div class="grid gap-2">
+                            <button onclick="quiz(this, 0)" class="quiz-option">A) Confidentiality</button>
+                            <button onclick="quiz(this, 1)" class="quiz-option">B) Integrity</button>
+                            <button onclick="quiz(this, 0)" class="quiz-option">C) Availability</button>
+                        </div>
+                        <div id="fb" class="hidden font-bold text-lg p-4 rounded-lg bg-slate-800"></div>
+                    </div>
+                `
+            },
+            {
+                tag: "Quiz",
+                title: "Knowledge Test 03",
+                content: `
+                    <div class="space-y-6 max-w-2xl mx-auto py-4">
+                        <p class="text-xl md:text-2xl font-semibold leading-snug">An attacker floods a server with junk requests until it crashes and legitimate users can't login. What failed?</p>
+                        <div class="grid gap-2">
+                            <button onclick="quiz(this, 0)" class="quiz-option">A) Confidentiality</button>
+                            <button onclick="quiz(this, 0)" class="quiz-option">B) Integrity</button>
+                            <button onclick="quiz(this, 1)" class="quiz-option">C) Availability</button>
+                        </div>
+                        <div id="fb" class="hidden font-bold text-lg p-4 rounded-lg bg-slate-800"></div>
+                    </div>
+                `
+            },
+            {
+                tag: "Threats",
+                title: "Phishing & Social Eng.",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <h3 class="text-3xl font-bold">The Human Factor</h3>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Social engineering is manipulating people into divulging secrets. 
+                            <strong>Phishing</strong> is the most common form, using deceptive emails to steal credentials.
+                        </p>
+                        <div class="bg-red-500/10 p-6 rounded-xl border border-red-500/30">
+                            <h4 class="font-bold text-red-400 mb-2">Real World Example: FACC Austria</h4>
+                            <p class="text-slate-300">Hackers spoofed the CEO's email to the finance department, tricking them into wire-transferring <span class="text-white font-bold">$54 Million</span>.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Threats",
+                title: "Ransomware",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <h3 class="text-3xl font-bold">Digital Hostages</h3>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Malware that encrypts your files and demands a ransom (usually Bitcoin) for the decryption key.
+                        </p>
+                        <div class="bg-red-500/10 p-6 rounded-xl border border-red-500/30">
+                            <h4 class="font-bold text-red-400 mb-2">Real World Example: WannaCry</h4>
+                            <p class="text-slate-300">A 2017 global attack that crippled the UK's NHS, causing 19,000 appointment cancellations. It used an NSA-leaked exploit to spread globally in hours.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Threats",
+                title: "SQL Injection",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <h3 class="text-3xl font-bold">Code Injection</h3>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Inserting malicious code into database queries via input fields (like login forms) to trick the server into leaking data.
+                        </p>
+                        <div class="bg-red-500/10 p-6 rounded-xl border border-red-500/30">
+                            <h4 class="font-bold text-red-400 mb-2">Real World Example: Sony Pictures</h4>
+                            <p class="text-slate-300">LulzSec used SQLi to steal personal information of 1 million users from Sony's database, including passwords and home addresses.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Threats",
+                title: "DDoS",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <h3 class="text-3xl font-bold">Traffic Flood</h3>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Distributed Denial of Service: Overwhelming a target server with millions of junk requests from a "Botnet" (a network of infected devices).
+                        </p>
+                        <div class="bg-red-500/10 p-6 rounded-xl border border-red-500/30">
+                            <h4 class="font-bold text-red-400 mb-2">Real World Example: GitHub</h4>
+                            <p class="text-slate-300">Hit with 1.35 Terabits per second of traffic in 2018. It was the largest DDoS in history at the time, aiming to take the entire service offline.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Threats",
+                title: "Nation State Warfare",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <h3 class="text-3xl font-bold">Sabotage & Espionage</h3>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Attacks sponsored by governments for political or military advantage. These are often the most complex "Zero-Day" exploits.
+                        </p>
+                        <div class="bg-red-500/10 p-6 rounded-xl border border-red-500/30">
+                            <h4 class="font-bold text-red-400 mb-2">Real World Example: Stuxnet</h4>
+                            <p class="text-slate-300">A sophisticated worm that physically destroyed nuclear centrifuges in Iran. It proved that code can destroy physical machines.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Actors",
+                title: "Hackers vs. Attackers",
+                content: `
+                    <div class="text-left space-y-8 max-w-3xl mx-auto">
+                        <p class="text-xl text-slate-300 italic">"The motive defines the actor."</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-6 bg-white/5 border-t-4 border-emerald-500 rounded-lg">
+                                <h4 class="font-bold text-white mb-2">White Hat</h4>
+                                <p class="text-sm text-slate-400">Ethical hackers who use their skills to find vulnerabilities and fix them. They work with permission.</p>
+                            </div>
+                            <div class="p-6 bg-white/5 border-t-4 border-slate-500 rounded-lg">
+                                <h4 class="font-bold text-white mb-2">Grey Hat</h4>
+                                <p class="text-sm text-slate-400">Hackers who might violate laws but don't have malicious intent. Often expose bugs without permission.</p>
+                            </div>
+                            <div class="p-6 bg-white/5 border-t-4 border-red-500 rounded-lg">
+                                <h4 class="font-bold text-white mb-2">Black Hat</h4>
+                                <p class="text-sm text-slate-400">Criminals who break into systems for financial gain, destruction, or personal malice.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-800/40 p-6 rounded-xl border border-slate-700">
+                            <h4 class="text-emerald-500 font-bold mb-2 uppercase text-xs">Importance:</h4>
+                            <p class="text-slate-300 text-sm">Understanding these actors helps organizations anticipate attack styles and legal boundaries for security researchers.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Defense",
+                title: "The Defenders",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <h3 class="text-3xl font-bold">The Front Line</h3>
+                        <p class="text-lg text-slate-300">Defenders are the analysts and engineers who monitor and protect an organization's digital assets.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                                <h5 class="text-emerald-500 font-bold mb-1">SOC Analyst</h5>
+                                <p class="text-sm text-slate-400">Monitor traffic 24/7 for suspicious alerts and patterns.</p>
+                            </div>
+                            <div class="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                                <h5 class="text-emerald-500 font-bold mb-1">Incident Responder</h5>
+                                <p class="text-sm text-slate-400">The "Firefighters" who contain and fix a breach after it happens.</p>
+                            </div>
+                            <div class="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                                <h5 class="text-emerald-500 font-bold mb-1">Security Architect</h5>
+                                <p class="text-sm text-slate-400">Design the secure infrastructure and choosing the right tools.</p>
+                            </div>
+                            <div class="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                                <h5 class="text-emerald-500 font-bold mb-1">CISO</h5>
+                                <p class="text-sm text-slate-400">Chief Information Security Officer. The executive leader of security strategy.</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500 italic">Importance: Defenders ensure business continuity and protect the company from multi-million dollar losses.</p>
+                    </div>
+                `
+            },
+            {
+                tag: "Domains",
+                title: "Cyber Security Domains",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <p class="text-lg text-slate-300">Cybersecurity is vast. You can specialize in many different areas depending on your interest.</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <div class="p-3 bg-white/5 border border-slate-800 text-center rounded">Network Security</div>
+                            <div class="p-3 bg-white/5 border border-slate-800 text-center rounded">Application Security</div>
+                            <div class="p-3 bg-white/5 border border-slate-800 text-center rounded">Cloud Security</div>
+                            <div class="p-3 bg-white/5 border border-slate-800 text-center rounded">GRC (Compliance)</div>
+                            <div class="p-3 bg-white/5 border border-slate-800 text-center rounded">Forensics</div>
+                            <div class="p-3 bg-white/5 border border-slate-800 text-center rounded">IoT Security</div>
+                            <div class="p-3 bg-white/5 border border-slate-800 text-center rounded">I.A.M.</div>
+                            <div class="p-3 bg-white/5 border border-slate-800 text-center rounded">Crytography</div>
+                            <div class="p-3 bg-white/5 border border-slate-800 text-center rounded">Threat Intel</div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Careers",
+                title: "Career Paths",
+                content: `
+                    <div class="text-left space-y-8 max-w-3xl mx-auto">
+                        <div class="space-y-4">
+                            <h4 class="text-emerald-500 font-bold uppercase text-xs">The Entry Point:</h4>
+                            <p class="text-lg text-slate-300">Start with <strong>IT Support</strong> or <strong>Junior SOC Analyst</strong> roles. Focus on learning Networking (TCP/IP) and Linux/Unix basics.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="text-emerald-500 font-bold uppercase text-xs">How to get there?</h4>
+                            <ul class="space-y-3 text-slate-300">
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">▶</span> <span><strong>Certifications:</strong> CompTIA Security+, CEH, CPTS, OSCP.</span></li>
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">▶</span> <span><strong>Practical Skills:</strong> Play CTFs (HackTheBox, TryHackMe), build a lab.</span></li>
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">▶</span> <span><strong>Portfolio:</strong> Document your hacking or securing journey on GitHub/Blogs.</span></li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-emerald-500/10 rounded border border-emerald-500/20 text-center">
+                            <p class="text-emerald-400 font-bold">The demand for security talent is infinite. Your journey starts now.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Conclusion",
+                title: "Next Steps",
+                content: `
+                    <div class="text-center space-y-8 py-10 max-w-3xl mx-auto">
+                        <h3 class="text-4xl font-bold">Module 01 Complete</h3>
+                        <p class="text-xl text-slate-400">You now have a foundational understanding of what Cybersecurity is, why it matters, and who the players are.</p>
+                        <div class="flex justify-center space-x-4">
+                            <button onclick="change(-19)" class="nav-btn">Restart Training</button>
+                        </div>
+                        <p class="text-sm text-slate-500 pt-10">Presented by Anish Bhattarai <br> CPTS / ASCP / Researcher @ Threatnix</p>
+                    </div>
+                `
+            }
+        ];
+
+        let current = 0;
+
+        function render() {
+            const wrapper = document.getElementById('slide-wrapper');
+            const data = pages[current];
+            
+            // Re-render the slide
+            wrapper.innerHTML = `
+                <div class="slide-container active-slide">
+                    <span class="mono text-emerald-500 text-xs font-bold uppercase tracking-[0.2em] mb-2 block">${data.tag}</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight mb-8">${data.title}</h2>
+                    <div class="content-body">${data.content}</div>
+                </div>
+            `;
+
+            // Reset scroll to top on slide change
+            wrapper.scrollTop = 0;
+
+            // Footer State
+            document.getElementById('slide-num').innerText = `${(current + 1).toString().padStart(2, '0')} / ${pages.length}`;
+            document.getElementById('prevBtn').disabled = current === 0;
+            document.getElementById('nextBtn').innerText = current === pages.length - 1 ? "Finish" : "Next";
+            
+            // Progress Bar
+            const pb = document.getElementById('progress-bar');
+            pb.innerHTML = pages.map((_, i) => `<div class="progress-dot ${i <= current ? 'active' : ''}"></div>`).join('');
+        }
+
+        function change(dir) {
+            current += dir;
+            if (current < 0) current = 0;
+            if (current >= pages.length) current = pages.length - 1;
+            render();
+        }
+
+        function quiz(btn, isCorrect) {
+            const fb = document.getElementById('fb');
+            fb.classList.remove('hidden');
+            
+            // Reset all options
+            document.querySelectorAll('.quiz-option').forEach(b => {
+                b.style.borderColor = "transparent";
+                b.style.opacity = "0.4";
+            });
+            
+            if (isCorrect) {
+                btn.style.borderColor = "#10b981";
+                btn.style.opacity = "1";
+                fb.innerText = "ACCESS GRANTED: Correct Answer!";
+                fb.className = "mt-4 font-bold text-lg p-4 rounded-lg bg-emerald-500/10 text-emerald-500 block";
+            } else {
+                btn.style.borderColor = "#ef4444";
+                btn.style.opacity = "1";
+                fb.innerText = "ACCESS DENIED: Try again!";
+                fb.className = "mt-4 font-bold text-lg p-4 rounded-lg bg-red-500/10 text-red-500 block";
+            }
+        }
+
+        // Live Clock
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') change(1);
+            if (e.key === 'ArrowLeft') change(-1);
+        });
+
+        window.onload = render;
+    </script>
+</body>
+</html>
