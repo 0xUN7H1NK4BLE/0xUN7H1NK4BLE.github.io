@@ -212,6 +212,20 @@
                 `
             },
             {
+                tag: "Global Network",
+                title: "Global Network Cable Connections",
+                content: `
+                    <div class="text-left space-y-6 max-w-3xl mx-auto">
+                        <img src="https://c8.alamy.com/comp/2BKM575/global-network-cable-connections-and-information-transfer-system-world-map-technology-internet-connection-telecommunications-concept-infographic-horizontal-copy-space-vector-illustration-2BKM575.jpg" class="slide-img" alt="Global network cable connections and information transfer system" onerror="this.src='https://via.placeholder.com/800x400/1e293b/10b981?text=Global+Network+Connections'">
+                        <p class="text-2xl text-slate-300">This infographic shows global network cable connections and how information transfers around the world through fiber, undersea cables, and backbone links.</p>
+                        <div class="p-6 bg-slate-800 rounded-xl border border-slate-700">
+                            <h4 class="text-white font-bold mb-2">Why it matters</h4>
+                            <p class="text-sm text-slate-400">The global network is built from physical cable systems that carry the internet and telecom traffic between continents, countries, and cities.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
                 tag: "Network Scope",
                 title: "PAN — Personal Area Network",
                 content: `
@@ -494,6 +508,220 @@
                 `
             },
             {
+                tag: "Layer 3",
+                title: "Unicast Delivery",
+                content: `
+                    <div class="max-w-5xl mx-auto lg:flex lg:items-center lg:gap-10">
+                        <div class="lg:w-1/2">
+                            <img src="https://www.learnabhi.com/wp-content/uploads/2018/02/unicast.jpg" class="slide-img w-full" style="object-fit: contain; height: auto; max-height: 420px;" alt="One-to-one network connection">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6 text-left">
+                            <h4 class="text-white font-bold text-3xl">Unicast</h4>
+                            <p class="text-slate-300">Unicast sends a packet from one sender to one specific receiver. It is the most common type of traffic for web browsing, email, and SSH.</p>
+                            <div class="p-6 bg-slate-800 rounded-xl border border-slate-700">
+                                <p class="text-sm text-slate-400">Example: A laptop requests a webpage from one server, and only that server sends data back to the laptop.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Layer 3",
+                title: "Multicast Delivery",
+                content: `
+                    <div class="max-w-5xl mx-auto lg:flex lg:items-center lg:gap-10">
+                        <div class="lg:w-1/2">
+                            <img src="https://d2cest1yk6hx2d.cloudfront.net/uninets-001/store/3057/article%20images/multicasting-visual-representation.png" class="slide-img w-full" style="object-fit: contain; height: auto; max-height: 420px;" alt="One-to-many multicast network concept">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6 text-left">
+                            <h4 class="text-white font-bold text-3xl">Multicast</h4>
+                            <p class="text-slate-300">Multicast sends a single packet from one sender to a group of receivers that have joined the multicast group.</p>
+                            <div class="p-6 bg-slate-800 rounded-xl border border-slate-700">
+                                <p class="text-sm text-slate-400">Use case: streaming a live video conference to multiple users without sending individual copies to each one.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Layer 3",
+                title: "Broadcast Delivery",
+                content: `
+                    <div class="max-w-5xl mx-auto lg:flex lg:items-center lg:gap-10">
+                        <div class="lg:w-1/2">
+                            <img src="https://ars.els-cdn.com/content/image/3-s2.0-B9780128133651000023-f02-01-9780128133651.jpg" class="slide-img w-full" style="object-fit: contain; height: auto; max-height: 420px;" alt="Broadcast network traffic concept">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6 text-left">
+                            <h4 class="text-white font-bold text-3xl">Broadcast</h4>
+                            <p class="text-slate-300">Broadcast sends a packet from one sender to all hosts on the local network segment.</p>
+                            <div class="p-6 bg-slate-800 rounded-xl border border-slate-700">
+                                <p class="text-sm text-slate-400">Common in LANs: ARP requests and DHCP discovery messages are broadcast to every device on the subnet.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Layer 3",
+                title: "Subnetting Basics",
+                content: `
+                    <div class="text-left space-y-6 max-w-4xl mx-auto">
+                        <p class="text-slate-300">Subnetting divides a larger network into smaller subnetworks so traffic is isolated and managed more efficiently.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
+                            <div class="p-4 bg-slate-800 rounded-xl border border-slate-700">
+                                <strong>192.168.1.0/24</strong>
+                                <p class="text-xs text-slate-400">255.255.255.0</p>
+                            </div>
+                            <div class="p-4 bg-slate-800 rounded-xl border border-slate-700">
+                                <strong>192.168.2.0/24</strong>
+                                <p class="text-xs text-slate-400">255.255.255.0</p>
+                            </div>
+                            <div class="p-4 bg-slate-800 rounded-xl border border-slate-700">
+                                <strong>192.168.3.0/24</strong>
+                                <p class="text-xs text-slate-400">255.255.255.0</p>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
+                            <p class="text-slate-400 italic">Subnetting improves security and performance by limiting broadcast domains and helping network administrators apply access controls per subnet.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Network Devices",
+                title: "Router",
+                content: `
+                    <div class="max-w-5xl mx-auto lg:flex lg:items-center lg:gap-10">
+                        <div class="lg:w-1/2">
+                            <img src="https://www.juniper.net/content/dam/www/assets/images/us/en/products/routers/acx-series/acx7100/acx7100-48l-hero.png" class="slide-img w-full" style="object-fit: contain; height: auto; max-height: 420px;" alt="Network router device" onerror="this.src='https://via.placeholder.com/800x400/1e293b/10b981?text=Router'">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6 text-left">
+                            <h4 class="text-white font-bold text-3xl">Router</h4>
+                            <p class="text-slate-300">Routers connect different networks together and forward packets between them using routing tables. They operate at Layer 3 (IP layer) and manage traffic between LANs and WANs.</p>
+                            <div class="p-6 bg-slate-800 rounded-xl border border-slate-700">
+                                <h5 class="text-emerald-500 font-bold mb-2">Key Functions:</h5>
+                                <ul class="text-sm text-slate-400 space-y-1">
+                                    <li>• Routes packets to different subnets</li>
+                                    <li>• Performs NAT (Network Address Translation)</li>
+                                    <li>• Provides DHCP services</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Network Devices",
+                title: "Switch",
+                content: `
+                    <div class="max-w-5xl mx-auto lg:flex lg:items-center lg:gap-10">
+                        <div class="lg:w-1/2">
+                            <img src="https://www.zyxel.com/sites/zyxel/files/styles/square_thumbnail/public/library/assets/products/xgs1935-series/img_xgs1935_series_family_p_cover.jpg?itok=DYauoFpT" class="slide-img w-full" style="object-fit: contain; height: auto; max-height: 420px;" alt="Network switch" onerror="this.src='https://via.placeholder.com/800x400/1e293b/10b981?text=Switch'">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6 text-left">
+                            <h4 class="text-white font-bold text-3xl">Switch</h4>
+                            <p class="text-slate-300">Switches connect devices within a LAN and forward frames based on MAC addresses. They operate at Layer 2 and use a CAM (Content Addressable Memory) table to map MAC addresses to ports.</p>
+                            <div class="p-6 bg-slate-800 rounded-xl border border-slate-700">
+                                <h5 class="text-emerald-500 font-bold mb-2">Key Functions:</h5>
+                                <ul class="text-sm text-slate-400 space-y-1">
+                                    <li>• Learns MAC addresses dynamically</li>
+                                    <li>• Forwards frames to correct ports</li>
+                                    <li>• Reduces collision domains (unlike hubs)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Network Devices",
+                title: "Hub",
+                content: `
+                    <div class="max-w-5xl mx-auto lg:flex lg:items-center lg:gap-10">
+                        <div class="lg:w-1/2">
+                            <img src="https://www.cablify.ca/wp-content/uploads/2018/09/Ethernet-Hub.jpg" class="slide-img w-full" style="object-fit: contain; height: auto; max-height: 420px;" alt="Network hub device" onerror="this.src='https://via.placeholder.com/800x400/1e293b/10b981?text=Hub'">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6 text-left">
+                            <h4 class="text-white font-bold text-3xl">Hub</h4>
+                            <p class="text-slate-300">Hubs are Layer 1 (Physical) devices that simply broadcast incoming data to all connected ports. They have no intelligence and create a single collision domain.</p>
+                            <div class="p-6 bg-red-500/10 border border-red-500/20 rounded-xl">
+                                <h5 class="text-red-400 font-bold mb-2">Security Risk:</h5>
+                                <p class="text-sm text-slate-400">All traffic on a hub is visible to all connected devices. Attackers can sniff all network traffic on the segment.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Network Devices",
+                title: "Firewall",
+                content: `
+                    <div class="max-w-5xl mx-auto lg:flex lg:items-center lg:gap-10">
+                        <div class="lg:w-1/2">
+                            <img src="https://linuxblog.io/wp-content/uploads/2024/02/protectli-FW4B-J3160.png" class="slide-img w-full" style="object-fit: contain; height: auto; max-height: 420px;" alt="Firewall protection concept" onerror="this.src='https://via.placeholder.com/800x400/1e293b/10b981?text=Firewall'">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6 text-left">
+                            <h4 class="text-white font-bold text-3xl">Firewall</h4>
+                            <p class="text-slate-300">Firewalls monitor and control incoming and outgoing network traffic based on predetermined security rules. They can operate at Layer 3/4 (stateless) or higher layers (stateful/application-aware).</p>
+                            <div class="p-6 bg-slate-800 rounded-xl border border-slate-700">
+                                <h5 class="text-emerald-500 font-bold mb-2">Types:</h5>
+                                <ul class="text-sm text-slate-400 space-y-1">
+                                    <li>• Stateless: Examines individual packets</li>
+                                    <li>• Stateful: Tracks connection state</li>
+                                    <li>• Application-aware: Inspects data payloads</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Network Devices",
+                title: "Gateway",
+                content: `
+                    <div class="max-w-5xl mx-auto lg:flex lg:items-center lg:gap-10">
+                        <div class="lg:w-1/2">
+                            <img src="https://i.ytimg.com/vi/ai5bFPVToMU/maxresdefault.jpg" class="slide-img w-full" style="object-fit: contain; height: auto; max-height: 420px;" alt="Gateway network bridge" onerror="this.src='https://via.placeholder.com/800x400/1e293b/10b981?text=Gateway'">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6 text-left">
+                            <h4 class="text-white font-bold text-3xl">Gateway</h4>
+                            <p class="text-slate-300">Gateways translate between different network protocols or systems. They work at Layer 7 (Application) and can convert data formats, protocols, and encode/decode information.</p>
+                            <div class="p-6 bg-slate-800 rounded-xl border border-slate-700">
+                                <h5 class="text-emerald-500 font-bold mb-2">Uses:</h5>
+                                <ul class="text-sm text-slate-400 space-y-1">
+                                    <li>• VoIP gateway (converts voice to data)</li>
+                                    <li>• Email gateway (filters and scans mail)</li>
+                                    <li>• Protocol conversion</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "Network Devices",
+                title: "Modem",
+                content: `
+                    <div class="max-w-5xl mx-auto lg:flex lg:items-center lg:gap-10">
+                        <div class="lg:w-1/2">
+                            <img src="https://m.media-amazon.com/images/I/5190nJOS2WL._AC_UF1000,1000_QL80_.jpg" class="slide-img w-full" style="object-fit: contain; height: auto; max-height: 420px;" alt="Modem device" onerror="this.src='https://via.placeholder.com/800x400/1e293b/10b981?text=Modem'">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6 text-left">
+                            <h4 class="text-white font-bold text-3xl">Modem</h4>
+                            <p class="text-slate-300">Modems (MOdulator-DEModulator) convert digital signals to analog (and vice versa) for transmission over telephone lines or coaxial cables. They are the gateway between your ISP and your local network.</p>
+                            <div class="p-6 bg-slate-800 rounded-xl border border-slate-700">
+                                <h5 class="text-emerald-500 font-bold mb-2">Types:</h5>
+                                <ul class="text-sm text-slate-400 space-y-1">
+                                    <li>• Cable modem: Uses coaxial cable (DOCSIS)</li>
+                                    <li>• DSL modem: Uses phone lines (ADSL/VDSL)</li>
+                                    <li>• Fiber modem: Directly handles digital fiber signals</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
                 tag: "Addressing",
                 title: "Public vs Private IP",
                 content: `
@@ -709,6 +937,66 @@
                             <button onclick="quiz(this, 0)" class="quiz-option">A) Public</button>
                             <button onclick="quiz(this, 1)" class="quiz-option">B) Private</button>
                             <button onclick="quiz(this, 0)" class="quiz-option">C) Multicast</button>
+                        </div>
+                        <div id="fb" class="hidden font-bold text-lg p-4 rounded-lg"></div>
+                    </div>
+                `
+            },
+            {
+                tag: "Quiz",
+                title: "Checkpoint: IP Class",
+                content: `
+                    <div class="space-y-6 max-w-2xl mx-auto py-4">
+                        <p class="text-xl md:text-2xl font-semibold text-white">Which IP class is reserved for multicast addresses?</p>
+                        <div class="grid gap-2">
+                            <button onclick="quiz(this, 0)" class="quiz-option">A) Class B</button>
+                            <button onclick="quiz(this, 0)" class="quiz-option">B) Class C</button>
+                            <button onclick="quiz(this, 1)" class="quiz-option">C) Class D</button>
+                        </div>
+                        <div id="fb" class="hidden font-bold text-lg p-4 rounded-lg"></div>
+                    </div>
+                `
+            },
+            {
+                tag: "Quiz",
+                title: "Checkpoint: Subnetting",
+                content: `
+                    <div class="space-y-6 max-w-2xl mx-auto py-4">
+                        <p class="text-xl md:text-2xl font-semibold text-white">What is the main purpose of subnetting?</p>
+                        <div class="grid gap-2">
+                            <button onclick="quiz(this, 0)" class="quiz-option">A) To increase broadcast traffic</button>
+                            <button onclick="quiz(this, 1)" class="quiz-option">B) To divide a network into smaller subnetworks</button>
+                            <button onclick="quiz(this, 0)" class="quiz-option">C) To bypass DHCP servers</button>
+                        </div>
+                        <div id="fb" class="hidden font-bold text-lg p-4 rounded-lg"></div>
+                    </div>
+                `
+            },
+            {
+                tag: "Quiz",
+                title: "Checkpoint: Delivery Type",
+                content: `
+                    <div class="space-y-6 max-w-2xl mx-auto py-4">
+                        <p class="text-xl md:text-2xl font-semibold text-white">Which delivery type sends a packet to all hosts on the local subnet?</p>
+                        <div class="grid gap-2">
+                            <button onclick="quiz(this, 0)" class="quiz-option">A) Unicast</button>
+                            <button onclick="quiz(this, 0)" class="quiz-option">B) Multicast</button>
+                            <button onclick="quiz(this, 1)" class="quiz-option">C) Broadcast</button>
+                        </div>
+                        <div id="fb" class="hidden font-bold text-lg p-4 rounded-lg"></div>
+                    </div>
+                `
+            },
+            {
+                tag: "Quiz",
+                title: "Checkpoint: MAN Scope",
+                content: `
+                    <div class="space-y-6 max-w-2xl mx-auto py-4">
+                        <p class="text-xl md:text-2xl font-semibold text-white">Which scope describes a city-wide network connecting multiple LANs?</p>
+                        <div class="grid gap-2">
+                            <button onclick="quiz(this, 0)" class="quiz-option">A) PAN</button>
+                            <button onclick="quiz(this, 1)" class="quiz-option">B) MAN</button>
+                            <button onclick="quiz(this, 0)" class="quiz-option">C) WAN</button>
                         </div>
                         <div id="fb" class="hidden font-bold text-lg p-4 rounded-lg"></div>
                     </div>
