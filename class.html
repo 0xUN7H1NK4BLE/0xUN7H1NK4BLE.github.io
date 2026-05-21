@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1198,6 +1199,137 @@
     </div>
 
     <div class="slide">
+        <div class="slide-header"><h2>PKI Deep Dive: What Happens in Real Life?</h2><span class="slide-number">HOW IT WORKS</span></div>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Two Common Uses</h3>
+                <ul>
+                    <li><strong>Confidentiality:</strong> Encrypt data for the receiver.</li>
+                    <li><strong>Trust:</strong> Certificates bind a public key to an identity (website/person).</li>
+                </ul>
+                <p style="margin-top: 10px;">Most apps use asymmetric crypto to establish trust/keys, then switch to <strong>fast symmetric encryption</strong> (AES/ChaCha20) for bulk data.</p>
+            </div>
+            <div class="card" style="border-left: 5px solid var(--accent-warning);">
+                <h3><i class="fa-solid fa-triangle-exclamation"></i> Key Safety Rules</h3>
+                <ul>
+                    <li>Private keys should be permissioned like <code>chmod 600</code>.</li>
+                    <li>Back up private keys securely (encrypted storage).</li>
+                    <li>Never email/send private keys in plain text.</li>
+                    <li>If a private key leaks, assume it is compromised forever.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>How-To: Encrypt/Decrypt with OpenSSL (RSA)</h2><span class="slide-number">PRACTICAL</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-success);">
+            <h3><i class="fa-solid fa-terminal"></i> Lab Steps</h3>
+            <p>Generate an RSA keypair, encrypt with the <strong>public</strong> key, decrypt with the <strong>private</strong> key:</p>
+            <div class="terminal" style="margin-top: 15px;">
+                <span class="comment"># 1) Generate private key (2048-bit RSA)</span><br>
+                <span class="cmd">$ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out private.pem</span><br><br>
+                <span class="comment"># 2) Extract public key</span><br>
+                <span class="cmd">$ openssl pkey -in private.pem -pubout -out public.pem</span><br><br>
+                <span class="comment"># 3) Create a small message</span><br>
+                <span class="cmd">$ echo "Meet at 5pm" > msg.txt</span><br><br>
+                <span class="comment"># 4) Encrypt with PUBLIC key (OAEP padding)</span><br>
+                <span class="cmd">$ openssl pkeyutl -encrypt -pubin -inkey public.pem -pkeyopt rsa_padding_mode:oaep -in msg.txt -out msg.enc</span><br><br>
+                <span class="comment"># 5) Decrypt with PRIVATE key</span><br>
+                <span class="cmd">$ openssl pkeyutl -decrypt -inkey private.pem -pkeyopt rsa_padding_mode:oaep -in msg.enc -out msg.dec</span><br><br>
+                <span class="comment"># 6) Verify</span><br>
+                <span class="cmd">$ cat msg.dec</span>
+            </div>
+            <p style="margin-top: 15px; color: var(--accent-warning);"><strong>Note:</strong> RSA encryption is for small data (like keys or short messages). For big files, encrypt a random AES key with RSA, then encrypt the file with AES.</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Quick Check: Asymmetric Encryption (PKI)</h2><span class="slide-number">QUIZ</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-primary); margin-bottom: 20px;">
+            <h3><i class="fa-solid fa-question-circle"></i> Practice Questions</h3>
+            <p>Click each question to reveal the answer:</p>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            1. Which key do you share publicly in PKI?
+            <div class="quiz-answer"><strong>Public key</strong>.</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            2. If Alice wants to send Bob a secret message, which key should Alice use to encrypt it?
+            <div class="quiz-answer"><strong>Bob’s public key</strong> (so only Bob can decrypt with his private key).</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            3. True or False: Asymmetric encryption is usually used to encrypt entire large files directly.
+            <div class="quiz-answer"><strong>False</strong> — usually it protects small secrets (like symmetric keys), then symmetric crypto encrypts the bulk data.</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            4. What should you do if a private key leaks (is exposed)?
+            <div class="quiz-answer"><strong>Revoke/replace it</strong> (generate a new key, re-issue certs/credentials, and assume the old key is compromised forever).</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            5. In the OpenSSL lab, which file contains the private key, and what permission is a good idea on Linux?
+            <div class="quiz-answer"><strong>private.pem</strong>, and a typical safe permission is <strong><code>chmod 600 private.pem</code></strong>.</div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Lab: Asymmetric Encryption (RSA)</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-success); margin-bottom: 20px;">
+            <h3><i class="fa-solid fa-flask"></i> Complete This Lab</h3>
+            <p>Create an RSA keypair and use it to encrypt + decrypt a short message.</p>
+            <ol>
+                <li>Create a folder: <code>mkdir -p pki_lab && cd pki_lab</code></li>
+                <li>Generate private key: <code>openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out private.pem</code></li>
+                <li>Extract public key: <code>openssl pkey -in private.pem -pubout -out public.pem</code></li>
+                <li>Create a message file: <code>echo "ISFT PKI Lab" > msg.txt</code></li>
+                <li>Encrypt using public key: <code>openssl pkeyutl -encrypt -pubin -inkey public.pem -pkeyopt rsa_padding_mode:oaep -in msg.txt -out msg.enc</code></li>
+                <li>Decrypt using private key: <code>openssl pkeyutl -decrypt -inkey private.pem -pkeyopt rsa_padding_mode:oaep -in msg.enc -out msg.dec</code></li>
+                <li>Verify: <code>cat msg.dec</code></li>
+                <li>Secure the private key: <code>chmod 600 private.pem</code></li>
+            </ol>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            Lab Question 1: If you delete <code>private.pem</code>, can you decrypt <code>msg.enc</code>?
+            <div class="quiz-answer"><strong>No</strong> — the private key is required to decrypt. Without it, the ciphertext cannot be decrypted.</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            Lab Question 2: If someone steals your <code>private.pem</code>, what can they do?
+            <div class="quiz-answer">They can <strong>decrypt</strong> messages encrypted to you and can <strong>impersonate you</strong> in systems where that key is used for authentication/signing.</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            Lab Question 3: Why do we use OAEP padding for RSA encryption?
+            <div class="quiz-answer">It adds randomness and security. It prevents attacks that are possible with “textbook RSA” and makes encryption safer in practice.</div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Certificates: CSR → Certificate (OpenSSL)</h2><span class="slide-number">PRACTICAL</span></div>
+        <div class="grid-2">
+            <div class="card">
+                <h3>What a Certificate Proves</h3>
+                <ul>
+                    <li>It contains a <strong>public key</strong>.</li>
+                    <li>It includes an <strong>identity</strong> (like a domain name).</li>
+                    <li>It is <strong>signed</strong> by a trusted CA (or self-signed in labs).</li>
+                </ul>
+                <p style="margin-top: 10px;">A <strong>CSR</strong> (Certificate Signing Request) is what you send to a CA to request a signed certificate.</p>
+            </div>
+            <div class="card" style="border-left: 5px solid var(--accent-success);">
+                <h3><i class="fa-solid fa-terminal"></i> Lab Demo</h3>
+                <div class="terminal" style="margin-top: 10px;">
+                    <span class="comment"># 1) Generate a key + CSR (no passphrase for lab)</span><br>
+                    <span class="cmd">$ openssl req -newkey rsa:2048 -nodes -keyout site.key -out site.csr -subj "/CN=example.local"</span><br><br>
+                    <span class="comment"># 2) Create a self-signed certificate (lab only)</span><br>
+                    <span class="cmd">$ openssl x509 -req -in site.csr -signkey site.key -days 365 -out site.crt</span><br><br>
+                    <span class="comment"># 3) Inspect the certificate</span><br>
+                    <span class="cmd">$ openssl x509 -in site.crt -noout -subject -issuer -dates</span>
+                </div>
+            </div>
+        </div>
+        <p style="margin-top: 15px; color: var(--accent-warning);"><strong>Reality Check:</strong> Public websites use CA-signed certificates so browsers can verify trust automatically.</p>
+    </div>
+
+    <div class="slide">
         <div class="slide-header"><h2>Digital Signatures</h2><span class="slide-number">AUTHENTICITY</span></div>
         <p>How do I know the message truly came from you?</p>
         <div class="grid-2">
@@ -1233,6 +1365,37 @@
     </div>
 
     <div class="slide">
+        <div class="slide-header"><h2>Crypto Attack Tools (For Authorized Labs)</h2><span class="slide-number">TOOLS</span></div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>hashid</h3>
+                <p>Helps guess hash type (MD5, SHA1, SHA-256, etc.).</p>
+                <div class="terminal" style="margin-top: 10px;">
+                    <span class="cmd">$ hashid 5f4dcc3b5aa765d61d8327deb882cf99</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>John the Ripper</h3>
+                <p>Wordlist + rules cracking for many formats.</p>
+                <div class="terminal" style="margin-top: 10px;">
+                    <span class="cmd">$ john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Hashcat</h3>
+                <p>Very fast cracking (often GPU). Needs correct mode (<code>-m</code>).</p>
+                <div class="terminal" style="margin-top: 10px;">
+                    <span class="cmd">$ hashcat -m 0 -a 0 hashes.txt rockyou.txt</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="margin-top: 20px; border-left: 5px solid var(--accent-warning);">
+            <h3><i class="fa-solid fa-gavel"></i> Legal & Safety</h3>
+            <p>Only run cracking tools on <strong>your own</strong> hashes or with <strong>written permission</strong>. In class, we crack a test hash to learn the concept safely.</p>
+        </div>
+    </div>
+
+    <div class="slide">
         <div class="slide-header"><h2>Crypto Attacks</h2><span class="slide-number">ATTACKS</span></div>
         <div class="grid-3">
             <div class="card">
@@ -1247,6 +1410,34 @@
                 <h3>Rainbow Table</h3>
                 <p>Pre-computed list of hashes. Instant, if no salt is used.</p>
             </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header"><h2>Lab: Dictionary Attack Concept (Safe Demo)</h2><span class="slide-number">PRACTICAL TASK</span></div>
+        <div class="card" style="border-left: 5px solid var(--accent-success); margin-bottom: 20px;">
+            <h3><i class="fa-solid fa-flask"></i> Crack a Test Hash</h3>
+            <p>This lab demonstrates a dictionary attack without special cracking tools.</p>
+            <ol>
+                <li>Create a folder: <code>mkdir -p crypto_attack_lab && cd crypto_attack_lab</code></li>
+                <li>Create a test password file: <code>echo -n "password123" > plain.txt</code></li>
+                <li>Hash it (SHA-256): <code>sha256sum plain.txt | awk '{print $1}' > target.hash</code></li>
+                <li>Create a tiny wordlist: <code>printf "123456\\npassword\\npassword123\\nqwerty\\n" > wordlist.txt</code></li>
+                <li>Hash each guess and compare (dictionary attack):<br><code>while read w; do echo -n \"$w\" | sha256sum | awk '{print $1}'; done &lt; wordlist.txt</code></li>
+                <li>Find which guess produced the same hash as <code>target.hash</code>.</li>
+            </ol>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            Lab Question 1: Why does a dictionary attack often succeed in real life?
+            <div class="quiz-answer">Because many users choose <strong>common</strong> or <strong>pattern-based</strong> passwords (leaked lists + human habits).</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            Lab Question 2: What is the purpose of a <strong>salt</strong> in password hashing?
+            <div class="quiz-answer">To ensure the same password does not produce the same hash, stopping efficient precomputed attacks (rainbow tables) and forcing per-hash cracking.</div>
+        </div>
+        <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+            Lab Question 3: Name one strong defense that makes cracking harder.
+            <div class="quiz-answer">Use long unique passwords + salted hashes + slow hashing (bcrypt/scrypt/Argon2) + MFA.</div>
         </div>
     </div>
 
