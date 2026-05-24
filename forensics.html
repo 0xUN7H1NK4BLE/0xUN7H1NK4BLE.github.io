@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Forensics Fundamentals</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forensic: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                            darkbg: '#0b0f19',
+                            cardbg: '#141d30'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0f19;
+        }
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+        .slide-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="text-slate-200 h-full overflow-hidden flex flex-col justify-between">
+
+    <!-- Top Simplified Header -->
+    <header class="border-b border-slate-800/80 bg-slate-950/40 backdrop-blur px-8 py-4 flex items-center justify-between z-10">
+        <div class="flex items-center gap-3">
+            <span class="p-1.5 bg-sky-500/10 text-sky-400 rounded-lg border border-sky-500/20">
+                <i data-lucide="shield" class="w-5 h-5"></i>
+            </span>
+            <div>
+                <h1 class="text-xs font-semibold tracking-widest text-slate-400 uppercase">Forensics Core</h1>
+                <p class="text-[10px] text-sky-400 font-medium">Digital Forensics Masterclass</p>
+            </div>
+        </div>
+        <div class="text-[11px] text-slate-500 font-mono">
+            Standard Operating Protocol
+        </div>
+    </header>
+
+    <!-- Main Slide Arena -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-6 py-6 flex flex-col justify-center items-center relative overflow-hidden">
+        
+        <!-- Subtle Glow Decors -->
+        <div class="absolute top-1/3 left-1/3 w-72 h-72 bg-sky-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/3 right-1/3 w-72 h-72 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- slides wrapper -->
+        <div class="w-full h-full max-h-[520px] relative">
+            
+            <!-- Slide 1: Welcome -->
+            <div id="slide-1" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-center items-center text-center opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="space-y-6 max-w-2xl">
+                    <span class="inline-block px-3 py-1 bg-sky-500/10 text-sky-400 rounded-full text-[11px] font-bold tracking-wider uppercase border border-sky-500/20">
+                        Expanded Reference Deck
+                    </span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-sky-400 via-indigo-300 to-sky-400 bg-clip-text text-transparent leading-tight">
+                        Digital Forensics Fundamentals
+                    </h2>
+                    <p class="text-slate-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
+                        A clean, structured introduction to evidence systems, forensic types, standard utility software, and basic identification techniques.
+                    </p>
+                    <div class="pt-4 text-xs text-slate-500 font-mono">
+                        Press <kbd class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">→</kbd> or use the controls below to navigate.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Importance & Scope -->
+            <div id="slide-2" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">01 / Scope</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Why Digital Forensics?</h3>
+                        <p class="text-xs text-slate-400">At its core, forensics translates raw technical fragments into legally sound facts.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80">
+                            <h4 class="font-bold text-slate-200 text-sm mb-1">Legal Admissibility</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">Unchanging standard processes that ensure electronic evidence stands up in court.</p>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80">
+                            <h4 class="font-bold text-slate-200 text-sm mb-1">Incident Recovery</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">Dissecting data breaches to identify compromised networks and trace intruder steps.</p>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80">
+                            <h4 class="font-bold text-slate-200 text-sm mb-1">Modern Scope</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">Now stretching beyond PCs to mobile platforms, cloud environments, and IoT endpoints.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Who Uses & Applications -->
+            <div id="slide-3" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">02 / Stakeholders</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Key Stakeholders &amp; Roles</h3>
+                        <p class="text-xs text-slate-400">Select a role to inspect its primary real-world application.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <!-- Left Buttons -->
+                        <div class="md:col-span-5 flex flex-col gap-2">
+                            <button onclick="selectForensicRole('law')" id="role-law" class="role-btn text-left p-3 rounded-lg border border-sky-500/30 bg-sky-500/10 text-slate-100 flex items-center gap-3 transition-all">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-sky-400"></i>
+                                <span class="text-xs font-semibold">Law Enforcement</span>
+                            </button>
+                            <button onclick="selectForensicRole('corp')" id="role-corp" class="role-btn text-left p-3 rounded-lg border border-slate-800 bg-slate-900/40 text-slate-400 flex items-center gap-3 transition-all hover:bg-slate-800/40">
+                                <i data-lucide="building" class="w-4 h-4 text-slate-400"></i>
+                                <span class="text-xs font-semibold">Corporate Defense</span>
+                            </button>
+                            <button onclick="selectForensicRole('court')" id="role-court" class="role-btn text-left p-3 rounded-lg border border-slate-800 bg-slate-900/40 text-slate-400 flex items-center gap-3 transition-all hover:bg-slate-800/40">
+                                <i data-lucide="gavel" class="w-4 h-4 text-slate-400"></i>
+                                <span class="text-xs font-semibold">Legal Council</span>
+                            </button>
+                        </div>
+
+                        <!-- Right Card Panel -->
+                        <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-5 flex flex-col justify-center min-h-[160px]">
+                            <div id="role-content" class="space-y-2">
+                                <h4 class="text-xs font-bold text-sky-400 uppercase tracking-widest" id="role-title">Law Enforcement</h4>
+                                <p class="text-xs text-slate-300 leading-relaxed" id="role-desc">
+                                    Extracting data from mobile devices and smart logs to construct admissible evidence pathways for judicial systems.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Nepal Context -->
+            <div id="slide-4" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-rose-400 uppercase">03 / Challenges</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">The Nepal Landscape</h3>
+                        <p class="text-xs text-slate-400">Key systematic bottlenecks currently encountered on the ground.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-2">
+                            <div class="flex items-center gap-2 text-rose-400">
+                                <i data-lucide="scale" class="w-4 h-4"></i>
+                                <h4 class="text-xs font-bold uppercase tracking-wider">Statutory Limitations</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                The Electronic Transactions Act (ETA 2063) remains our central benchmark, but lacks provisions for contemporary challenges like localized cloud multi-tenancy and encrypted crypto assets.
+                            </p>
+                        </div>
+
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-2">
+                            <div class="flex items-center gap-2 text-amber-400">
+                                <i data-lucide="key" class="w-4 h-4"></i>
+                                <h4 class="text-xs font-bold uppercase tracking-wider">Centralized Resources</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Heavy platform licensing fees (Axiom, Cellebrite) limit specialized extraction suites to central labs, creating diagnostic backlogs for remote regional cases.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Mindset & Chain of Custody -->
+            <div id="slide-5" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-emerald-400 uppercase">04 / Methodology</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">The Investigation Mindset</h3>
+                        <p class="text-xs text-slate-400">Preserving integrity by enforcing strict chain of custody protocols.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <!-- Info Columns -->
+                        <div class="md:col-span-5 space-y-3 flex flex-col justify-center">
+                            <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-emerald-400 uppercase mb-1">Volatile Data First</h4>
+                                <p class="text-xs text-slate-400">Collect unstable memory states (like live CPU caches &amp; RAM) before acquiring offline persistent drives.</p>
+                            </div>
+                            <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-emerald-400 uppercase mb-1">Analytical Copy Rule</h4>
+                                <p class="text-xs text-slate-400">Always generate a write-blocked bitstream image. <strong>Never</strong> run diagnostic tools on the original media.</p>
+                            </div>
+                        </div>
+
+                        <!-- Live Interactive Chain -->
+                        <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-4 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Chain of Custody Simulation</span>
+                                    <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-mono">CASE #DFF-902</span>
+                                </div>
+                                <div id="coc-log" class="space-y-1.5 h-24 overflow-y-auto text-[11px] text-slate-400 font-mono pr-1">
+                                    <div class="p-1 bg-slate-950/60 rounded flex justify-between">
+                                        <span>[10:15] USB seized</span>
+                                        <span class="text-sky-400">Investigator R. Shrestha</span>
+                                    </div>
+                                    <div class="p-1 bg-slate-950/60 rounded flex justify-between">
+                                        <span>[11:40] Bitstream image created</span>
+                                        <span class="text-violet-400">Analyst A. Adhikari</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Simple Action bar -->
+                            <div class="mt-3 flex gap-2">
+                                <input type="text" id="coc-actor" placeholder="Officer Name" class="bg-slate-950 text-xs px-2.5 py-1.5 rounded border border-slate-800 focus:outline-none focus:border-emerald-500 w-1/3 text-slate-300">
+                                <input type="text" id="coc-act" placeholder="Action taken" class="bg-slate-950 text-xs px-2.5 py-1.5 rounded border border-slate-800 focus:outline-none focus:border-emerald-500 flex-1 text-slate-300">
+                                <button onclick="addLog()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-3 py-1.5 rounded text-xs transition-colors">
+                                    Log
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Stego & Carving -->
+            <div id="slide-6" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-violet-400 uppercase">05 / Diagnostics A</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Steganography &amp; File Carving</h3>
+                        <p class="text-xs text-slate-400">Basic techniques to find hidden information and recover unallocated files.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <!-- Steganography visual block -->
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800/80 space-y-4">
+                            <div>
+                                <h4 class="text-xs font-bold text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i data-lucide="eye-off" class="w-3.5 h-3.5"></i> Stego LSB Shift
+                                </h4>
+                                <p class="text-[11px] text-slate-400 mt-1">Conceals data into the Least Significant Bits of pixel arrays.</p>
+                            </div>
+
+                            <div class="p-3 bg-slate-950 rounded border border-slate-900/80 flex items-center gap-4">
+                                <div id="stego-box" class="w-12 h-12 rounded bg-sky-500/90 flex items-center justify-center text-[10px] font-bold text-slate-950 transition-all relative">
+                                    IMG
+                                    <div id="stego-payload" class="absolute inset-0 bg-rose-500 flex items-center justify-center text-[8px] font-bold text-white transition-opacity duration-200 opacity-0">
+                                        SECRET
+                                    </div>
+                                </div>
+                                <div class="flex-1 space-y-1.5">
+                                    <div class="flex justify-between text-[10px]">
+                                        <span class="text-slate-400">Bit Mask State:</span>
+                                        <span id="bit-state" class="text-slate-300">Default (Visual Block)</span>
+                                    </div>
+                                    <input type="range" id="stego-slider" min="0" max="1" step="1" value="0" class="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer accent-violet-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Carving visual block -->
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800/80 space-y-4">
+                            <div>
+                                <h4 class="text-xs font-bold text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i data-lucide="search" class="w-3.5 h-3.5"></i> File Carving
+                                </h4>
+                                <p class="text-[11px] text-slate-400 mt-1">Locates deleted files by matching magic bytes in unallocated space.</p>
+                            </div>
+
+                            <div class="p-3 bg-slate-950 rounded border border-slate-900/80 space-y-2">
+                                <div class="text-[10px] code-font text-slate-500 break-all leading-relaxed">
+                                    HEX: 4d 5a 90 <span class="text-rose-400 font-bold" id="magic-marker">ff d8 ff e0</span> 00 10 4a 46...
+                                </div>
+                                <div class="flex justify-between items-center pt-1">
+                                    <span class="text-[10px] text-slate-400" id="carve-status">Awaiting search...</span>
+                                    <button onclick="carveFile()" class="bg-violet-500/20 hover:bg-violet-500/35 text-violet-300 font-bold px-2 py-0.5 rounded text-[10px] border border-violet-500/20 transition-all">
+                                        Scan Headers
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: EXIF & Hashing -->
+            <div id="slide-7" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-amber-400 uppercase">06 / Diagnostics B</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Metadata &amp; Hashing</h3>
+                        <p class="text-xs text-slate-400">Verifying timeline records and assuring absolute data integrity.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <!-- Metadata block -->
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <i data-lucide="camera" class="w-3.5 h-3.5"></i> EXIF Metadata Inspector
+                            </h4>
+                            <div class="flex gap-2">
+                                <button onclick="setExif('nepal')" id="exif-btn-nepal" class="flex-1 py-1 rounded bg-amber-500/10 text-[10px] font-semibold text-amber-300 border border-amber-500/25">
+                                    Ktm_Crime_Scene.jpg
+                                </button>
+                                <button onclick="setExif('hq')" id="exif-btn-hq" class="flex-1 py-1 rounded bg-slate-950 text-[10px] text-slate-400 border border-slate-800">
+                                    Default_Backup.jpg
+                                </button>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded border border-slate-900/80 text-[10px] code-font space-y-1">
+                                <div class="flex justify-between"><span class="text-slate-500">Camera:</span> <span id="metadata-camera" class="text-slate-300">iPhone 14 Pro</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">GPS Coords:</span> <span id="metadata-gps" class="text-amber-400">27.7172° N, 85.3240° E</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Hashing block -->
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <i data-lucide="fingerprint" class="w-3.5 h-3.5"></i> Cryptographic Hash Checker
+                            </h4>
+                            <input type="text" id="live-hash-input" value="Secure Case Data" oninput="runLiveHash()" class="w-full bg-slate-950 text-xs px-2.5 py-1.5 rounded border border-slate-850 focus:outline-none focus:border-amber-500 text-slate-100">
+                            
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-900/80">
+                                <div class="flex justify-between text-[9px] text-slate-500 mb-1">
+                                    <span>MD5 SIGNATURE</span>
+                                    <span class="text-emerald-500 font-bold">MATCHED</span>
+                                </div>
+                                <div id="live-hash-output" class="text-[10px] code-font text-slate-300 break-all bg-slate-900/40 p-1 rounded">
+                                    -
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Forensic Type 1 - Computer & Disk -->
+            <div id="slide-8" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">07 / Forensic Branch</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Computer &amp; Disk Forensics</h3>
+                        <p class="text-xs text-slate-400">The collection, recovery, and analysis of static data stored inside physical storage sectors.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-5 space-y-2.5 text-xs text-slate-400">
+                            <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800/80">
+                                <strong class="text-slate-200">Registry Auditing:</strong>
+                                <p class="mt-1">Analyzing OS configuration databases to find system history, execution paths, and connected USB devices.</p>
+                            </div>
+                            <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800/80">
+                                <strong class="text-slate-200">File System Inquest:</strong>
+                                <p class="mt-1">Reconstructing logs from systems like NTFS (MFT records) or ext4 (journal nodes) to find modified files.</p>
+                            </div>
+                        </div>
+
+                        <!-- Clickable Sector Inspector Widget -->
+                        <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-4 flex flex-col justify-between">
+                            <span class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Sector Map Simulator</span>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="inspectSector(0)" class="p-3 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded text-left transition-colors">
+                                    <span class="text-[9px] text-sky-400 block">Sector 00</span>
+                                    <span class="text-[11px] font-bold">MBR Boot</span>
+                                </button>
+                                <button onclick="inspectSector(1)" class="p-3 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded text-left transition-colors">
+                                    <span class="text-[9px] text-sky-400 block">Sector 01</span>
+                                    <span class="text-[11px] font-bold">Partition Table</span>
+                                </button>
+                                <button onclick="inspectSector(2)" class="p-3 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded text-left transition-colors">
+                                    <span class="text-[9px] text-sky-400 block">Sector 02</span>
+                                    <span class="text-[11px] font-bold">Deleted File Flag</span>
+                                </button>
+                            </div>
+                            <div class="mt-3 bg-slate-950 p-2.5 rounded border border-slate-900/80 min-h-[50px]">
+                                <span class="text-[9px] uppercase tracking-wider text-slate-500 font-bold block">Sector Diagnostics</span>
+                                <p id="sector-inspect-text" class="text-xs text-slate-300 mt-1">Select a sector above to dump its data structure.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Forensic Type 2 - Network Forensics -->
+            <div id="slide-9" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">08 / Forensic Branch</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Network Forensics</h3>
+                        <p class="text-xs text-slate-400">Monitoring and analysis of network traffic to discover active intrusions, data leaks, and attacks.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-5 space-y-3 flex flex-col justify-center text-xs text-slate-400">
+                            <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800/80">
+                                <strong class="text-slate-200">Packet Capture (PCAP):</strong>
+                                <p class="mt-0.5">Capturing and parsing exact raw frame layers in transit (Ethernet, IP, TCP).</p>
+                            </div>
+                            <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800/80">
+                                <strong class="text-slate-200">NetFlow Audits:</strong>
+                                <p class="mt-0.5">Studying transaction flows to map bandwidth patterns without logging raw payloads.</p>
+                            </div>
+                        </div>
+
+                        <!-- Live Packet Feed Widget -->
+                        <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-4 flex flex-col justify-between">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Live Packet Stream Simulator</span>
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                            </div>
+                            <div id="packet-feed" class="bg-slate-950 p-2 rounded h-28 overflow-y-auto text-[10px] code-font text-slate-400 space-y-1">
+                                <div class="text-sky-400">[TCP] 192.168.1.52:54201 -> 10.0.0.10:443 [SYN]</div>
+                                <div class="text-emerald-400">[DNS] Query: forensics.gov.np -> A Record</div>
+                            </div>
+                            <button onclick="simulateNetworkPacket()" class="mt-2 w-full py-1 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 rounded text-[11px] font-bold border border-sky-500/20 transition-all">
+                                Inject Mock Packet
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Forensic Type 3 - Mobile Forensics -->
+            <div id="slide-10" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">09 / Forensic Branch</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Mobile &amp; Device Forensics</h3>
+                        <p class="text-xs text-slate-400">Extraction and recovery of persistent storage records, communication apps, and system logs from mobile hardware.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-5 space-y-3 flex flex-col justify-center text-xs text-slate-400">
+                            <div class="p-3.5 bg-slate-900/60 rounded-lg border border-slate-800/80">
+                                <strong class="text-slate-200">Logical vs. Physical Dump:</strong>
+                                <p class="mt-0.5">Logical acquires visible file structures, while Physical copies raw flash storage chunks, including deleted partitions.</p>
+                            </div>
+                            <div class="p-3.5 bg-slate-900/60 rounded-lg border border-slate-800/80">
+                                <strong class="text-slate-200">SQLite Database Audits:</strong>
+                                <p class="mt-0.5">Extracting messages and contact directories from relational client databases used by chat applications.</p>
+                            </div>
+                        </div>
+
+                        <!-- Mobile SQLite Parser Sandbox -->
+                        <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-4 flex flex-col justify-between h-[210px]">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Device Extraction Simulator</span>
+                                <span id="mobile-ext-status" class="text-[9px] px-1.5 py-0.5 bg-slate-950 text-slate-400 border border-slate-800 rounded font-mono">Standby</span>
+                            </div>
+                            <div id="mobile-ext-box" class="bg-slate-950 p-3 rounded h-24 text-[10px] code-font text-slate-500 overflow-y-auto flex items-center justify-center">
+                                <span>Awaiting logical capture...</span>
+                            </div>
+                            <button onclick="runMobileExt()" class="w-full py-1.5 bg-sky-500 hover:bg-sky-600 text-slate-950 font-bold rounded text-xs transition-colors">
+                                Trigger Acquisition Sequence
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: Tools List A - Acquisition & Imaging -->
+            <div id="slide-11" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-violet-400 uppercase">10 / Tools Suite</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Forensic Acquisition Tools</h3>
+                        <p class="text-xs text-slate-400">Applications used to safely capture, clone, and preserve data with mathematical integrity.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
+                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
+                            <span class="text-[10px] text-violet-400 font-mono block">GUI IMAGER</span>
+                            <h4 class="font-bold text-slate-200 text-sm">FTK Imager</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">The industry standard for quick disk imaging, directory mounting, and hash calculation. Known for reliability on Windows environments.</p>
+                        </div>
+                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
+                            <span class="text-[10px] text-violet-400 font-mono block">LINUX COMPLIANT</span>
+                            <h4 class="font-bold text-slate-200 text-sm">Guymager</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">A fast, open-source acquisition tool for Linux systems. Supports multi-threaded processing and writes out EWF (E01) files.</p>
+                        </div>
+                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
+                            <span class="text-[10px] text-violet-400 font-mono block">TERMINAL ENGINE</span>
+                            <h4 class="font-bold text-slate-200 text-sm">dd &amp; dcfldd</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">Low-level command-line disk dumping utilities. `dcfldd` is customized for forensics, generating progress bars and on-the-fly hashes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 12: Tools List B - Comprehensive Analysis Suites -->
+            <div id="slide-12" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-violet-400 uppercase">11 / Tools Suite</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Investigation &amp; Analysis Suites</h3>
+                        <p class="text-xs text-slate-400">All-in-one workspaces to analyze files, parse registries, index keywords, and trace history timelines.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
+                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
+                            <span class="text-[10px] text-violet-400 font-mono block">OPEN SOURCE</span>
+                            <h4 class="font-bold text-slate-200 text-sm">Autopsy</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">A highly extensible, user-friendly open source interface for Sleuth Kit backend utilities. Excellent for analyzing registry files, EXIF, and carving deleted files.</p>
+                        </div>
+                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
+                            <span class="text-[10px] text-violet-400 font-mono block">ENTERPRISE CORE</span>
+                            <h4 class="font-bold text-slate-200 text-sm">Magnet AXIOM</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">A powerful platform specialized in consolidating memory, mobile applications, cloud repositories, and computer sectors into synchronized timeline views.</p>
+                        </div>
+                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
+                            <span class="text-[10px] text-violet-400 font-mono block">LEGACY BENCHMARK</span>
+                            <h4 class="font-bold text-slate-200 text-sm">EnCase Forensics</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">One of the oldest corporate suites, renowned for raw-sector scripting, court-verified structures, and comprehensive compliance capabilities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 13: Tools List C - Specialized Utility Software -->
+            <div id="slide-13" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-violet-400 uppercase">12 / Tools Suite</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Specialized Forensic Utilities</h3>
+                        <p class="text-xs text-slate-400">Targeted tools configured for specific, high-precision forensic investigations.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
+                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
+                            <span class="text-[10px] text-violet-400 font-mono block">VOLATILE MEMORY</span>
+                            <h4 class="font-bold text-slate-200 text-sm">Volatility</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">The leading framework for command-line volatile RAM analysis. Identifies active processes, open network ports, and cached passwords in memory dumps.</p>
+                        </div>
+                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
+                            <span class="text-[10px] text-violet-400 font-mono block">METADATA READ / WRITE</span>
+                            <h4 class="font-bold text-slate-200 text-sm">ExifTool</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">An exceptionally versatile command-line utility for reading, writing, and parsing metadata across thousands of media file extensions.</p>
+                        </div>
+                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
+                            <span class="text-[10px] text-violet-400 font-mono block">NETWORK DECODER</span>
+                            <h4 class="font-bold text-slate-200 text-sm">Wireshark</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">The premier network protocol analyzer. Allows deep packet inspection, traffic decoding, and reconstruction of exfiltrated data layers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Bottom Controls -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/40 backdrop-blur px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 z-10">
+        <!-- Progress dots -->
+        <div class="flex items-center gap-1.5" id="dots-container"></div>
+
+        <!-- Controls -->
+        <div class="flex items-center gap-4">
+            <button onclick="changeSlide(-1)" id="prev-btn" class="p-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-slate-300 rounded-lg border border-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            </button>
+            <div class="text-[11px] font-bold tracking-wider uppercase text-slate-400 min-w-[70px] text-center">
+                <span id="current-page" class="text-sky-400">1</span> / <span id="total-pages">13</span>
+            </div>
+            <button onclick="changeSlide(1)" id="next-btn" class="p-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-slate-300 rounded-lg border border-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <div class="hidden sm:block text-[10px] text-slate-500 font-mono">
+            Use ← Left or Right → Keys
+        </div>
+    </footer>
+
+    <!-- JS Slide Core -->
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 13; // Updated total slides
+
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            buildProgressDots();
+            showSlide();
+            runLiveHash(); // populate first hash
+        });
+
+        function buildProgressDots() {
+            const container = document.getElementById('dots-container');
+            container.innerHTML = '';
+            for (let i = 0; i < totalSlides; i++) {
+                const btn = document.createElement('button');
+                btn.className = `w-1.5 h-1.5 rounded-full transition-all duration-300 border border-slate-700 bg-slate-800 hover:bg-sky-500/50`;
+                btn.setAttribute('onclick', `jumpSlide(${i})`);
+                btn.setAttribute('id', `progress-dot-${i}`);
+                container.appendChild(btn);
+            }
+        }
+
+        function changeSlide(direction) {
+            const destination = currentSlide + direction;
+            if (destination >= 0 && destination < totalSlides) {
+                currentSlide = destination;
+                showSlide();
+            }
+        }
+
+        function jumpSlide(index) {
+            currentSlide = index;
+            showSlide();
+        }
+
+        function showSlide() {
+            for (let i = 0; i < totalSlides; i++) {
+                const slide = document.getElementById(`slide-${i+1}`);
+                const dot = document.getElementById(`progress-dot-${i}`);
+                if (slide) {
+                    if (i === currentSlide) {
+                        slide.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+                        slide.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
+                    } else {
+                        slide.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                        slide.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+                    }
+                }
+                if (dot) {
+                    if (i === currentSlide) {
+                        dot.className = "w-4 h-1.5 rounded-full transition-all duration-300 bg-sky-500 border border-sky-400";
+                    } else {
+                        dot.className = "w-1.5 h-1.5 rounded-full transition-all duration-300 border border-slate-700 bg-slate-850 hover:bg-sky-500/30";
+                    }
+                }
+            }
+
+            document.getElementById('current-page').textContent = currentSlide + 1;
+            document.getElementById('total-pages').textContent = totalSlides;
+
+            document.getElementById('prev-btn').disabled = (currentSlide === 0);
+            document.getElementById('next-btn').disabled = (currentSlide === totalSlides - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+
+        /* Role Selector Logic */
+        function selectForensicRole(role) {
+            const btns = document.querySelectorAll('.role-btn');
+            btns.forEach(btn => {
+                btn.className = "role-btn text-left p-3 rounded-lg border border-slate-800 bg-slate-900/40 text-slate-400 flex items-center gap-3 transition-all hover:bg-slate-800/40";
+            });
+
+            const activeBtn = document.getElementById(`role-${role}`);
+            if (activeBtn) {
+                activeBtn.className = "role-btn text-left p-3 rounded-lg border border-sky-500/30 bg-sky-500/10 text-slate-100 flex items-center gap-3 transition-all";
+            }
+
+            const title = document.getElementById('role-title');
+            const desc = document.getElementById('role-desc');
+
+            if (role === 'law') {
+                title.textContent = "Law Enforcement";
+                desc.textContent = "Extracting data from mobile devices and smart logs to construct admissible evidence pathways for judicial systems.";
+            } else if (role === 'corp') {
+                title.textContent = "Corporate Defense";
+                desc.textContent = "Tracing data exfiltration pathways, analyzing internal actor access records, and auditing compliance leaks.";
+            } else if (role === 'court') {
+                title.textContent = "Legal Council";
+                desc.textContent = "Reviewing chain-of-custody logs, examining digital acquisition protocols, and ensuring process admissibility.";
+            }
+        }
+
+        /* Chain of Custody Add Log Logic */
+        function addLog() {
+            const actorInput = document.getElementById('coc-actor');
+            const actInput = document.getElementById('coc-act');
+            const logBox = document.getElementById('coc-log');
+
+            if (actorInput.value.trim() === '' || actInput.value.trim() === '') return;
+
+            const now = new Date();
+            const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            const logElement = document.createElement('div');
+            logElement.className = "p-1 bg-sky-950/40 border border-sky-500/10 rounded flex justify-between animate-pulse";
+            logElement.innerHTML = `
+                <span>[${time}] ${actInput.value}</span>
+                <span class="text-sky-400">${actorInput.value}</span>
+            `;
+
+            logBox.appendChild(logElement);
+            logBox.scrollTop = logBox.scrollHeight;
+
+            actorInput.value = '';
+            actInput.value = '';
+        }
+
+        /* Steganography Slider */
+        const stegoSlider = document.getElementById('stego-slider');
+        const stegoPayload = document.getElementById('stego-payload');
+        const bitState = document.getElementById('bit-state');
+        const stegoBox = document.getElementById('stego-box');
+
+        stegoSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            if (val === 1) {
+                stegoPayload.classList.remove('opacity-0');
+                bitState.textContent = "LSB Shift Active";
+                bitState.className = "text-rose-400 font-semibold";
+                stegoBox.className = "w-12 h-12 rounded bg-rose-500/90 flex items-center justify-center text-[10px] font-bold text-slate-100 transition-all";
+            } else {
+                stegoPayload.classList.add('opacity-0');
+                bitState.textContent = "Default (Visual Block)";
+                bitState.className = "text-slate-300";
+                stegoBox.className = "w-12 h-12 rounded bg-sky-500/90 flex items-center justify-center text-[10px] font-bold text-slate-950 transition-all";
+            }
+        });
+
+        /* Carver Logic */
+        function carveFile() {
+            const status = document.getElementById('carve-status');
+            const marker = document.getElementById('magic-marker');
+
+            status.textContent = "Searching block address...";
+            status.className = "text-[10px] text-amber-400 animate-pulse";
+
+            setTimeout(() => {
+                marker.className = "text-emerald-400 font-bold bg-emerald-500/10 px-0.5 rounded";
+                status.textContent = "Match: JPEG magic bytes recovered";
+                status.className = "text-[10px] text-emerald-400 font-semibold";
+            }, 800);
+        }
+
+        /* EXIF Config */
+        function setExif(type) {
+            const btnNepal = document.getElementById('exif-btn-nepal');
+            const btnHq = document.getElementById('exif-btn-hq');
+
+            const cameraEl = document.getElementById('metadata-camera');
+            const gpsEl = document.getElementById('metadata-gps');
+
+            if (type === 'nepal') {
+                btnNepal.className = "flex-1 py-1 rounded bg-amber-500/10 text-[10px] font-semibold text-amber-300 border border-amber-500/25";
+                btnHq.className = "flex-1 py-1 rounded bg-slate-950 text-[10px] text-slate-400 border border-slate-800";
+
+                cameraEl.textContent = "iPhone 14 Pro";
+                gpsEl.textContent = "27.7172° N, 85.3240° E (Kathmandu)";
+            } else {
+                btnHq.className = "flex-1 py-1 rounded bg-amber-500/10 text-[10px] font-semibold text-amber-300 border border-amber-500/25";
+                btnNepal.className = "flex-1 py-1 rounded bg-slate-950 text-[10px] text-slate-400 border border-slate-800";
+
+                cameraEl.textContent = "Sony Alpha 7M4";
+                gpsEl.textContent = "28.2096° N, 83.9856° E (Pokhara)";
+            }
+        }
+
+        /* Hashing Tool */
+        function runLiveHash() {
+            const inputVal = document.getElementById('live-hash-input').value;
+            const outputBox = document.getElementById('live-hash-output');
+
+            let hash = 0;
+            for (let i = 0; i < inputVal.length; i++) {
+                const char = inputVal.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+
+            const hex = Math.abs(hash).toString(16).padStart(8, '0');
+            outputBox.textContent = `md5_ac37_${hex}_f79e_${hex.split('').reverse().join('')}`;
+        }
+
+        /* Slide 8: Clickable Sector Inspector */
+        function inspectSector(sec) {
+            const output = document.getElementById('sector-inspect-text');
+            if (sec === 0) {
+                output.innerHTML = "<span class='text-sky-400'>[0x000] MBR Status:</span> Found Master Boot Record. Points system loader to active partition structure.";
+            } else if (sec === 1) {
+                output.innerHTML = "<span class='text-sky-400'>[0x001] Partition Map:</span> Standard GUID Partition Table. Holds structural offsets for system volumes.";
+            } else {
+                output.innerHTML = "<span class='text-rose-400'>[0x002] Flag status:</span> Active file flag set to `0x00` (Deallocated). File remains physically intact on sectors but marked deleted.";
+            }
+        }
+
+        /* Slide 9: Packet stream simulation */
+        function simulateNetworkPacket() {
+            const feed = document.getElementById('packet-feed');
+            const list = [
+                '<div class="text-rose-400">[UDP] 192.168.1.120:53 -> 8.8.8.8:53 [DNS Query]</div>',
+                '<div class="text-amber-400">[HTTP] 10.0.0.1 -> 10.0.0.5 POST /login_admin</div>',
+                '<div class="text-sky-400">[TCP] 192.168.1.52:22 -> 192.168.1.1 [SSH Handshake]</div>',
+                '<div class="text-emerald-400 font-bold">[PCAP] Stream captured block payload matching ETA 2063 filters.</div>'
+            ];
+            const item = list[Math.floor(Math.random() * list.length)];
+            feed.innerHTML += item;
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        /* Slide 10: Device extraction simulator */
+        function runMobileExt() {
+            const extBox = document.getElementById('mobile-ext-box');
+            const status = document.getElementById('mobile-ext-status');
+
+            status.textContent = "Acquiring...";
+            status.className = "text-[9px] px-1.5 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded font-mono animate-pulse";
+            extBox.innerHTML = "<span class='text-amber-400 animate-pulse'>Dumping logical filesystems & database structures...</span>";
+
+            setTimeout(() => {
+                status.textContent = "Acquired";
+                status.className = "text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded font-mono";
+                extBox.innerHTML = `
+                    <div class="space-y-1 text-slate-300">
+                        <p class="text-emerald-400 font-bold">> Success. Extracted contacts_db.sqlite</p>
+                        <p class="text-slate-400">> Chat record parsed: "Meeting at Kathmandu 14:00"</p>
+                        <p class="text-slate-500">> Device Hash: sha256_3b01a7f0e9cd...</p>
+                    </div>
+                `;
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
