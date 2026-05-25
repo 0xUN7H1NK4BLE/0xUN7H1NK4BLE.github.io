@@ -29,6 +29,15 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        /* Classroom-friendly sizing (bigger text + bigger UI) */
+        html {
+            font-size: 18px;
+        }
+        @media (min-width: 1024px) {
+            html {
+                font-size: 20px;
+            }
+        }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #0b0f19;
@@ -44,44 +53,44 @@
 <body class="text-slate-200 h-full overflow-hidden flex flex-col justify-between">
 
     <!-- Top Simplified Header -->
-    <header class="border-b border-slate-800/80 bg-slate-950/40 backdrop-blur px-8 py-4 flex items-center justify-between z-10">
+    <header class="border-b border-slate-800/80 bg-slate-950/40 backdrop-blur px-10 py-5 flex items-center justify-between z-10">
         <div class="flex items-center gap-3">
             <span class="p-1.5 bg-sky-500/10 text-sky-400 rounded-lg border border-sky-500/20">
                 <i data-lucide="shield" class="w-5 h-5"></i>
             </span>
             <div>
-                <h1 class="text-xs font-semibold tracking-widest text-slate-400 uppercase">Forensics Core</h1>
-                <p class="text-[10px] text-sky-400 font-medium">Digital Forensics Masterclass</p>
+                <h1 class="text-sm font-semibold tracking-widest text-slate-400 uppercase">Forensics Core</h1>
+                <p class="text-xs text-sky-400 font-medium">Digital Forensics Lesson</p>
             </div>
         </div>
-        <div class="text-[11px] text-slate-500 font-mono">
-            Standard Operating Protocol
+        <div class="text-sm text-slate-500 font-mono">
+            Class Notes
         </div>
     </header>
 
     <!-- Main Slide Arena -->
-    <main class="flex-1 max-w-5xl w-full mx-auto px-6 py-6 flex flex-col justify-center items-center relative overflow-hidden">
+    <main class="flex-1 max-w-6xl w-full mx-auto px-10 py-8 flex flex-col justify-center items-center relative overflow-hidden">
         
         <!-- Subtle Glow Decors -->
         <div class="absolute top-1/3 left-1/3 w-72 h-72 bg-sky-500/5 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute bottom-1/3 right-1/3 w-72 h-72 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
         <!-- slides wrapper -->
-        <div class="w-full h-full max-h-[520px] relative">
+        <div class="w-full h-full max-h-[720px] relative">
             
             <!-- Slide 1: Welcome -->
             <div id="slide-1" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-center items-center text-center opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="space-y-6 max-w-2xl">
-                    <span class="inline-block px-3 py-1 bg-sky-500/10 text-sky-400 rounded-full text-[11px] font-bold tracking-wider uppercase border border-sky-500/20">
-                        Expanded Reference Deck
+                    <span class="inline-block px-3 py-1 bg-sky-500/10 text-sky-400 rounded-full text-sm font-bold tracking-wider uppercase border border-sky-500/20">
+                        Lesson Slides
                     </span>
                     <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-sky-400 via-indigo-300 to-sky-400 bg-clip-text text-transparent leading-tight">
                         Digital Forensics Fundamentals
                     </h2>
                     <p class="text-slate-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
-                        A clean, structured introduction to evidence systems, forensic types, standard utility software, and basic identification techniques.
+                        Learn how investigators collect, protect, and analyze digital evidence.
                     </p>
-                    <div class="pt-4 text-xs text-slate-500 font-mono">
+                    <div class="pt-4 text-sm text-slate-500 font-mono">
                         Press <kbd class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">→</kbd> or use the controls below to navigate.
                     </div>
                 </div>
@@ -91,23 +100,23 @@
             <div id="slide-2" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">01 / Scope</span>
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">01 / Scope</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Why Digital Forensics?</h3>
-                        <p class="text-xs text-slate-400">At its core, forensics translates raw technical fragments into legally sound facts.</p>
+                        <p class="text-sm text-slate-400">Digital forensics turns technical traces into evidence you can explain and defend.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
                         <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80">
                             <h4 class="font-bold text-slate-200 text-sm mb-1">Legal Admissibility</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">Unchanging standard processes that ensure electronic evidence stands up in court.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">Using repeatable steps so digital evidence can be trusted in court.</p>
                         </div>
                         <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80">
                             <h4 class="font-bold text-slate-200 text-sm mb-1">Incident Recovery</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">Dissecting data breaches to identify compromised networks and trace intruder steps.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">Investigating breaches to learn what happened and how to prevent it again.</p>
                         </div>
                         <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80">
                             <h4 class="font-bold text-slate-200 text-sm mb-1">Modern Scope</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">Now stretching beyond PCs to mobile platforms, cloud environments, and IoT endpoints.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">Not just PCs: phones, cloud services, and smart/IoT devices too.</p>
                         </div>
                     </div>
                 </div>
@@ -117,9 +126,9 @@
             <div id="slide-3" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">02 / Stakeholders</span>
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">02 / Stakeholders</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Key Stakeholders &amp; Roles</h3>
-                        <p class="text-xs text-slate-400">Select a role to inspect its primary real-world application.</p>
+                        <p class="text-sm text-slate-400">Select a role to see how they use digital forensics.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
@@ -127,23 +136,23 @@
                         <div class="md:col-span-5 flex flex-col gap-2">
                             <button onclick="selectForensicRole('law')" id="role-law" class="role-btn text-left p-3 rounded-lg border border-sky-500/30 bg-sky-500/10 text-slate-100 flex items-center gap-3 transition-all">
                                 <i data-lucide="shield-check" class="w-4 h-4 text-sky-400"></i>
-                                <span class="text-xs font-semibold">Law Enforcement</span>
+                                <span class="text-sm font-semibold">Law Enforcement</span>
                             </button>
                             <button onclick="selectForensicRole('corp')" id="role-corp" class="role-btn text-left p-3 rounded-lg border border-slate-800 bg-slate-900/40 text-slate-400 flex items-center gap-3 transition-all hover:bg-slate-800/40">
                                 <i data-lucide="building" class="w-4 h-4 text-slate-400"></i>
-                                <span class="text-xs font-semibold">Corporate Defense</span>
+                                <span class="text-sm font-semibold">Corporate Defense</span>
                             </button>
                             <button onclick="selectForensicRole('court')" id="role-court" class="role-btn text-left p-3 rounded-lg border border-slate-800 bg-slate-900/40 text-slate-400 flex items-center gap-3 transition-all hover:bg-slate-800/40">
                                 <i data-lucide="gavel" class="w-4 h-4 text-slate-400"></i>
-                                <span class="text-xs font-semibold">Legal Council</span>
+                                <span class="text-sm font-semibold">Legal Council</span>
                             </button>
                         </div>
 
                         <!-- Right Card Panel -->
                         <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-5 flex flex-col justify-center min-h-[160px]">
                             <div id="role-content" class="space-y-2">
-                                <h4 class="text-xs font-bold text-sky-400 uppercase tracking-widest" id="role-title">Law Enforcement</h4>
-                                <p class="text-xs text-slate-300 leading-relaxed" id="role-desc">
+                                <h4 class="text-sm font-bold text-sky-400 uppercase tracking-widest" id="role-title">Law Enforcement</h4>
+                                <p class="text-sm text-slate-300 leading-relaxed" id="role-desc">
                                     Extracting data from mobile devices and smart logs to construct admissible evidence pathways for judicial systems.
                                 </p>
                             </div>
@@ -156,29 +165,29 @@
             <div id="slide-4" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-rose-400 uppercase">03 / Challenges</span>
+                        <span class="text-sm font-semibold tracking-wider text-rose-400 uppercase">03 / Challenges</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">The Nepal Landscape</h3>
-                        <p class="text-xs text-slate-400">Key systematic bottlenecks currently encountered on the ground.</p>
+                        <p class="text-sm text-slate-400">Real challenges that can make investigations slower or harder.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
                         <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-2">
                             <div class="flex items-center gap-2 text-rose-400">
                                 <i data-lucide="scale" class="w-4 h-4"></i>
-                                <h4 class="text-xs font-bold uppercase tracking-wider">Statutory Limitations</h4>
+                                <h4 class="text-sm font-bold uppercase tracking-wider">Statutory Limitations</h4>
                             </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                The Electronic Transactions Act (ETA 2063) remains our central benchmark, but lacks provisions for contemporary challenges like localized cloud multi-tenancy and encrypted crypto assets.
+                            <p class="text-sm text-slate-400 leading-relaxed">
+                                The Electronic Transactions Act (ETA 2063) is still a key reference, but some newer problems (cloud systems, strong encryption, crypto assets) need clearer legal guidance.
                             </p>
                         </div>
 
                         <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-2">
                             <div class="flex items-center gap-2 text-amber-400">
                                 <i data-lucide="key" class="w-4 h-4"></i>
-                                <h4 class="text-xs font-bold uppercase tracking-wider">Centralized Resources</h4>
+                                <h4 class="text-sm font-bold uppercase tracking-wider">Centralized Resources</h4>
                             </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Heavy platform licensing fees (Axiom, Cellebrite) limit specialized extraction suites to central labs, creating diagnostic backlogs for remote regional cases.
+                            <p class="text-sm text-slate-400 leading-relaxed">
+                                Expensive forensic tools can be limited to central labs, which creates backlogs and delays for regional cases.
                             </p>
                         </div>
                     </div>
@@ -189,21 +198,21 @@
             <div id="slide-5" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-emerald-400 uppercase">04 / Methodology</span>
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">04 / Methodology</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">The Investigation Mindset</h3>
-                        <p class="text-xs text-slate-400">Preserving integrity by enforcing strict chain of custody protocols.</p>
+                        <p class="text-sm text-slate-400">Preserving integrity by enforcing strict chain of custody protocols.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
                         <!-- Info Columns -->
                         <div class="md:col-span-5 space-y-3 flex flex-col justify-center">
                             <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80">
-                                <h4 class="text-xs font-bold text-emerald-400 uppercase mb-1">Volatile Data First</h4>
-                                <p class="text-xs text-slate-400">Collect unstable memory states (like live CPU caches &amp; RAM) before acquiring offline persistent drives.</p>
+                                <h4 class="text-sm font-bold text-emerald-400 uppercase mb-1">Volatile Data First</h4>
+                                <p class="text-sm text-slate-400">Collect unstable data (RAM, live memory) before you power off or image storage.</p>
                             </div>
                             <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80">
-                                <h4 class="text-xs font-bold text-emerald-400 uppercase mb-1">Analytical Copy Rule</h4>
-                                <p class="text-xs text-slate-400">Always generate a write-blocked bitstream image. <strong>Never</strong> run diagnostic tools on the original media.</p>
+                                <h4 class="text-sm font-bold text-emerald-400 uppercase mb-1">Analytical Copy Rule</h4>
+                                <p class="text-sm text-slate-400">Work on a write-protected forensic image. <strong>Never</strong> analyze the original device directly.</p>
                             </div>
                         </div>
 
@@ -211,10 +220,10 @@
                         <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-4 flex flex-col justify-between">
                             <div>
                                 <div class="flex justify-between items-center mb-3">
-                                    <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Chain of Custody Simulation</span>
-                                    <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-mono">CASE #DFF-902</span>
+                                    <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">Chain of Custody Simulation</span>
+                                    <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-mono">CASE #DFF-902</span>
                                 </div>
-                                <div id="coc-log" class="space-y-1.5 h-24 overflow-y-auto text-[11px] text-slate-400 font-mono pr-1">
+                                <div id="coc-log" class="space-y-1.5 h-24 overflow-y-auto text-sm text-slate-400 font-mono pr-1">
                                     <div class="p-1 bg-slate-950/60 rounded flex justify-between">
                                         <span>[10:15] USB seized</span>
                                         <span class="text-sky-400">Investigator R. Shrestha</span>
@@ -227,9 +236,9 @@
                             </div>
                             <!-- Simple Action bar -->
                             <div class="mt-3 flex gap-2">
-                                <input type="text" id="coc-actor" placeholder="Officer Name" class="bg-slate-950 text-xs px-2.5 py-1.5 rounded border border-slate-800 focus:outline-none focus:border-emerald-500 w-1/3 text-slate-300">
-                                <input type="text" id="coc-act" placeholder="Action taken" class="bg-slate-950 text-xs px-2.5 py-1.5 rounded border border-slate-800 focus:outline-none focus:border-emerald-500 flex-1 text-slate-300">
-                                <button onclick="addLog()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-3 py-1.5 rounded text-xs transition-colors">
+                                <input type="text" id="coc-actor" placeholder="Officer Name" class="bg-slate-950 text-sm px-2.5 py-1.5 rounded border border-slate-800 focus:outline-none focus:border-emerald-500 w-1/3 text-slate-300">
+                                <input type="text" id="coc-act" placeholder="Action taken" class="bg-slate-950 text-sm px-2.5 py-1.5 rounded border border-slate-800 focus:outline-none focus:border-emerald-500 flex-1 text-slate-300">
+                                <button onclick="addLog()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-3 py-1.5 rounded text-sm transition-colors">
                                     Log
                                 </button>
                             </div>
@@ -238,34 +247,790 @@
                 </div>
             </div>
 
-            <!-- Slide 6: Stego & Carving -->
+            <!-- Slide 6–11: Anti-Forensic Techniques (6 pages) -->
             <div id="slide-6" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-violet-400 uppercase">05 / Diagnostics A</span>
+                        <span class="text-sm font-semibold tracking-wider text-rose-400 uppercase">05 / Anti-Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Anti-Forensic Techniques (1/6)</h3>
+                        <p class="text-sm text-slate-400">Methods criminals may use to hide, change, or destroy evidence — and how investigators respond.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-rose-300">What “anti-forensics” means</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><strong>Hide</strong> evidence (make it hard to find).</li>
+                                <li><strong>Change</strong> evidence (make it inaccurate or misleading).</li>
+                                <li><strong>Destroy</strong> evidence (make it unrecoverable).</li>
+                                <li><strong>Confuse</strong> the timeline (mislead investigators).</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Investigator mindset</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Assume important data might be <strong>missing on purpose</strong>.</li>
+                                <li>Validate everything with <strong>multiple sources</strong> (files, logs, backups).</li>
+                                <li>Preserve evidence first: image, hash, and document.</li>
+                                <li>Explain findings clearly: what you know, what you infer, and what you cannot prove.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-7" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-rose-400 uppercase">05 / Anti-Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Data Wiping &amp; Secure Deletion (2/6)</h3>
+                        <p class="text-sm text-slate-400">Deleting a file is not the same as wiping it.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-6 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-rose-300">Common tactics</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><strong>Normal delete</strong>: removes the reference, data may remain on disk.</li>
+                                <li><strong>Wipe tools</strong>: overwrite blocks to reduce recovery chances.</li>
+                                <li><strong>Factory reset</strong>: can remove user data, but artifacts may remain (depends on device/OS).</li>
+                                <li><strong>Disk encryption + key destruction</strong>: makes data unreadable without the key.</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-6 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Investigator response</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Look for traces: <strong>file system logs</strong>, <strong>USN journal</strong>, <strong>shadow copies</strong>, <strong>app caches</strong>.</li>
+                                <li>Check external sources: <strong>cloud sync</strong>, <strong>email</strong>, <strong>messaging backups</strong>.</li>
+                                <li>Correlate time: when was wiping tool installed/run?</li>
+                                <li>Document limits: some wiping/encryption can make recovery impossible.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-8" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-rose-400 uppercase">05 / Anti-Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Log Tampering &amp; Timeline Tricks (3/6)</h3>
+                        <p class="text-sm text-slate-400">Attackers may try to erase or rewrite history.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-rose-300">Examples</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Clearing system logs (Windows Event Logs, Linux auth logs).</li>
+                                <li>Changing timestamps (“timestomping”).</li>
+                                <li>Disabling logging / deleting browser history.</li>
+                                <li>Changing timezone or system clock to confuse order of events.</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">How to counter</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Cross-check timestamps: file system + app logs + network logs.</li>
+                                <li>Look for “gaps” or “resets” in log sequences.</li>
+                                <li>Compare device time vs. server time (email, cloud, VPN, routers).</li>
+                                <li>Use multiple artifacts: prefetch, registry, browser cache, database records.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-9" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-rose-400 uppercase">05 / Anti-Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Encryption &amp; Obfuscation (4/6)</h3>
+                        <p class="text-sm text-slate-400">Strong encryption can protect privacy — and also prevent lawful access without keys.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-6 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-rose-300">What you might see</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Encrypted disks/containers (BitLocker, VeraCrypt, FileVault).</li>
+                                <li>Password-protected archives (zip/rar) and “hidden volumes”.</li>
+                                <li>Encoded/packed data (base64, custom formats).</li>
+                                <li>Encrypted messaging apps with disappearing messages.</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-6 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Investigation approach</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Collect keys where lawful: memory capture, keychain artifacts, TPM state.</li>
+                                <li>Look for <strong>unencrypted copies</strong>: thumbnails, exports, cloud sync.</li>
+                                <li>Use context: file names, sizes, access times, mount history.</li>
+                                <li>Report clearly when data cannot be decrypted.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-10" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-rose-400 uppercase">05 / Anti-Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Hiding Data (5/6)</h3>
+                        <p class="text-sm text-slate-400">Evidence can be hidden inside normal-looking files or locations.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-rose-300">Common hiding places</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Steganography (data hidden inside images/audio).</li>
+                                <li>Hidden partitions or “unallocated space”.</li>
+                                <li>Alternate data streams (NTFS) / unusual filesystem features.</li>
+                                <li>“Looks harmless” files (renamed extensions, fake headers).</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">How to detect</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Check signatures (magic bytes) vs. file extensions.</li>
+                                <li>Measure anomalies: file size, entropy, unusual metadata.</li>
+                                <li>Search for known patterns and artifacts (thumbnails, caches).</li>
+                                <li>Use carving and timeline correlation.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-11" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-rose-400 uppercase">05 / Anti-Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Living-Off-The-Land &amp; Fileless Activity (6/6)</h3>
+                        <p class="text-sm text-slate-400">Some attacks avoid obvious malware files and run in memory or using built-in tools.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-6 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-rose-300">What it looks like</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Scripts executed from memory (PowerShell, WMI, macros).</li>
+                                <li>Abuse of legitimate admin tools (remote management).</li>
+                                <li>Short-lived processes that disappear quickly.</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-6 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Evidence sources</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Memory images, process lists, command history.</li>
+                                <li>Event logs, scheduled tasks, registry run keys.</li>
+                                <li>Network telemetry: DNS, proxy, firewall logs.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 12–17: Digital Evidence and Types (6 pages) -->
+            <div id="slide-12" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">06 / Digital Evidence</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Digital Evidence: Overview (1/6)</h3>
+                        <p class="text-sm text-slate-400">Digital evidence is any information stored or transmitted in digital form that can support an investigation.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Two big categories</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><strong>Volatile</strong>: disappears when power is off (RAM, running processes).</li>
+                                <li><strong>Non-volatile</strong>: stays stored (disk, phone storage, cloud files).</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">What makes it “good” evidence?</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Collected legally and ethically.</li>
+                                <li>Integrity preserved (hash + chain of custody).</li>
+                                <li>Repeatable process (another expert can verify).</li>
+                                <li>Clear explanation (technical → understandable).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-13" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">06 / Digital Evidence</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Device Evidence (2/6)</h3>
+                        <p class="text-sm text-slate-400">Computers and storage media contain system history, files, and hidden artifacts.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Examples</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
+                                <div class="p-3 bg-slate-950/60 rounded border border-slate-800/80">Documents, photos, downloads</div>
+                                <div class="p-3 bg-slate-950/60 rounded border border-slate-800/80">Browser history, cache, cookies</div>
+                                <div class="p-3 bg-slate-950/60 rounded border border-slate-800/80">System logs, registry, plists</div>
+                                <div class="p-3 bg-slate-950/60 rounded border border-slate-800/80">USB connection history</div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-5 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Best practice</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Image the drive (don’t “browse” the original).</li>
+                                <li>Hash the image and keep notes.</li>
+                                <li>Analyze on copies.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-14" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">06 / Digital Evidence</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Network Evidence (3/6)</h3>
+                        <p class="text-sm text-slate-400">Traffic and logs can show communication, intrusions, and data exfiltration.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Sources</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>PCAP packet captures</li>
+                                <li>Firewall / router / VPN logs</li>
+                                <li>DNS logs and proxy logs</li>
+                                <li>Server access logs</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">What you can learn</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Who talked to who (IP/ports)</li>
+                                <li>When (timestamps)</li>
+                                <li>How (protocols)</li>
+                                <li>Sometimes what (payloads — depends on encryption)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-15" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">06 / Digital Evidence</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Mobile &amp; App Evidence (4/6)</h3>
+                        <p class="text-sm text-slate-400">Phones store call logs, messages, locations, and app databases.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Typical artifacts</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>SMS, chats (often stored as SQLite databases)</li>
+                                <li>Call history and contacts</li>
+                                <li>App caches (images, voice notes, files)</li>
+                                <li>Location history (if enabled)</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-5 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Important note</h4>
+                            <p class="text-sm text-slate-300">Mobile evidence is sensitive. Always follow legal authority and privacy rules for the case.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-16" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">06 / Digital Evidence</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Cloud Evidence (5/6)</h3>
+                        <p class="text-sm text-slate-400">Data stored on services (email, drives, social media) often includes logs and history.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Examples</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Email accounts (headers, access history)</li>
+                                <li>Cloud storage (Drive/Dropbox/OneDrive)</li>
+                                <li>Social media messages and posts</li>
+                                <li>Audit logs (admin consoles)</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Challenges</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Jurisdiction and legal process</li>
+                                <li>Short log retention</li>
+                                <li>Encryption and account recovery</li>
+                                <li>Provider cooperation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-17" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">06 / Digital Evidence</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Media, IoT &amp; Other Evidence (6/6)</h3>
+                        <p class="text-sm text-slate-400">Photos, videos, smart devices, and sensors can contain important context.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Examples</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
+                                <div class="p-3 bg-slate-950/60 rounded border border-slate-800/80">EXIF metadata (camera, GPS)</div>
+                                <div class="p-3 bg-slate-950/60 rounded border border-slate-800/80">CCTV/DVR recordings</div>
+                                <div class="p-3 bg-slate-950/60 rounded border border-slate-800/80">Vehicle/telematics data</div>
+                                <div class="p-3 bg-slate-950/60 rounded border border-slate-800/80">IoT logs (routers, smart home)</div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-5 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Quick check</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Where did it come from?</li>
+                                <li>Is it original or edited?</li>
+                                <li>Do timestamps match other sources?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 18–26: Investigation Procedure (9 pages, full process) -->
+            <div id="slide-18" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">07 / Procedure</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Investigation Procedure: Preparation (1/9)</h3>
+                        <p class="text-sm text-slate-400">Before touching evidence: confirm authority, scope, tools, and documentation plan.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Checklist</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Legal authority and scope (what you can collect)</li>
+                                <li>Case ID, labels, chain-of-custody forms</li>
+                                <li>Write blockers, storage, power supplies</li>
+                                <li>Plan: volatile-first vs powered-off collection</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Goal</h4>
+                            <p class="text-sm text-slate-300">Make your work <strong>repeatable</strong>, <strong>legal</strong>, and <strong>easy to explain</strong> later.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-19" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">07 / Procedure</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Identification (2/9)</h3>
+                        <p class="text-sm text-slate-400">Find what sources of evidence exist and decide what matters for the case.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Evidence sources</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Devices: laptops, phones, USBs, DVRs</li>
+                                <li>Accounts: email, social, cloud storage</li>
+                                <li>Network: routers, firewalls, servers</li>
+                                <li>People: interviews (what to look for)</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-5 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Output</h4>
+                            <p class="text-sm text-slate-300">A list of targets with priorities (what to collect first and why).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-20" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">07 / Procedure</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Preservation (3/9)</h3>
+                        <p class="text-sm text-slate-400">Protect evidence from change, damage, or contamination.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Do</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Photograph and label evidence</li>
+                                <li>Use write blockers for storage devices</li>
+                                <li>Seal and store items securely</li>
+                                <li>Record every transfer (chain of custody)</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-rose-300">Don’t</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Boot and “click around” on the original device</li>
+                                <li>Install tools on the suspect system</li>
+                                <li>Share evidence copies without permission</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-21" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">07 / Procedure</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Collection (4/9)</h3>
+                        <p class="text-sm text-slate-400">Collect devices and data sources safely, keeping good notes.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">What to record</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Device identifiers (serial, model), owner, location found</li>
+                                <li>Power state (on/off), screen status, network connections</li>
+                                <li>Who collected it and when</li>
+                                <li>Packaging and transport details</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-5 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Tip</h4>
+                            <p class="text-sm text-slate-300">If a device is powered on, decide quickly whether to capture volatile data first.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-22" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">07 / Procedure</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Acquisition / Imaging (5/9)</h3>
+                        <p class="text-sm text-slate-400">Create forensic copies so analysis does not change the original.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Disk imaging</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Use write blockers</li>
+                                <li>Bitstream (sector-by-sector) image when required</li>
+                                <li>Hash before/after to prove integrity</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Mobile acquisition</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Logical vs physical (depends on device/security)</li>
+                                <li>Keep device state stable (airplane mode if allowed)</li>
+                                <li>Document tools and settings used</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-23" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">07 / Procedure</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Examination (6/9)</h3>
+                        <p class="text-sm text-slate-400">Extract and organize data for analysis (without jumping to conclusions).</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Tasks</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>File listing, keyword search, timeline building</li>
+                                <li>Recover deleted files (where possible)</li>
+                                <li>Parse artifacts (browser, chat DBs, logs)</li>
+                                <li>Normalize timezones and formats</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-5 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Output</h4>
+                            <p class="text-sm text-slate-300">A structured set of findings and artifacts ready for analysis.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-24" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">07 / Procedure</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Analysis (7/9)</h3>
+                        <p class="text-sm text-slate-400">Answer the case questions by connecting artifacts into a clear story supported by evidence.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Good analysis</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Uses multiple artifacts to confirm events</li>
+                                <li>Separates facts vs. assumptions</li>
+                                <li>Includes alternative explanations when relevant</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-rose-300">Common mistakes</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Relying on a single artifact</li>
+                                <li>Ignoring timezone differences</li>
+                                <li>Overstating what the evidence proves</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-25" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">07 / Procedure</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Reporting (8/9)</h3>
+                        <p class="text-sm text-slate-400">Write a report that another expert can reproduce and a judge/jury can understand.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Include</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Scope and authority</li>
+                                <li>Tools + versions + settings</li>
+                                <li>Hashes and chain-of-custody summary</li>
+                                <li>Findings with supporting artifacts</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-5 p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Style</h4>
+                            <p class="text-sm text-slate-300">Clear, neutral, and factual. Avoid guessing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-26" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-emerald-400 uppercase">07 / Procedure</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Presentation &amp; Archiving (9/9)</h3>
+                        <p class="text-sm text-slate-400">Present results when needed, then store evidence and documentation securely.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Presentation</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Explain method and integrity (hashes)</li>
+                                <li>Use simple visuals: timelines, diagrams</li>
+                                <li>Be prepared to defend your process</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Archiving</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Store originals and images securely</li>
+                                <li>Maintain chain of custody until closure</li>
+                                <li>Follow retention policy and law</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 27–32: Real Forensics Begins (Network + PCAP) -->
+            <div id="slide-27" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">08 / Real Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Now the “Real Forensics” Begins</h3>
+                        <p class="text-sm text-slate-400">From here, we focus on practical investigation work: network traces and PCAP analysis.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">What you will learn</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>What network forensics is (and what it can prove).</li>
+                                <li>What a PCAP file is and how it’s collected.</li>
+                                <li>How to analyze PCAP step-by-step (filters, follow streams, timelines).</li>
+                                <li>Common real-world indicators: scanning, brute force, malware C2, data exfiltration.</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-5 p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Class rule</h4>
+                            <p class="text-sm text-slate-300">Only capture/analyze traffic you’re authorized to see. In class we use simulated traffic.</p>
+                            <div class="text-sm text-slate-400 font-mono bg-slate-950/60 border border-slate-800/80 rounded p-3">
+                                Goal: evidence you can explain
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-28" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">09 / Network Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Network Forensics: What It Is</h3>
+                        <p class="text-sm text-slate-400">Network forensics uses traffic and logs to reconstruct what happened across systems.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Questions it answers</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Who communicated? (IPs, hostnames)</li>
+                                <li>When? (timestamps, sessions)</li>
+                                <li>How? (protocols, ports)</li>
+                                <li>Sometimes what? (payloads — depends on encryption)</li>
+                            </ul>
+                        </div>
+                        <div class="p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-rose-300">Limitations</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Encryption hides content (HTTPS, VPN).</li>
+                                <li>NAT can hide internal hosts.</li>
+                                <li>Missing logs = missing visibility.</li>
+                                <li>Packets show activity, not intent — you still need context.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-29" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">09 / Network Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Network Evidence: Where It Comes From</h3>
+                        <p class="text-sm text-slate-400">Different sources give different detail. You usually combine them.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Common sources</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
+                                <div class="p-4 bg-slate-950/60 rounded border border-slate-800/80">PCAP (raw packets)</div>
+                                <div class="p-4 bg-slate-950/60 rounded border border-slate-800/80">NetFlow (session summaries)</div>
+                                <div class="p-4 bg-slate-950/60 rounded border border-slate-800/80">Firewall / IDS alerts</div>
+                                <div class="p-4 bg-slate-950/60 rounded border border-slate-800/80">DNS logs / proxy logs</div>
+                                <div class="p-4 bg-slate-950/60 rounded border border-slate-800/80">Server access logs</div>
+                                <div class="p-4 bg-slate-950/60 rounded border border-slate-800/80">Endpoint telemetry (EDR)</div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-5 p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Collection tips</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Record timezone and clock accuracy.</li>
+                                <li>Keep originals read-only; work from copies.</li>
+                                <li>Hash exported log/pcap files and track chain of custody.</li>
+                                <li>Note interfaces/ports and capture filters used.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-30" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">10 / PCAP Analysis</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">PCAP: What It Is (1/2)</h3>
+                        <p class="text-sm text-slate-400">A PCAP stores captured packets, including headers and sometimes payloads.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-violet-300">What’s inside a packet?</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Link + IP + transport headers (Ethernet/IP/TCP/UDP)</li>
+                                <li>Ports (80, 443, 53, …)</li>
+                                <li>Protocol data (DNS queries, HTTP requests, TLS handshakes)</li>
+                            </ul>
+                        </div>
+                        <div class="p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">How it’s collected (high level)</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>On an endpoint (capture on a NIC)</li>
+                                <li>On a switch (SPAN / mirror port)</li>
+                                <li>On a tap/sensor (network probe)</li>
+                                <li>On a server (capture server-side traffic)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide-31" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">10 / PCAP Analysis</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">PCAP Analysis: How It’s Done (2/2)</h3>
+                        <p class="text-sm text-slate-400">A simple workflow students can follow every time.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                        <div class="md:col-span-7 p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-violet-300">Step-by-step workflow</h4>
+                            <ol class="text-sm text-slate-300 space-y-2 list-decimal pl-5">
+                                <li>Confirm timeframe + timezone.</li>
+                                <li>Find “top talkers”: IPs, ports, protocols.</li>
+                                <li>Filter by suspect host: `ip.addr == x.x.x.x`.</li>
+                                <li>Inspect DNS: queries, responses, unusual domains.</li>
+                                <li>Check HTTP (if not encrypted): requests, files, user agents.</li>
+                                <li>For TCP sessions: “follow stream” to view a conversation.</li>
+                                <li>Write notes: why you think it matters + evidence lines.</li>
+                            </ol>
+                        </div>
+                        <div class="md:col-span-5 p-6 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Common red flags</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Many failed logins (brute force)</li>
+                                <li>Unexpected outbound connections</li>
+                                <li>Large uploads to unknown hosts</li>
+                                <li>DNS to random-looking domains</li>
+                                <li>Traffic at strange hours</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 32: Stego & Carving (moved down after new sections) -->
+            <div id="slide-32" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">11 / Diagnostics A</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Steganography &amp; File Carving</h3>
-                        <p class="text-xs text-slate-400">Basic techniques to find hidden information and recover unallocated files.</p>
+                        <p class="text-sm text-slate-400">Basic techniques to find hidden information and recover unallocated files.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
                         <!-- Steganography visual block -->
                         <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800/80 space-y-4">
                             <div>
-                                <h4 class="text-xs font-bold text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <h4 class="text-sm font-bold text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
                                     <i data-lucide="eye-off" class="w-3.5 h-3.5"></i> Stego LSB Shift
                                 </h4>
-                                <p class="text-[11px] text-slate-400 mt-1">Conceals data into the Least Significant Bits of pixel arrays.</p>
+                                <p class="text-sm text-slate-400 mt-1">Conceals data into the Least Significant Bits of pixel arrays.</p>
                             </div>
 
                             <div class="p-3 bg-slate-950 rounded border border-slate-900/80 flex items-center gap-4">
-                                <div id="stego-box" class="w-12 h-12 rounded bg-sky-500/90 flex items-center justify-center text-[10px] font-bold text-slate-950 transition-all relative">
+                                <div id="stego-box" class="w-12 h-12 rounded bg-sky-500/90 flex items-center justify-center text-xs font-bold text-slate-950 transition-all relative">
                                     IMG
                                     <div id="stego-payload" class="absolute inset-0 bg-rose-500 flex items-center justify-center text-[8px] font-bold text-white transition-opacity duration-200 opacity-0">
                                         SECRET
                                     </div>
                                 </div>
                                 <div class="flex-1 space-y-1.5">
-                                    <div class="flex justify-between text-[10px]">
+                                    <div class="flex justify-between text-xs">
                                         <span class="text-slate-400">Bit Mask State:</span>
                                         <span id="bit-state" class="text-slate-300">Default (Visual Block)</span>
                                     </div>
@@ -277,19 +1042,19 @@
                         <!-- Carving visual block -->
                         <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800/80 space-y-4">
                             <div>
-                                <h4 class="text-xs font-bold text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <h4 class="text-sm font-bold text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
                                     <i data-lucide="search" class="w-3.5 h-3.5"></i> File Carving
                                 </h4>
-                                <p class="text-[11px] text-slate-400 mt-1">Locates deleted files by matching magic bytes in unallocated space.</p>
+                                <p class="text-sm text-slate-400 mt-1">Locates deleted files by matching magic bytes in unallocated space.</p>
                             </div>
 
                             <div class="p-3 bg-slate-950 rounded border border-slate-900/80 space-y-2">
-                                <div class="text-[10px] code-font text-slate-500 break-all leading-relaxed">
+                                <div class="text-xs code-font text-slate-500 break-all leading-relaxed">
                                     HEX: 4d 5a 90 <span class="text-rose-400 font-bold" id="magic-marker">ff d8 ff e0</span> 00 10 4a 46...
                                 </div>
                                 <div class="flex justify-between items-center pt-1">
-                                    <span class="text-[10px] text-slate-400" id="carve-status">Awaiting search...</span>
-                                    <button onclick="carveFile()" class="bg-violet-500/20 hover:bg-violet-500/35 text-violet-300 font-bold px-2 py-0.5 rounded text-[10px] border border-violet-500/20 transition-all">
+                                    <span class="text-xs text-slate-400" id="carve-status">Awaiting search...</span>
+                                    <button onclick="carveFile()" class="bg-violet-500/20 hover:bg-violet-500/35 text-violet-300 font-bold px-2 py-0.5 rounded text-xs border border-violet-500/20 transition-all">
                                         Scan Headers
                                     </button>
                                 </div>
@@ -299,30 +1064,30 @@
                 </div>
             </div>
 
-            <!-- Slide 7: EXIF & Hashing -->
-            <div id="slide-7" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 33: EXIF & Hashing (moved down after new sections) -->
+            <div id="slide-33" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-amber-400 uppercase">06 / Diagnostics B</span>
+                        <span class="text-sm font-semibold tracking-wider text-amber-400 uppercase">12 / Diagnostics B</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Metadata &amp; Hashing</h3>
-                        <p class="text-xs text-slate-400">Verifying timeline records and assuring absolute data integrity.</p>
+                        <p class="text-sm text-slate-400">Verifying timeline records and assuring absolute data integrity.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
                         <!-- Metadata block -->
                         <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800/80 space-y-3">
-                            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <h4 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                                 <i data-lucide="camera" class="w-3.5 h-3.5"></i> EXIF Metadata Inspector
                             </h4>
                             <div class="flex gap-2">
-                                <button onclick="setExif('nepal')" id="exif-btn-nepal" class="flex-1 py-1 rounded bg-amber-500/10 text-[10px] font-semibold text-amber-300 border border-amber-500/25">
+                                <button onclick="setExif('nepal')" id="exif-btn-nepal" class="flex-1 py-1 rounded bg-amber-500/10 text-xs font-semibold text-amber-300 border border-amber-500/25">
                                     Ktm_Crime_Scene.jpg
                                 </button>
-                                <button onclick="setExif('hq')" id="exif-btn-hq" class="flex-1 py-1 rounded bg-slate-950 text-[10px] text-slate-400 border border-slate-800">
+                                <button onclick="setExif('hq')" id="exif-btn-hq" class="flex-1 py-1 rounded bg-slate-950 text-xs text-slate-400 border border-slate-800">
                                     Default_Backup.jpg
                                 </button>
                             </div>
-                            <div class="bg-slate-950 p-3 rounded border border-slate-900/80 text-[10px] code-font space-y-1">
+                            <div class="bg-slate-950 p-3 rounded border border-slate-900/80 text-xs code-font space-y-1">
                                 <div class="flex justify-between"><span class="text-slate-500">Camera:</span> <span id="metadata-camera" class="text-slate-300">iPhone 14 Pro</span></div>
                                 <div class="flex justify-between"><span class="text-slate-500">GPS Coords:</span> <span id="metadata-gps" class="text-amber-400">27.7172° N, 85.3240° E</span></div>
                             </div>
@@ -330,17 +1095,17 @@
 
                         <!-- Hashing block -->
                         <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800/80 space-y-3">
-                            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <h4 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                                 <i data-lucide="fingerprint" class="w-3.5 h-3.5"></i> Cryptographic Hash Checker
                             </h4>
-                            <input type="text" id="live-hash-input" value="Secure Case Data" oninput="runLiveHash()" class="w-full bg-slate-950 text-xs px-2.5 py-1.5 rounded border border-slate-850 focus:outline-none focus:border-amber-500 text-slate-100">
+                            <input type="text" id="live-hash-input" value="Secure Case Data" oninput="runLiveHash()" class="w-full bg-slate-950 text-sm px-2.5 py-1.5 rounded border border-slate-800 focus:outline-none focus:border-amber-500 text-slate-100">
                             
                             <div class="bg-slate-950 p-2.5 rounded border border-slate-900/80">
-                                <div class="flex justify-between text-[9px] text-slate-500 mb-1">
+                                <div class="flex justify-between text-xs text-slate-500 mb-1">
                                     <span>MD5 SIGNATURE</span>
                                     <span class="text-emerald-500 font-bold">MATCHED</span>
                                 </div>
-                                <div id="live-hash-output" class="text-[10px] code-font text-slate-300 break-all bg-slate-900/40 p-1 rounded">
+                                <div id="live-hash-output" class="text-xs code-font text-slate-300 break-all bg-slate-900/40 p-1 rounded">
                                     -
                                 </div>
                             </div>
@@ -349,17 +1114,17 @@
                 </div>
             </div>
 
-            <!-- Slide 8: Forensic Type 1 - Computer & Disk -->
-            <div id="slide-8" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 34: Forensic Type 1 - Computer & Disk -->
+            <div id="slide-34" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">07 / Forensic Branch</span>
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">13 / Forensic Branch</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Computer &amp; Disk Forensics</h3>
-                        <p class="text-xs text-slate-400">The collection, recovery, and analysis of static data stored inside physical storage sectors.</p>
+                        <p class="text-sm text-slate-400">The collection, recovery, and analysis of static data stored inside physical storage sectors.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
-                        <div class="md:col-span-5 space-y-2.5 text-xs text-slate-400">
+                        <div class="md:col-span-5 space-y-2.5 text-sm text-slate-400">
                             <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800/80">
                                 <strong class="text-slate-200">Registry Auditing:</strong>
                                 <p class="mt-1">Analyzing OS configuration databases to find system history, execution paths, and connected USB devices.</p>
@@ -372,41 +1137,41 @@
 
                         <!-- Clickable Sector Inspector Widget -->
                         <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-4 flex flex-col justify-between">
-                            <span class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Sector Map Simulator</span>
+                            <span class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-2">Sector Map Simulator</span>
                             <div class="grid grid-cols-3 gap-2">
                                 <button onclick="inspectSector(0)" class="p-3 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded text-left transition-colors">
-                                    <span class="text-[9px] text-sky-400 block">Sector 00</span>
-                                    <span class="text-[11px] font-bold">MBR Boot</span>
+                                    <span class="text-xs text-sky-400 block">Sector 00</span>
+                                    <span class="text-sm font-bold">MBR Boot</span>
                                 </button>
                                 <button onclick="inspectSector(1)" class="p-3 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded text-left transition-colors">
-                                    <span class="text-[9px] text-sky-400 block">Sector 01</span>
-                                    <span class="text-[11px] font-bold">Partition Table</span>
+                                    <span class="text-xs text-sky-400 block">Sector 01</span>
+                                    <span class="text-sm font-bold">Partition Table</span>
                                 </button>
                                 <button onclick="inspectSector(2)" class="p-3 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded text-left transition-colors">
-                                    <span class="text-[9px] text-sky-400 block">Sector 02</span>
-                                    <span class="text-[11px] font-bold">Deleted File Flag</span>
+                                    <span class="text-xs text-sky-400 block">Sector 02</span>
+                                    <span class="text-sm font-bold">Deleted File Flag</span>
                                 </button>
                             </div>
                             <div class="mt-3 bg-slate-950 p-2.5 rounded border border-slate-900/80 min-h-[50px]">
-                                <span class="text-[9px] uppercase tracking-wider text-slate-500 font-bold block">Sector Diagnostics</span>
-                                <p id="sector-inspect-text" class="text-xs text-slate-300 mt-1">Select a sector above to dump its data structure.</p>
+                                <span class="text-xs uppercase tracking-wider text-slate-500 font-bold block">Sector Diagnostics</span>
+                                <p id="sector-inspect-text" class="text-sm text-slate-300 mt-1">Select a sector above to dump its data structure.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 9: Forensic Type 2 - Network Forensics -->
-            <div id="slide-9" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 35: Forensic Type 2 - Network Forensics -->
+            <div id="slide-35" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">08 / Forensic Branch</span>
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">14 / Forensic Branch</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Network Forensics</h3>
-                        <p class="text-xs text-slate-400">Monitoring and analysis of network traffic to discover active intrusions, data leaks, and attacks.</p>
+                        <p class="text-sm text-slate-400">Monitoring and analysis of network traffic to discover active intrusions, data leaks, and attacks.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
-                        <div class="md:col-span-5 space-y-3 flex flex-col justify-center text-xs text-slate-400">
+                        <div class="md:col-span-5 space-y-3 flex flex-col justify-center text-sm text-slate-400">
                             <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800/80">
                                 <strong class="text-slate-200">Packet Capture (PCAP):</strong>
                                 <p class="mt-0.5">Capturing and parsing exact raw frame layers in transit (Ethernet, IP, TCP).</p>
@@ -420,14 +1185,14 @@
                         <!-- Live Packet Feed Widget -->
                         <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-4 flex flex-col justify-between">
                             <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Live Packet Stream Simulator</span>
+                                <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">Live Packet Stream Simulator</span>
                                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                             </div>
-                            <div id="packet-feed" class="bg-slate-950 p-2 rounded h-28 overflow-y-auto text-[10px] code-font text-slate-400 space-y-1">
+                            <div id="packet-feed" class="bg-slate-950 p-2 rounded h-28 overflow-y-auto text-xs code-font text-slate-400 space-y-1">
                                 <div class="text-sky-400">[TCP] 192.168.1.52:54201 -> 10.0.0.10:443 [SYN]</div>
                                 <div class="text-emerald-400">[DNS] Query: forensics.gov.np -> A Record</div>
                             </div>
-                            <button onclick="simulateNetworkPacket()" class="mt-2 w-full py-1 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 rounded text-[11px] font-bold border border-sky-500/20 transition-all">
+                            <button onclick="simulateNetworkPacket()" class="mt-2 w-full py-1 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 rounded text-sm font-bold border border-sky-500/20 transition-all">
                                 Inject Mock Packet
                             </button>
                         </div>
@@ -435,17 +1200,17 @@
                 </div>
             </div>
 
-            <!-- Slide 10: Forensic Type 3 - Mobile Forensics -->
-            <div id="slide-10" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 36: Forensic Type 3 - Mobile Forensics -->
+            <div id="slide-36" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-sky-400 uppercase">09 / Forensic Branch</span>
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">15 / Forensic Branch</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Mobile &amp; Device Forensics</h3>
-                        <p class="text-xs text-slate-400">Extraction and recovery of persistent storage records, communication apps, and system logs from mobile hardware.</p>
+                        <p class="text-sm text-slate-400">Extraction and recovery of persistent storage records, communication apps, and system logs from mobile hardware.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
-                        <div class="md:col-span-5 space-y-3 flex flex-col justify-center text-xs text-slate-400">
+                        <div class="md:col-span-5 space-y-3 flex flex-col justify-center text-sm text-slate-400">
                             <div class="p-3.5 bg-slate-900/60 rounded-lg border border-slate-800/80">
                                 <strong class="text-slate-200">Logical vs. Physical Dump:</strong>
                                 <p class="mt-0.5">Logical acquires visible file structures, while Physical copies raw flash storage chunks, including deleted partitions.</p>
@@ -459,13 +1224,13 @@
                         <!-- Mobile SQLite Parser Sandbox -->
                         <div class="md:col-span-7 bg-slate-900/60 rounded-xl border border-slate-800/80 p-4 flex flex-col justify-between h-[210px]">
                             <div class="flex justify-between items-center">
-                                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Device Extraction Simulator</span>
-                                <span id="mobile-ext-status" class="text-[9px] px-1.5 py-0.5 bg-slate-950 text-slate-400 border border-slate-800 rounded font-mono">Standby</span>
+                                <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">Device Extraction Simulator</span>
+                                <span id="mobile-ext-status" class="text-xs px-1.5 py-0.5 bg-slate-950 text-slate-400 border border-slate-800 rounded font-mono">Standby</span>
                             </div>
-                            <div id="mobile-ext-box" class="bg-slate-950 p-3 rounded h-24 text-[10px] code-font text-slate-500 overflow-y-auto flex items-center justify-center">
+                            <div id="mobile-ext-box" class="bg-slate-950 p-3 rounded h-24 text-xs code-font text-slate-500 overflow-y-auto flex items-center justify-center">
                                 <span>Awaiting logical capture...</span>
                             </div>
-                            <button onclick="runMobileExt()" class="w-full py-1.5 bg-sky-500 hover:bg-sky-600 text-slate-950 font-bold rounded text-xs transition-colors">
+                            <button onclick="runMobileExt()" class="w-full py-1.5 bg-sky-500 hover:bg-sky-600 text-slate-950 font-bold rounded text-sm transition-colors">
                                 Trigger Acquisition Sequence
                             </button>
                         </div>
@@ -473,88 +1238,88 @@
                 </div>
             </div>
 
-            <!-- Slide 11: Tools List A - Acquisition & Imaging -->
-            <div id="slide-11" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 37: Tools List A - Acquisition & Imaging (moved down after new sections) -->
+            <div id="slide-37" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-violet-400 uppercase">10 / Tools Suite</span>
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">16 / Tools Suite</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Forensic Acquisition Tools</h3>
-                        <p class="text-xs text-slate-400">Applications used to safely capture, clone, and preserve data with mathematical integrity.</p>
+                        <p class="text-sm text-slate-400">Applications used to safely capture, clone, and preserve data with mathematical integrity.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
                         <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-[10px] text-violet-400 font-mono block">GUI IMAGER</span>
+                            <span class="text-xs text-violet-400 font-mono block">GUI IMAGER</span>
                             <h4 class="font-bold text-slate-200 text-sm">FTK Imager</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">The industry standard for quick disk imaging, directory mounting, and hash calculation. Known for reliability on Windows environments.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">The industry standard for quick disk imaging, directory mounting, and hash calculation. Known for reliability on Windows environments.</p>
                         </div>
                         <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-[10px] text-violet-400 font-mono block">LINUX COMPLIANT</span>
+                            <span class="text-xs text-violet-400 font-mono block">LINUX COMPLIANT</span>
                             <h4 class="font-bold text-slate-200 text-sm">Guymager</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">A fast, open-source acquisition tool for Linux systems. Supports multi-threaded processing and writes out EWF (E01) files.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">A fast, open-source acquisition tool for Linux systems. Supports multi-threaded processing and writes out EWF (E01) files.</p>
                         </div>
                         <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-[10px] text-violet-400 font-mono block">TERMINAL ENGINE</span>
+                            <span class="text-xs text-violet-400 font-mono block">TERMINAL ENGINE</span>
                             <h4 class="font-bold text-slate-200 text-sm">dd &amp; dcfldd</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">Low-level command-line disk dumping utilities. `dcfldd` is customized for forensics, generating progress bars and on-the-fly hashes.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">Low-level command-line disk dumping utilities. `dcfldd` is customized for forensics, generating progress bars and on-the-fly hashes.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 12: Tools List B - Comprehensive Analysis Suites -->
-            <div id="slide-12" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 38: Tools List B - Comprehensive Analysis Suites (moved down after new sections) -->
+            <div id="slide-38" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-violet-400 uppercase">11 / Tools Suite</span>
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">17 / Tools Suite</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Investigation &amp; Analysis Suites</h3>
-                        <p class="text-xs text-slate-400">All-in-one workspaces to analyze files, parse registries, index keywords, and trace history timelines.</p>
+                        <p class="text-sm text-slate-400">All-in-one workspaces to analyze files, parse registries, index keywords, and trace history timelines.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
                         <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-[10px] text-violet-400 font-mono block">OPEN SOURCE</span>
+                            <span class="text-xs text-violet-400 font-mono block">OPEN SOURCE</span>
                             <h4 class="font-bold text-slate-200 text-sm">Autopsy</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">A highly extensible, user-friendly open source interface for Sleuth Kit backend utilities. Excellent for analyzing registry files, EXIF, and carving deleted files.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">A highly extensible, user-friendly open source interface for Sleuth Kit backend utilities. Excellent for analyzing registry files, EXIF, and carving deleted files.</p>
                         </div>
                         <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-[10px] text-violet-400 font-mono block">ENTERPRISE CORE</span>
+                            <span class="text-xs text-violet-400 font-mono block">ENTERPRISE CORE</span>
                             <h4 class="font-bold text-slate-200 text-sm">Magnet AXIOM</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">A powerful platform specialized in consolidating memory, mobile applications, cloud repositories, and computer sectors into synchronized timeline views.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">A powerful platform specialized in consolidating memory, mobile applications, cloud repositories, and computer sectors into synchronized timeline views.</p>
                         </div>
                         <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-[10px] text-violet-400 font-mono block">LEGACY BENCHMARK</span>
+                            <span class="text-xs text-violet-400 font-mono block">LEGACY BENCHMARK</span>
                             <h4 class="font-bold text-slate-200 text-sm">EnCase Forensics</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">One of the oldest corporate suites, renowned for raw-sector scripting, court-verified structures, and comprehensive compliance capabilities.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">One of the oldest corporate suites, renowned for raw-sector scripting, court-verified structures, and comprehensive compliance capabilities.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 13: Tools List C - Specialized Utility Software -->
-            <div id="slide-13" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 39: Tools List C - Specialized Utility Software -->
+            <div id="slide-39" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-[11px] font-semibold tracking-wider text-violet-400 uppercase">12 / Tools Suite</span>
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">18 / Tools Suite</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Specialized Forensic Utilities</h3>
-                        <p class="text-xs text-slate-400">Targeted tools configured for specific, high-precision forensic investigations.</p>
+                        <p class="text-sm text-slate-400">Targeted tools configured for specific, high-precision forensic investigations.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
                         <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-[10px] text-violet-400 font-mono block">VOLATILE MEMORY</span>
+                            <span class="text-xs text-violet-400 font-mono block">VOLATILE MEMORY</span>
                             <h4 class="font-bold text-slate-200 text-sm">Volatility</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">The leading framework for command-line volatile RAM analysis. Identifies active processes, open network ports, and cached passwords in memory dumps.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">The leading framework for command-line volatile RAM analysis. Identifies active processes, open network ports, and cached passwords in memory dumps.</p>
                         </div>
                         <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-[10px] text-violet-400 font-mono block">METADATA READ / WRITE</span>
+                            <span class="text-xs text-violet-400 font-mono block">METADATA READ / WRITE</span>
                             <h4 class="font-bold text-slate-200 text-sm">ExifTool</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">An exceptionally versatile command-line utility for reading, writing, and parsing metadata across thousands of media file extensions.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">An exceptionally versatile command-line utility for reading, writing, and parsing metadata across thousands of media file extensions.</p>
                         </div>
                         <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-[10px] text-violet-400 font-mono block">NETWORK DECODER</span>
+                            <span class="text-xs text-violet-400 font-mono block">NETWORK DECODER</span>
                             <h4 class="font-bold text-slate-200 text-sm">Wireshark</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">The premier network protocol analyzer. Allows deep packet inspection, traffic decoding, and reconstruction of exfiltrated data layers.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">The premier network protocol analyzer. Allows deep packet inspection, traffic decoding, and reconstruction of exfiltrated data layers.</p>
                         </div>
                     </div>
                 </div>
@@ -565,32 +1330,41 @@
     </main>
 
     <!-- Bottom Controls -->
-    <footer class="border-t border-slate-800/80 bg-slate-950/40 backdrop-blur px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 z-10">
+    <footer class="border-t border-slate-800/80 bg-slate-950/40 backdrop-blur px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-5 z-10">
         <!-- Progress dots -->
-        <div class="flex items-center gap-1.5" id="dots-container"></div>
+        <div class="flex items-center gap-2" id="dots-container"></div>
 
         <!-- Controls -->
         <div class="flex items-center gap-4">
-            <button onclick="changeSlide(-1)" id="prev-btn" class="p-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-slate-300 rounded-lg border border-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            <button onclick="changeSlide(-1)" id="prev-btn" class="p-3 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-slate-300 rounded-xl border border-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
             </button>
-            <div class="text-[11px] font-bold tracking-wider uppercase text-slate-400 min-w-[70px] text-center">
-                <span id="current-page" class="text-sky-400">1</span> / <span id="total-pages">13</span>
+            <div class="text-sm font-bold tracking-wider uppercase text-slate-400 min-w-[110px] text-center">
+                <span id="current-page" class="text-sky-400">1</span> / <span id="total-pages">39</span>
             </div>
-            <button onclick="changeSlide(1)" id="next-btn" class="p-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-slate-300 rounded-lg border border-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            <button onclick="changeSlide(1)" id="next-btn" class="p-3 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-slate-300 rounded-xl border border-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                <i data-lucide="chevron-right" class="w-6 h-6"></i>
             </button>
         </div>
 
-        <div class="hidden sm:block text-[10px] text-slate-500 font-mono">
+        <div class="hidden sm:block text-sm text-slate-500 font-mono">
             Use ← Left or Right → Keys
         </div>
     </footer>
 
     <!-- JS Slide Core -->
     <script>
+        /*
+          This page is a simple "slide deck" built with:
+          - HTML sections (slide-1 ... slide-13)
+          - Tailwind CSS classes for styling
+          - Small JavaScript functions for interactivity
+        */
+
+        const el = (id) => document.getElementById(id);
+
         let currentSlide = 0;
-        const totalSlides = 13; // Updated total slides
+        const totalSlides = 39; // Updated total slides
 
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -600,11 +1374,11 @@
         });
 
         function buildProgressDots() {
-            const container = document.getElementById('dots-container');
+            const container = el('dots-container');
             container.innerHTML = '';
             for (let i = 0; i < totalSlides; i++) {
                 const btn = document.createElement('button');
-                btn.className = `w-1.5 h-1.5 rounded-full transition-all duration-300 border border-slate-700 bg-slate-800 hover:bg-sky-500/50`;
+                btn.className = `w-2.5 h-2.5 rounded-full transition-all duration-300 border border-slate-700 bg-slate-800 hover:bg-sky-500/50`;
                 btn.setAttribute('onclick', `jumpSlide(${i})`);
                 btn.setAttribute('id', `progress-dot-${i}`);
                 container.appendChild(btn);
@@ -626,8 +1400,8 @@
 
         function showSlide() {
             for (let i = 0; i < totalSlides; i++) {
-                const slide = document.getElementById(`slide-${i+1}`);
-                const dot = document.getElementById(`progress-dot-${i}`);
+                const slide = el(`slide-${i+1}`);
+                const dot = el(`progress-dot-${i}`);
                 if (slide) {
                     if (i === currentSlide) {
                         slide.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
@@ -639,18 +1413,18 @@
                 }
                 if (dot) {
                     if (i === currentSlide) {
-                        dot.className = "w-4 h-1.5 rounded-full transition-all duration-300 bg-sky-500 border border-sky-400";
+                        dot.className = "w-8 h-2.5 rounded-full transition-all duration-300 bg-sky-500 border border-sky-400";
                     } else {
-                        dot.className = "w-1.5 h-1.5 rounded-full transition-all duration-300 border border-slate-700 bg-slate-850 hover:bg-sky-500/30";
+                        dot.className = "w-2.5 h-2.5 rounded-full transition-all duration-300 border border-slate-700 bg-slate-800 hover:bg-sky-500/30";
                     }
                 }
             }
 
-            document.getElementById('current-page').textContent = currentSlide + 1;
-            document.getElementById('total-pages').textContent = totalSlides;
+            el('current-page').textContent = currentSlide + 1;
+            el('total-pages').textContent = totalSlides;
 
-            document.getElementById('prev-btn').disabled = (currentSlide === 0);
-            document.getElementById('next-btn').disabled = (currentSlide === totalSlides - 1);
+            el('prev-btn').disabled = (currentSlide === 0);
+            el('next-btn').disabled = (currentSlide === totalSlides - 1);
         }
 
         document.addEventListener('keydown', (e) => {
@@ -668,31 +1442,31 @@
                 btn.className = "role-btn text-left p-3 rounded-lg border border-slate-800 bg-slate-900/40 text-slate-400 flex items-center gap-3 transition-all hover:bg-slate-800/40";
             });
 
-            const activeBtn = document.getElementById(`role-${role}`);
+            const activeBtn = el(`role-${role}`);
             if (activeBtn) {
                 activeBtn.className = "role-btn text-left p-3 rounded-lg border border-sky-500/30 bg-sky-500/10 text-slate-100 flex items-center gap-3 transition-all";
             }
 
-            const title = document.getElementById('role-title');
-            const desc = document.getElementById('role-desc');
+            const title = el('role-title');
+            const desc = el('role-desc');
 
             if (role === 'law') {
                 title.textContent = "Law Enforcement";
-                desc.textContent = "Extracting data from mobile devices and smart logs to construct admissible evidence pathways for judicial systems.";
+                desc.textContent = "Collecting and analyzing devices to explain what happened in a case (with proper evidence handling).";
             } else if (role === 'corp') {
                 title.textContent = "Corporate Defense";
-                desc.textContent = "Tracing data exfiltration pathways, analyzing internal actor access records, and auditing compliance leaks.";
+                desc.textContent = "Investigating breaches, tracing data leaks, and improving security controls after an incident.";
             } else if (role === 'court') {
                 title.textContent = "Legal Council";
-                desc.textContent = "Reviewing chain-of-custody logs, examining digital acquisition protocols, and ensuring process admissibility.";
+                desc.textContent = "Checking whether evidence was collected correctly and whether the process is reliable in court.";
             }
         }
 
         /* Chain of Custody Add Log Logic */
         function addLog() {
-            const actorInput = document.getElementById('coc-actor');
-            const actInput = document.getElementById('coc-act');
-            const logBox = document.getElementById('coc-log');
+            const actorInput = el('coc-actor');
+            const actInput = el('coc-act');
+            const logBox = el('coc-log');
 
             if (actorInput.value.trim() === '' || actInput.value.trim() === '') return;
 
@@ -725,12 +1499,12 @@
                 stegoPayload.classList.remove('opacity-0');
                 bitState.textContent = "LSB Shift Active";
                 bitState.className = "text-rose-400 font-semibold";
-                stegoBox.className = "w-12 h-12 rounded bg-rose-500/90 flex items-center justify-center text-[10px] font-bold text-slate-100 transition-all";
+                stegoBox.className = "w-12 h-12 rounded bg-rose-500/90 flex items-center justify-center text-xs font-bold text-slate-100 transition-all";
             } else {
                 stegoPayload.classList.add('opacity-0');
                 bitState.textContent = "Default (Visual Block)";
                 bitState.className = "text-slate-300";
-                stegoBox.className = "w-12 h-12 rounded bg-sky-500/90 flex items-center justify-center text-[10px] font-bold text-slate-950 transition-all";
+                stegoBox.className = "w-12 h-12 rounded bg-sky-500/90 flex items-center justify-center text-xs font-bold text-slate-950 transition-all";
             }
         });
 
@@ -740,12 +1514,12 @@
             const marker = document.getElementById('magic-marker');
 
             status.textContent = "Searching block address...";
-            status.className = "text-[10px] text-amber-400 animate-pulse";
+            status.className = "text-xs text-amber-400 animate-pulse";
 
             setTimeout(() => {
                 marker.className = "text-emerald-400 font-bold bg-emerald-500/10 px-0.5 rounded";
                 status.textContent = "Match: JPEG magic bytes recovered";
-                status.className = "text-[10px] text-emerald-400 font-semibold";
+                status.className = "text-xs text-emerald-400 font-semibold";
             }, 800);
         }
 
@@ -758,14 +1532,14 @@
             const gpsEl = document.getElementById('metadata-gps');
 
             if (type === 'nepal') {
-                btnNepal.className = "flex-1 py-1 rounded bg-amber-500/10 text-[10px] font-semibold text-amber-300 border border-amber-500/25";
-                btnHq.className = "flex-1 py-1 rounded bg-slate-950 text-[10px] text-slate-400 border border-slate-800";
+                btnNepal.className = "flex-1 py-1 rounded bg-amber-500/10 text-xs font-semibold text-amber-300 border border-amber-500/25";
+                btnHq.className = "flex-1 py-1 rounded bg-slate-950 text-xs text-slate-400 border border-slate-800";
 
                 cameraEl.textContent = "iPhone 14 Pro";
                 gpsEl.textContent = "27.7172° N, 85.3240° E (Kathmandu)";
             } else {
-                btnHq.className = "flex-1 py-1 rounded bg-amber-500/10 text-[10px] font-semibold text-amber-300 border border-amber-500/25";
-                btnNepal.className = "flex-1 py-1 rounded bg-slate-950 text-[10px] text-slate-400 border border-slate-800";
+                btnHq.className = "flex-1 py-1 rounded bg-amber-500/10 text-xs font-semibold text-amber-300 border border-amber-500/25";
+                btnNepal.className = "flex-1 py-1 rounded bg-slate-950 text-xs text-slate-400 border border-slate-800";
 
                 cameraEl.textContent = "Sony Alpha 7M4";
                 gpsEl.textContent = "28.2096° N, 83.9856° E (Pokhara)";
@@ -820,12 +1594,12 @@
             const status = document.getElementById('mobile-ext-status');
 
             status.textContent = "Acquiring...";
-            status.className = "text-[9px] px-1.5 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded font-mono animate-pulse";
+            status.className = "text-xs px-1.5 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded font-mono animate-pulse";
             extBox.innerHTML = "<span class='text-amber-400 animate-pulse'>Dumping logical filesystems & database structures...</span>";
 
             setTimeout(() => {
                 status.textContent = "Acquired";
-                status.className = "text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded font-mono";
+                status.className = "text-xs px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded font-mono";
                 extBox.innerHTML = `
                     <div class="space-y-1 text-slate-300">
                         <p class="text-emerald-400 font-bold">> Success. Extracted contacts_db.sqlite</p>
