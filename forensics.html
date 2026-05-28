@@ -1003,11 +1003,337 @@
                 </div>
             </div>
 
-            <!-- Slide 32: Stego & Carving (moved down after new sections) -->
+            <!-- Slide 32: Memory Forensics -->
             <div id="slide-32" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">11 / Diagnostics A</span>
+                        <span class="text-sm font-semibold tracking-wider text-cyan-400 uppercase">11 / Memory Forensics</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Memory Forensics: Why It Matters</h3>
+                        <p class="text-sm text-slate-400">RAM can reveal what a system was doing right before shutdown or compromise.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-cyan-300">What can be found in memory?</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Running processes and loaded modules</li>
+                                <li>Open network connections and listening ports</li>
+                                <li>Decrypted content that never hit disk</li>
+                                <li>Malware injection, hooks, and hidden code</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Investigator workflow</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Capture volatile data before powering off.</li>
+                                <li>Preserve the image and hash it immediately.</li>
+                                <li>Compare processes, sockets, and handles across artifacts.</li>
+                                <li>Use memory findings to guide disk and network analysis.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 33: Disk Artifacts -->
+            <div id="slide-33" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-amber-400 uppercase">12 / Disk Artifacts</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Disk Artifacts: What Survives on Storage</h3>
+                        <p class="text-sm text-slate-400">Storage media keeps traces long after files are deleted or applications are closed.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-amber-300">High-value artifacts</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>File metadata, timestamps, and ownership records</li>
+                                <li>Browser cache, downloads, and recent files</li>
+                                <li>Logs, journals, registry hives, and config files</li>
+                                <li>Unallocated space, slack space, and deleted records</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">How to analyze them</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Work from a forensic image, not the original device.</li>
+                                <li>Correlate file times with log and network timelines.</li>
+                                <li>Look for carving opportunities and file signature mismatches.</li>
+                                <li>Document what changed, what was recovered, and what was absent.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 34: Memory Acquisition Tools -->
+            <div id="slide-34" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-cyan-400 uppercase">13 / Acquisition Tools</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Memory Acquisition Tools: Windows and Linux</h3>
+                        <p class="text-sm text-slate-400">These tools capture RAM before it disappears. Pick the one that matches the OS and your lab workflow.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-cyan-300">Windows tools</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><strong>WinPmem</strong> for raw memory capture from the command line.</li>
+                                <li><strong>DumpIt</strong> for a quick one-click acquisition in training labs.</li>
+                                <li><strong>Magnet RAM Capture</strong> when you want a simple GUI workflow.</li>
+                            </ul>
+                            <div class="bg-slate-950 rounded border border-slate-900/80 p-3 text-xs code-font text-slate-300 space-y-1">
+                                <div><span class="text-slate-500">CLI example:</span> <span class="code-font text-slate-100">winpmem.exe memory.raw</span></div>
+                                <div><span class="text-slate-500">How to use:</span> run as admin, choose an output path, then hash the image.</div>
+                            </div>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Linux tools</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><strong>LiME</strong> for kernel-level memory acquisition.</li>
+                                <li><strong>AVML</strong> for portable, command-line RAM collection.</li>
+                                <li><strong>Volatility</strong> for analyzing the memory image after capture.</li>
+                            </ul>
+                            <div class="bg-slate-950 rounded border border-slate-900/80 p-3 text-xs code-font text-slate-300 space-y-1">
+                                <div><span class="text-slate-500">CLI example:</span> <span class="code-font text-slate-100">insmod lime.ko "path=/mnt/evidence/mem.lime format=lime"</span></div>
+                                <div><span class="text-slate-500">How to use:</span> load the module, write to external storage, then verify the hash.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 35: Disk Artifacts Tools -->
+            <div id="slide-35" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-amber-400 uppercase">14 / Artifact Tools</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Disk Artifacts Tools: Windows and Linux</h3>
+                        <p class="text-sm text-slate-400">Use these to inspect file-system traces, deleted data, metadata, and timelines from disk images.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-amber-300">Windows tools</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><strong>FTK Imager</strong> for browsing images, exporting files, and checking hashes.</li>
+                                <li><strong>KAPE</strong> for targeted collection of artifacts like browser data and registry hives.</li>
+                                <li><strong>Registry Explorer</strong> and <strong>ShellBags Explorer</strong> for artifact review.</li>
+                            </ul>
+                            <div class="bg-slate-950 rounded border border-slate-900/80 p-3 text-xs code-font text-slate-300 space-y-1">
+                                <div><span class="text-slate-500">CLI example:</span> <span class="code-font text-slate-100">kape.exe --tsource C:\\ --tdest D:\\out --target !BasicCollection</span></div>
+                                <div><span class="text-slate-500">How to use:</span> point KAPE at the source, choose targets, and collect only the artifacts you need.</div>
+                            </div>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-sky-300">Linux tools</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><strong>Sleuth Kit</strong> tools like <span class="code-font text-slate-100">mmls</span>, <span class="code-font text-slate-100">fls</span>, <span class="code-font text-slate-100">istat</span>, and <span class="code-font text-slate-100">tsk_recover</span>.</li>
+                                <li><strong>Autopsy</strong> for GUI-based artifact review on top of Sleuth Kit.</li>
+                                <li><strong>ExifTool</strong> and <strong>bulk_extractor</strong> for metadata and string extraction.</li>
+                            </ul>
+                            <div class="bg-slate-950 rounded border border-slate-900/80 p-3 text-xs code-font text-slate-300 space-y-1">
+                                <div><span class="text-slate-500">CLI example:</span> <span class="code-font text-slate-100">mmls disk.img</span> then <span class="code-font text-slate-100">fls -r -m / disk.img</span></div>
+                                <div><span class="text-slate-500">How to use:</span> identify partitions, list files recursively, then recover or inspect artifacts from the image.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 36: Volatility Intro -->
+            <div id="slide-36" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">15 / Memory Analysis</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Volatility: What It Is and Why It Matters</h3>
+                        <p class="text-sm text-slate-400">Volatility is a memory forensics framework used to inspect RAM images, find live traces, and reconstruct activity after capture.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-violet-300">What it does</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Parses memory images from Windows, Linux, and macOS systems.</li>
+                                <li>Extracts processes, DLLs/modules, sockets, handles, and registry-like artifacts.</li>
+                                <li>Helps you move from a raw RAM dump to evidence you can explain.</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Why it is important</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Finds malware that never touched disk.</li>
+                                <li>Shows running activity before shutdown or crash.</li>
+                                <li>Reveals decrypted content, injected code, and suspicious connections.</li>
+                                <li>Supports timelines when disk artifacts are missing or tampered with.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 37: Volatility Setup and Images -->
+            <div id="slide-37" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">15 / Memory Analysis</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Most Used Volatility Commands: Setup and Image Info</h3>
+                        <p class="text-sm text-slate-400">Start by identifying the image type and the right profile or symbol set.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-violet-300">Common commands</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.info</span></li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.pslist</span></li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.psscan</span></li>
+                            </ul>
+                            <p class="text-sm text-slate-400">Use <span class="code-font text-slate-100">windows.info</span> first to confirm the image format and reduce analysis errors.</p>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">How to use</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Point Volatility at the memory image with <span class="code-font text-slate-100">-f</span>.</li>
+                                <li>Run <span class="code-font text-slate-100">windows.info</span> to learn kernel details and supported plugins.</li>
+                                <li>Then choose follow-up plugins based on the case question.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 38: Volatility Processes and Modules -->
+            <div id="slide-38" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">15 / Memory Analysis</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Processes, Modules, and Hidden Activity</h3>
+                        <p class="text-sm text-slate-400">These are the first places investigators look for suspicious execution and hidden malware.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-violet-300">Most used commands</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.pslist</span> for active processes.</li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.psscan</span> for terminated or hidden processes.</li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.dlllist</span> to inspect loaded DLLs.</li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.ldrmodules</span> to spot module inconsistencies.</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Why it matters</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Shows which programs were running when the system was captured.</li>
+                                <li>Helps find injected code or unlinked modules.</li>
+                                <li>Lets you compare what should be loaded with what actually is loaded.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 39: Volatility Network and Handles -->
+            <div id="slide-39" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">15 / Memory Analysis</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Network, Handles, and User Activity</h3>
+                        <p class="text-sm text-slate-400">These plugins help tie RAM evidence to remote connections and user sessions.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-violet-300">Most used commands</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.netscan</span> for sockets and connections.</li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.handles</span> for open files, registry keys, and objects.</li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.sessions</span> for logged-in interactive sessions.</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">How to use the output</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Match IPs and ports with network logs or packet captures.</li>
+                                <li>Use handles to see which files or registry keys a process touched.</li>
+                                <li>Use sessions to understand who was logged in when activity happened.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 40: Volatility Timelines and Dumps -->
+            <div id="slide-40" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">15 / Memory Analysis</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Timelines, Dumps, and Evidence Export</h3>
+                        <p class="text-sm text-slate-400">Volatility can extract suspicious data so you can inspect it outside the memory image.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-violet-300">Most used commands</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.cmdline</span> to recover process command lines.</li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.dumpfiles</span> to export files from memory.</li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw windows.malfind</span> to flag suspicious memory regions.</li>
+                                <li><span class="code-font text-slate-100">vol -f mem.raw timeliner.Timeliner</span> to build an event timeline.</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Why investigators care</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Exported evidence can be reviewed, hashed, and cited in reports.</li>
+                                <li>Timeline output helps connect memory events to disk and network events.</li>
+                                <li>Suspicious regions often reveal shellcode, unpacked malware, or injected payloads.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 41: Volatility Quick Workflow -->
+            <div id="slide-41" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">15 / Memory Analysis</span>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">A Simple Volatility Workflow</h3>
+                        <p class="text-sm text-slate-400">This is a practical order students can follow during a case.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-violet-300">Suggested sequence</h4>
+                            <ol class="text-sm text-slate-300 space-y-2 list-decimal pl-5">
+                                <li>Run <span class="code-font text-slate-100">windows.info</span>.</li>
+                                <li>Check <span class="code-font text-slate-100">pslist</span> and <span class="code-font text-slate-100">psscan</span>.</li>
+                                <li>Inspect <span class="code-font text-slate-100">netscan</span> and <span class="code-font text-slate-100">handles</span>.</li>
+                                <li>Review <span class="code-font text-slate-100">cmdline</span> and <span class="code-font text-slate-100">malfind</span>.</li>
+                                <li>Dump important artifacts and document everything.</li>
+                            </ol>
+                        </div>
+                        <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-3">
+                            <h4 class="text-base font-bold text-emerald-300">Good reporting habits</h4>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc pl-5">
+                                <li>Record the exact plugin name and command line used.</li>
+                                <li>Separate facts from interpretation.</li>
+                                <li>Explain how the memory findings support the case story.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 42: Stego & Carving (moved down after new sections) -->
+            <div id="slide-42" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+                <div class="h-full flex flex-col justify-between py-2">
+                    <div class="space-y-2">
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">16 / Diagnostics A</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Steganography &amp; File Carving</h3>
                         <p class="text-sm text-slate-400">Basic techniques to find hidden information and recover unallocated files.</p>
                     </div>
@@ -1064,11 +1390,11 @@
                 </div>
             </div>
 
-            <!-- Slide 33: EXIF & Hashing (moved down after new sections) -->
-            <div id="slide-33" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 43: EXIF & Hashing (moved down after new sections) -->
+            <div id="slide-43" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-sm font-semibold tracking-wider text-amber-400 uppercase">12 / Diagnostics B</span>
+                        <span class="text-sm font-semibold tracking-wider text-amber-400 uppercase">17 / Diagnostics B</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Metadata &amp; Hashing</h3>
                         <p class="text-sm text-slate-400">Verifying timeline records and assuring absolute data integrity.</p>
                     </div>
@@ -1114,11 +1440,11 @@
                 </div>
             </div>
 
-            <!-- Slide 34: Forensic Type 1 - Computer & Disk -->
-            <div id="slide-34" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 44: Forensic Type 1 - Computer & Disk -->
+            <div id="slide-44" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">13 / Forensic Branch</span>
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">18 / Forensic Branch</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Computer &amp; Disk Forensics</h3>
                         <p class="text-sm text-slate-400">The collection, recovery, and analysis of static data stored inside physical storage sectors.</p>
                     </div>
@@ -1161,11 +1487,11 @@
                 </div>
             </div>
 
-            <!-- Slide 35: Forensic Type 2 - Network Forensics -->
-            <div id="slide-35" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 45: Forensic Type 2 - Network Forensics -->
+            <div id="slide-45" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">14 / Forensic Branch</span>
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">19 / Forensic Branch</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Network Forensics</h3>
                         <p class="text-sm text-slate-400">Monitoring and analysis of network traffic to discover active intrusions, data leaks, and attacks.</p>
                     </div>
@@ -1200,11 +1526,11 @@
                 </div>
             </div>
 
-            <!-- Slide 36: Forensic Type 3 - Mobile Forensics -->
-            <div id="slide-36" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 46: Forensic Type 3 - Mobile Forensics -->
+            <div id="slide-46" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">15 / Forensic Branch</span>
+                        <span class="text-sm font-semibold tracking-wider text-sky-400 uppercase">20 / Forensic Branch</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Mobile &amp; Device Forensics</h3>
                         <p class="text-sm text-slate-400">Extraction and recovery of persistent storage records, communication apps, and system logs from mobile hardware.</p>
                     </div>
@@ -1238,11 +1564,11 @@
                 </div>
             </div>
 
-            <!-- Slide 37: Tools List A - Acquisition & Imaging (moved down after new sections) -->
-            <div id="slide-37" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 47: Tools List A - Acquisition & Imaging (moved down after new sections) -->
+            <div id="slide-47" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">16 / Tools Suite</span>
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">21 / Tools Suite</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Forensic Acquisition Tools</h3>
                         <p class="text-sm text-slate-400">Applications used to safely capture, clone, and preserve data with mathematical integrity.</p>
                     </div>
@@ -1267,11 +1593,11 @@
                 </div>
             </div>
 
-            <!-- Slide 38: Tools List B - Comprehensive Analysis Suites (moved down after new sections) -->
-            <div id="slide-38" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
+            <!-- Slide 48: Tools List B - Comprehensive Analysis Suites (moved down after new sections) -->
+            <div id="slide-48" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
                 <div class="h-full flex flex-col justify-between py-2">
                     <div class="space-y-2">
-                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">17 / Tools Suite</span>
+                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">22 / Tools Suite</span>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Investigation &amp; Analysis Suites</h3>
                         <p class="text-sm text-slate-400">All-in-one workspaces to analyze files, parse registries, index keywords, and trace history timelines.</p>
                     </div>
@@ -1296,35 +1622,6 @@
                 </div>
             </div>
 
-            <!-- Slide 39: Tools List C - Specialized Utility Software -->
-            <div id="slide-39" class="slide-element absolute inset-0 w-full h-full flex flex-col justify-between opacity-0 pointer-events-none slide-transition scale-95">
-                <div class="h-full flex flex-col justify-between py-2">
-                    <div class="space-y-2">
-                        <span class="text-sm font-semibold tracking-wider text-violet-400 uppercase">18 / Tools Suite</span>
-                        <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Specialized Forensic Utilities</h3>
-                        <p class="text-sm text-slate-400">Targeted tools configured for specific, high-precision forensic investigations.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
-                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-xs text-violet-400 font-mono block">VOLATILE MEMORY</span>
-                            <h4 class="font-bold text-slate-200 text-sm">Volatility</h4>
-                            <p class="text-sm text-slate-400 leading-relaxed">The leading framework for command-line volatile RAM analysis. Identifies active processes, open network ports, and cached passwords in memory dumps.</p>
-                        </div>
-                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-xs text-violet-400 font-mono block">METADATA READ / WRITE</span>
-                            <h4 class="font-bold text-slate-200 text-sm">ExifTool</h4>
-                            <p class="text-sm text-slate-400 leading-relaxed">An exceptionally versatile command-line utility for reading, writing, and parsing metadata across thousands of media file extensions.</p>
-                        </div>
-                        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-1">
-                            <span class="text-xs text-violet-400 font-mono block">NETWORK DECODER</span>
-                            <h4 class="font-bold text-slate-200 text-sm">Wireshark</h4>
-                            <p class="text-sm text-slate-400 leading-relaxed">The premier network protocol analyzer. Allows deep packet inspection, traffic decoding, and reconstruction of exfiltrated data layers.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
     </main>
@@ -1340,7 +1637,7 @@
                 <i data-lucide="chevron-left" class="w-6 h-6"></i>
             </button>
             <div class="text-sm font-bold tracking-wider uppercase text-slate-400 min-w-[110px] text-center">
-                <span id="current-page" class="text-sky-400">1</span> / <span id="total-pages">39</span>
+                <span id="current-page" class="text-sky-400">1</span> / <span id="total-pages">48</span>
             </div>
             <button onclick="changeSlide(1)" id="next-btn" class="p-3 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-slate-300 rounded-xl border border-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
                 <i data-lucide="chevron-right" class="w-6 h-6"></i>
@@ -1364,11 +1661,33 @@
         const el = (id) => document.getElementById(id);
 
         let currentSlide = 0;
-        const totalSlides = 39; // Updated total slides
+        const totalSlides = 48; // Updated total slides
+        const slideStorageKey = 'forensics-current-slide';
+
+        function loadSavedSlide() {
+            try {
+                const saved = localStorage.getItem(slideStorageKey);
+                if (saved === null) return 0;
+                const parsed = parseInt(saved, 10);
+                if (Number.isNaN(parsed)) return 0;
+                return Math.min(Math.max(parsed, 0), totalSlides - 1);
+            } catch (error) {
+                return 0;
+            }
+        }
+
+        function saveCurrentSlide() {
+            try {
+                localStorage.setItem(slideStorageKey, String(currentSlide));
+            } catch (error) {
+                // Ignore storage errors so navigation still works.
+            }
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             buildProgressDots();
+            currentSlide = loadSavedSlide();
             showSlide();
             runLiveHash(); // populate first hash
         });
@@ -1425,6 +1744,8 @@
 
             el('prev-btn').disabled = (currentSlide === 0);
             el('next-btn').disabled = (currentSlide === totalSlides - 1);
+
+            saveCurrentSlide();
         }
 
         document.addEventListener('keydown', (e) => {
