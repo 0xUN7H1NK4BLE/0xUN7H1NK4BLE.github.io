@@ -682,6 +682,17 @@
       box-shadow: var(--shadow);
     }
 
+    .integration-trace {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .integration-trace summary {
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
     @media (max-width: 980px) {
       .app {
         grid-template-columns: 1fr;
@@ -1476,6 +1487,10 @@
             <label>Message <textarea name="message">Rollout files are ready for review.</textarea></label>
             <button class="btn primary" type="submit">${bellIcon()} Preview notification</button>
           </form>
+          <details class="integration-trace">
+            <summary>Integration diagnostics</summary>
+            <div class="preview-box" id="integrationInbox">${localStorage.getItem("northstar-integration-message") || "No integration preview received."}</div>
+          </details>
         `;
         $("#notifyForm").addEventListener("submit", event => {
           event.preventDefault();
@@ -1605,14 +1620,12 @@
 
     window.addEventListener("hashchange", () => switchView(currentView().split("?")[0]));
     window.addEventListener("message", event => {
-      const box = document.createElement("div");
-      box.className = "notice";
-      let message = event.data;
-      if (message && typeof message === "object") {
-        message = message.html || message.payload || message.body || message.content || JSON.stringify(message, null, 2);
-      }
-      box.innerHTML = message;
-      document.querySelector(".content").prepend(box);
+      const data = event.data;
+      if (!data || typeof data !== "object" || data.type !== "northstar:integration-preview") return;
+      const message = data.html || data.payload || data.body || data.content || "";
+      localStorage.setItem("northstar-integration-message", message);
+      const inbox = $("#integrationInbox");
+      if (inbox) inbox.innerHTML = message;
     });
 
     document.addEventListener("click", event => {

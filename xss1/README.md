@@ -35,7 +35,7 @@ Additional related sinks exist in:
 | Settings general | Stored DOM XSS | Workspace blurb saved and rendered in the sidebar |
 | Settings import | DOM + stored XSS | JSON import preview and `deepMerge()` into app state |
 | Settings notifications | DOM XSS with incomplete filtering | Notification preview strips angle brackets only from title, not message |
-| Window messaging | postMessage DOM XSS | `window.addEventListener("message", ...)` renders string data or object fields `html`, `payload`, `body`, `content` |
+| Window messaging | postMessage DOM XSS | `window.addEventListener("message", ...)` accepts `type: "northstar:integration-preview"` and renders object fields `html`, `payload`, `body`, or `content` in `Settings -> Notifications -> Integration diagnostics` |
 
 ## Main Dangerous Sinks
 
@@ -49,6 +49,20 @@ The app intentionally uses unsafe rendering patterns throughout `index.html`, in
 - JSON import merged into application state
 - `window.message` event rendering
 - weak filters such as `softFilter()` and `stripAngle()`
+
+## postMessage Test
+
+Open `Settings -> Notifications`, expand `Integration diagnostics`, then run this in the
+browser console:
+
+```js
+postMessage({
+  type: "northstar:integration-preview",
+  html: '<img src=x onerror=alert("postMessage XSS")>'
+}, "*");
+```
+
+Only the latest integration preview is rendered.
 
 
 ## Resetting Data
