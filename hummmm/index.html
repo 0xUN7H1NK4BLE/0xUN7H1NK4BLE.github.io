@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f1e7">
+  <title>A little chocolate question</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+    :root { --paper:#f2d5d2; --ink:#382a27; --cocoa:#703d36; --rose:#bc554e; --muted:#8c716d; --line:#eed1ce; }
+    * { box-sizing:border-box }
+    body { margin:0; background:radial-gradient(ellipse at 50% 36%,#fff7f1 0%,#f8e9e4 42%,#edc9c7 100%); color:var(--ink); font-family:'DM Sans',sans-serif; min-height:100vh; }
+    .page { width:min(1120px,100%); margin:auto; padding:24px 5.2vw 28px; }
+    header { display:flex; justify-content:space-between; align-items:center; padding-bottom:17px; border-bottom:1px solid #dcbab6; color:var(--muted); font-size:10px; letter-spacing:.16em; text-transform:uppercase; }
+    .brand { color:var(--cocoa); font-weight:700; letter-spacing:.08em; }
+    .brand span { color:var(--rose); font-size:17px; vertical-align:-2px; margin-right:7px; }
+    .layout { display:grid; grid-template-columns:1.03fr .97fr; gap:clamp(25px,5vw,70px); align-items:center; padding:clamp(26px,5vh,55px) 0 36px; }
+    .copy { position:relative; z-index:2; padding:clamp(30px,5vw,58px); background:#fffaf5; border:1px solid #fff; border-radius:8px; box-shadow:0 20px 65px #813c3530; }
+    .copy::before { content:'♥'; position:absolute; top:-18px; right:27px; display:grid; place-items:center; width:42px; height:42px; border-radius:50%; background:var(--rose); color:white; font-size:18px; box-shadow:0 5px 12px #7d39352a; }
+    .eyebrow { color:var(--rose); font-size:10px; font-weight:700; letter-spacing:.19em; text-transform:uppercase; margin:0 0 16px; }
+    h1 { font:600 clamp(41px,5.1vw,68px)/1.04 'Playfair Display',Georgia,serif; letter-spacing:-.045em; margin:0; max-width:570px; }
+    h1 em { color:var(--rose); font-weight:500; }
+    .intro { color:#806c62; font-size:15px; line-height:1.8; max-width:395px; margin:25px 0 29px; }
+    .question { font:600 20px 'Playfair Display',Georgia,serif; margin:22px 0 16px; }
+    .buttons { display:flex; gap:12px; align-items:center; min-height:54px; }
+    button { font:600 14px 'DM Sans',sans-serif; border:0; border-radius:999px; min-height:50px; padding:0 25px; cursor:pointer; touch-action:manipulation; transition:transform .18s ease, background .18s ease, box-shadow .18s ease; }
+    button:focus-visible { outline:3px solid #d3948c; outline-offset:4px; }
+    button:active { transform:scale(.97); }
+    .yes { color:white; background:var(--cocoa); box-shadow:0 8px 18px #57352c24; }
+    .yes:hover { background:#70473b; transform:translateY(-2px); }
+    .no { color:var(--cocoa); background:#efe4d8; }
+    .no:hover { background:#e8d7c6; }
+    .reply { min-height:27px; margin:18px 0 0; color:var(--rose); font-size:14px; font-weight:600; line-height:1.5; }
+    .fine { color:#9a887e; font-size:11px; margin:7px 0 0; }
+    .visual { position:relative; max-width:480px; width:100%; justify-self:end; padding:0 30px 32px 0; }
+    .hero-photo { display:block; width:100%; aspect-ratio: .82; object-fit:cover; object-position:50% 50%; border-radius:12px; box-shadow:0 22px 55px #50382b2d; border:7px solid #fffaf5; }
+    .stamp { position:absolute; top:-20px; left:-24px; width:76px; height:76px; display:grid; place-items:center; text-align:center; border-radius:50%; background:#fff2d6; color:var(--rose); box-shadow:0 6px 22px #50382b19; font:600 12px/1.15 'Playfair Display',serif; transform:rotate(-11deg); }
+    .note { position:absolute; right:0; bottom:0; width:44%; padding:8px; background:#fffaf2; box-shadow:0 12px 34px #50382b26; transform:rotate(3deg); }
+    .note img { width:100%; height:145px; display:block; object-fit:cover; object-position:center 43%; }
+    .note p { font:italic 12px 'Playfair Display',serif; color:var(--muted); text-align:center; margin:9px 0 3px; }
+    .memory { position:absolute; left:-24px; bottom:53px; width:25%; padding:6px; background:#fffaf2; box-shadow:0 8px 22px #50382b24; transform:rotate(-7deg); }
+    .memory img { width:100%; height:95px; display:block; object-fit:cover; object-position:center 55%; }
+    .memory span { display:block; text-align:center; font-size:9px; color:var(--muted); padding:5px 0 1px; letter-spacing:.08em; text-transform:uppercase; }
+    footer { border-top:1px solid #dcbab6; padding-top:13px; display:flex; justify-content:space-between; gap:16px; color:#8f706c; font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
+    .sparkle { position:fixed; pointer-events:none; font-size:20px; animation:float 1.5s ease-out forwards; z-index:5; }
+    @keyframes float { from { opacity:1; transform:translateY(0) rotate(0) scale(.7) } to { opacity:0; transform:translateY(-100px) rotate(35deg) scale(1.4) } }
+    @media (max-width:700px) {
+      .page { padding:20px 22px 25px; }
+      header { padding-bottom:16px; font-size:9px; }
+      .layout { grid-template-columns:1fr; gap:5px; padding:27px 0 26px; }
+      .copy { order:1; width:min(100%,460px); justify-self:center; padding:31px 26px 28px; } .visual { order:0; width:min(69%,300px); justify-self:center; padding:0 24px 24px 0; }
+      .hero-photo { aspect-ratio:.9; border-radius:12px; border-width:5px; }
+      .stamp { width:65px; height:65px; font-size:11px; left:-16px; top:13px; }
+      .note img { height:112px; } .memory img { height:73px; }
+      .memory { left:-18px; bottom:37px; }
+      .eyebrow { margin-bottom:13px; }
+      h1 { font-size:clamp(44px,12vw,65px); }
+      .intro { margin:17px 0 22px; font-size:14px; }
+      .question { font-size:19px; }
+      .buttons { gap:10px; }
+      button { min-height:52px; padding:0 22px; }
+      footer { font-size:9px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header><div class="brand"><span>✳</span> A tiny question</div><div>Just for you</div></header>
+    <section class="layout" aria-labelledby="title">
+      <div class="copy">
+        <p class="eyebrow">A little something sweet</p>
+        <h1 id="title">You make life<br><em>sweeter.</em></h1>
+        <p class="question">Will you give me chocolate?</p>
+        <div class="buttons">
+          <button class="yes" id="yes" type="button">Yes, obviously 🍫</button>
+          <button class="no" id="no" type="button">No, sorry</button>
+        </div>
+        <p class="reply" id="reply" role="status" aria-live="polite"></p>
+      </div>
+      <div class="visual" aria-label="A few favorite moments">
+        <img class="hero-photo" src="AC04DF31-99AB-4D1D-AC16-4DFC044CAFD3.jpg" alt="A woman holding a bright red flower, smiling shyly">
+        <div class="stamp" aria-hidden="true">you are<br>the sweetest</div>
+        <div class="memory"><img src="DC506655-CA5E-4DD6-980F-03717F673A58.jpg" alt="A mountain hiking memory"><span>little adventurer</span></div>
+        <div class="note"><img src="79B5D018-B770-47BD-8119-C60B7B2BAC6D.jpg" alt="A snowy mountain trail"><p>Chasing little wonders</p></div>
+      </div>
+    </section>
+    <footer><span>Made with cocoa & care</span><span>✿ &nbsp; for you</span></footer>
+  </main>
+  <script>
+    const reply = document.querySelector('#reply');
+    const noButton = document.querySelector('#no');
+    let noHasMoved = false;
+    function dodgeNo() {
+      const margin = 12;
+      const rect = noButton.getBoundingClientRect();
+      const maxX = Math.max(margin, window.innerWidth - rect.width - margin);
+      const maxY = Math.max(margin, window.innerHeight - rect.height - margin);
+      let x = margin + Math.random() * (maxX - margin);
+      let y = margin + Math.random() * (maxY - margin);
+      // Avoid landing on top of the main invitation and its easy-to-tap Yes button.
+      const yesRect = document.querySelector('#yes').getBoundingClientRect();
+      if (x < yesRect.right + 18 && x + rect.width > yesRect.left - 18 &&
+          y < yesRect.bottom + 18 && y + rect.height > yesRect.top - 18) {
+        x = x < window.innerWidth / 2 ? maxX : margin;
+        y = y < window.innerHeight / 2 ? maxY : margin;
+      }
+      noButton.style.position = 'fixed';
+      noButton.style.left = `${x}px`;
+      noButton.style.top = `${y}px`;
+      noButton.style.zIndex = '10';
+      noHasMoved = true;
+      reply.textContent = 'Hehe, too slow! Try again 😄';
+    }
+    noButton.addEventListener('pointerenter', dodgeNo);
+    noButton.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'touch') {
+        event.preventDefault();
+        dodgeNo();
+      }
+    });
+    window.addEventListener('resize', () => {
+      if (noHasMoved) dodgeNo();
+    });
+    function sprinkle(symbols) {
+      for (let i = 0; i < 14; i++) {
+        const bit = document.createElement('span');
+        bit.className = 'sparkle'; bit.textContent = symbols[i % symbols.length];
+        bit.style.left = `${12 + Math.random() * 76}vw`;
+        bit.style.top = `${28 + Math.random() * 55}vh`;
+        bit.style.animationDelay = `${Math.random() * .35}s`;
+        document.body.append(bit);
+        setTimeout(() => bit.remove(), 1900);
+      }
+    }
+    document.querySelector('#yes').addEventListener('click', () => {
+      reply.textContent = 'Excellent choice. I knew you had great taste 🍫';
+      sprinkle(['🍫','♥','✦','🍓']);
+    });
+    noButton.addEventListener('click', () => {
+      reply.textContent = 'No worries! I’ll save you the good chocolate anyway 💛';
+      sprinkle(['💛','✿','✦']);
+    });
+  </script>
+</body>
+</html>
