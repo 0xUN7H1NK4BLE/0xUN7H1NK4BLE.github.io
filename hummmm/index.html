@@ -1,146 +1,41 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f8f1e7">
-  <title>A little chocolate question</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
-    :root { --paper:#f2d5d2; --ink:#382a27; --cocoa:#703d36; --rose:#bc554e; --muted:#8c716d; --line:#eed1ce; }
-    * { box-sizing:border-box }
-    body { margin:0; background:radial-gradient(ellipse at 50% 36%,#fff7f1 0%,#f8e9e4 42%,#edc9c7 100%); color:var(--ink); font-family:'DM Sans',sans-serif; min-height:100vh; }
-    .page { width:min(1120px,100%); margin:auto; padding:24px 5.2vw 28px; }
-    header { display:flex; justify-content:space-between; align-items:center; padding-bottom:17px; border-bottom:1px solid #dcbab6; color:var(--muted); font-size:10px; letter-spacing:.16em; text-transform:uppercase; }
-    .brand { color:var(--cocoa); font-weight:700; letter-spacing:.08em; }
-    .brand span { color:var(--rose); font-size:17px; vertical-align:-2px; margin-right:7px; }
-    .layout { display:grid; grid-template-columns:1.03fr .97fr; gap:clamp(25px,5vw,70px); align-items:center; padding:clamp(26px,5vh,55px) 0 36px; }
-    .copy { position:relative; z-index:2; padding:clamp(30px,5vw,58px); background:#fffaf5; border:1px solid #fff; border-radius:8px; box-shadow:0 20px 65px #813c3530; }
-    .copy::before { content:'♥'; position:absolute; top:-18px; right:27px; display:grid; place-items:center; width:42px; height:42px; border-radius:50%; background:var(--rose); color:white; font-size:18px; box-shadow:0 5px 12px #7d39352a; }
-    .eyebrow { color:var(--rose); font-size:10px; font-weight:700; letter-spacing:.19em; text-transform:uppercase; margin:0 0 16px; }
-    h1 { font:600 clamp(41px,5.1vw,68px)/1.04 'Playfair Display',Georgia,serif; letter-spacing:-.045em; margin:0; max-width:570px; }
-    h1 em { color:var(--rose); font-weight:500; }
-    .intro { color:#806c62; font-size:15px; line-height:1.8; max-width:395px; margin:25px 0 29px; }
-    .question { font:600 20px 'Playfair Display',Georgia,serif; margin:22px 0 16px; }
-    .buttons { display:flex; gap:12px; align-items:center; min-height:54px; }
-    button { font:600 14px 'DM Sans',sans-serif; border:0; border-radius:999px; min-height:50px; padding:0 25px; cursor:pointer; touch-action:manipulation; transition:transform .18s ease, background .18s ease, box-shadow .18s ease; }
-    button:focus-visible { outline:3px solid #d3948c; outline-offset:4px; }
-    button:active { transform:scale(.97); }
-    .yes { color:white; background:var(--cocoa); box-shadow:0 8px 18px #57352c24; }
-    .yes:hover { background:#70473b; transform:translateY(-2px); }
-    .no { color:var(--cocoa); background:#efe4d8; }
-    .no:hover { background:#e8d7c6; }
-    .reply { min-height:27px; margin:18px 0 0; color:var(--rose); font-size:14px; font-weight:600; line-height:1.5; }
-    .fine { color:#9a887e; font-size:11px; margin:7px 0 0; }
-    .visual { position:relative; max-width:480px; width:100%; justify-self:end; padding:0 30px 32px 0; }
-    .hero-photo { display:block; width:100%; aspect-ratio: .82; object-fit:cover; object-position:50% 50%; border-radius:12px; box-shadow:0 22px 55px #50382b2d; border:7px solid #fffaf5; }
-    .stamp { position:absolute; top:-20px; left:-24px; width:76px; height:76px; display:grid; place-items:center; text-align:center; border-radius:50%; background:#fff2d6; color:var(--rose); box-shadow:0 6px 22px #50382b19; font:600 12px/1.15 'Playfair Display',serif; transform:rotate(-11deg); }
-    .note { position:absolute; right:0; bottom:0; width:44%; padding:8px; background:#fffaf2; box-shadow:0 12px 34px #50382b26; transform:rotate(3deg); }
-    .note img { width:100%; height:145px; display:block; object-fit:cover; object-position:center 43%; }
-    .note p { font:italic 12px 'Playfair Display',serif; color:var(--muted); text-align:center; margin:9px 0 3px; }
-    .memory { position:absolute; left:-24px; bottom:53px; width:25%; padding:6px; background:#fffaf2; box-shadow:0 8px 22px #50382b24; transform:rotate(-7deg); }
-    .memory img { width:100%; height:95px; display:block; object-fit:cover; object-position:center 55%; }
-    .memory span { display:block; text-align:center; font-size:9px; color:var(--muted); padding:5px 0 1px; letter-spacing:.08em; text-transform:uppercase; }
-    footer { border-top:1px solid #dcbab6; padding-top:13px; display:flex; justify-content:space-between; gap:16px; color:#8f706c; font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
-    .sparkle { position:fixed; pointer-events:none; font-size:20px; animation:float 1.5s ease-out forwards; z-index:5; }
-    @keyframes float { from { opacity:1; transform:translateY(0) rotate(0) scale(.7) } to { opacity:0; transform:translateY(-100px) rotate(35deg) scale(1.4) } }
-    @media (max-width:700px) {
-      .page { padding:20px 22px 25px; }
-      header { padding-bottom:16px; font-size:9px; }
-      .layout { grid-template-columns:1fr; gap:5px; padding:27px 0 26px; }
-      .copy { order:1; width:min(100%,460px); justify-self:center; padding:31px 26px 28px; } .visual { order:0; width:min(69%,300px); justify-self:center; padding:0 24px 24px 0; }
-      .hero-photo { aspect-ratio:.9; border-radius:12px; border-width:5px; }
-      .stamp { width:65px; height:65px; font-size:11px; left:-16px; top:13px; }
-      .note img { height:112px; } .memory img { height:73px; }
-      .memory { left:-18px; bottom:37px; }
-      .eyebrow { margin-bottom:13px; }
-      h1 { font-size:clamp(44px,12vw,65px); }
-      .intro { margin:17px 0 22px; font-size:14px; }
-      .question { font-size:19px; }
-      .buttons { gap:10px; }
-      button { min-height:52px; padding:0 22px; }
-      footer { font-size:9px; }
-    }
-    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms !important; transition-duration:.01ms !important; } }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7efe4">
+<title>A little story of red & snow</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Gloock&family=Playfair+Display:ital,wght@1,500&display=swap');
+:root{--cream:#f7efe4;--ink:#352720;--red:#a84036;--sage:#dce2d1;--soft:#82756b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif}
+.top{position:absolute;z-index:3;top:0;left:0;width:100%;height:72px;padding:0 6vw;display:flex;align-items:center;justify-content:space-between;color:white;font-size:10px;letter-spacing:.14em;text-transform:uppercase}.top span:first-child{font-weight:600}.top span:last-child{opacity:.8}
+.hero{height:min(850px,100svh);min-height:610px;position:relative;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;background:#463c32}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 43%;filter:saturate(.87)}
+.hero:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#1b17133d 0%,transparent 31%,#17130cb3 100%)}
+.hero-copy{z-index:1;text-align:center;color:#fffaf3;padding:0 20px 68px;max-width:820px}.overline{font-size:10px;letter-spacing:.24em;text-transform:uppercase}.hero h1{font:400 clamp(54px,9vw,112px)/.99 Gloock,Georgia,serif;letter-spacing:-.035em;margin:18px 0 12px}.hero h1 em{font-family:'Playfair Display',serif;font-weight:500;color:#f5b7a7}.hero-copy p{font-size:13px;letter-spacing:.06em;margin:0;color:#f4eae0}.down{display:inline-grid;place-items:center;width:39px;height:39px;margin-top:24px;border:1px solid #ffffff8a;border-radius:50%;color:white;text-decoration:none;font-size:17px;transition:background .2s}.down:hover{background:#ffffff32}
+.intro{text-align:center;padding:93px 24px 85px;position:relative}.intro:before,.intro:after{content:'✿';position:absolute;color:#c87666;font-size:22px;opacity:.7}.intro:before{top:70px;left:14%}.intro:after{right:15%;bottom:53px;font-size:15px}.intro small{color:var(--red);font-size:10px;letter-spacing:.19em;text-transform:uppercase}.intro h2{font:400 clamp(34px,5vw,55px)/1.12 Gloock,Georgia,serif;margin:17px auto 13px;max-width:620px}.intro p{color:var(--soft);font-size:14px;line-height:1.8;margin:0 auto;max-width:430px}
+.gallery{padding:20px 8vw 105px;display:grid;grid-template-columns:1.1fr .78fr;gap:clamp(32px,8vw,115px);align-items:center;background:var(--sage)}.gallery figure{margin:0}.pic{background:#fff;padding:10px 10px 42px;box-shadow:0 18px 40px #28312220;transform:rotate(-2deg)}.pic img{display:block;width:100%;height:clamp(330px,48vw,570px);object-fit:cover}.pic2{transform:rotate(2.2deg);margin-top:95px}.pic2 img{height:clamp(280px,36vw,430px)}figcaption{padding-top:13px;display:flex;justify-content:space-between;color:#676c60;font-size:10px;letter-spacing:.1em;text-transform:uppercase}.gallery-note{grid-column:1/-1;text-align:center;margin-top:14px;font:italic 24px 'Playfair Display',serif;color:#626a56}
+.end{text-align:center;padding:92px 20px 98px}.end .flower{font-size:28px;color:var(--red)}.end h2{font:400 clamp(38px,6vw,66px) Gloock,Georgia,serif;margin:14px 0}.end p{color:var(--soft);font-size:13px}.foot{border-top:1px solid #e3d9cb;padding:18px 6vw 22px;display:flex;justify-content:space-between;color:#92857a;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+@media(max-width:680px){.top{height:58px;padding:0 20px;font-size:8px}.hero{height:82svh;min-height:570px;max-height:780px}.hero>img{object-position:51% center}.hero-copy{padding-bottom:46px}.hero h1{font-size:clamp(50px,14vw,78px)}.overline{font-size:9px}.intro{padding:67px 25px 66px}.intro:before{left:8%;top:39px}.intro:after{right:8%;bottom:35px}.intro h2{font-size:37px}.intro p{font-size:13px}.gallery{padding:36px 25px 66px;grid-template-columns:1fr;gap:26px}.pic img{height:clamp(330px,100vw,470px)}.pic2{width:83%;justify-self:end;margin-top:0}.pic2 img{height:clamp(270px,82vw,390px)}.gallery-note{grid-column:auto;margin-top:5px;font-size:20px}.end{padding:68px 20px 74px}.foot{padding-left:20px;padding-right:20px;font-size:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-  <main class="page">
-    <header><div class="brand"><span>✳</span> A tiny question</div><div>Just for you</div></header>
-    <section class="layout" aria-labelledby="title">
-      <div class="copy">
-        <p class="eyebrow">A little something sweet</p>
-        <h1 id="title">You make life<br><em>sweeter.</em></h1>
-        <p class="question">Will you give me chocolate?</p>
-        <div class="buttons">
-          <button class="yes" id="yes" type="button">Yes, obviously 🍫</button>
-          <button class="no" id="no" type="button">No, sorry</button>
-        </div>
-        <p class="reply" id="reply" role="status" aria-live="polite"></p>
-      </div>
-      <div class="visual" aria-label="A few favorite moments">
-        <img class="hero-photo" src="AC04DF31-99AB-4D1D-AC16-4DFC044CAFD3.jpg" alt="A woman holding a bright red flower, smiling shyly">
-        <div class="stamp" aria-hidden="true">you are<br>the sweetest</div>
-        <div class="memory"><img src="DC506655-CA5E-4DD6-980F-03717F673A58.jpg" alt="A mountain hiking memory"><span>little adventurer</span></div>
-        <div class="note"><img src="79B5D018-B770-47BD-8119-C60B7B2BAC6D.jpg" alt="A snowy mountain trail"><p>Chasing little wonders</p></div>
-      </div>
-    </section>
-    <footer><span>Made with cocoa & care</span><span>✿ &nbsp; for you</span></footer>
-  </main>
-  <script>
-    const reply = document.querySelector('#reply');
-    const noButton = document.querySelector('#no');
-    let noHasMoved = false;
-    function dodgeNo() {
-      const margin = 12;
-      const rect = noButton.getBoundingClientRect();
-      const maxX = Math.max(margin, window.innerWidth - rect.width - margin);
-      const maxY = Math.max(margin, window.innerHeight - rect.height - margin);
-      let x = margin + Math.random() * (maxX - margin);
-      let y = margin + Math.random() * (maxY - margin);
-      // Avoid landing on top of the main invitation and its easy-to-tap Yes button.
-      const yesRect = document.querySelector('#yes').getBoundingClientRect();
-      if (x < yesRect.right + 18 && x + rect.width > yesRect.left - 18 &&
-          y < yesRect.bottom + 18 && y + rect.height > yesRect.top - 18) {
-        x = x < window.innerWidth / 2 ? maxX : margin;
-        y = y < window.innerHeight / 2 ? maxY : margin;
-      }
-      noButton.style.position = 'fixed';
-      noButton.style.left = `${x}px`;
-      noButton.style.top = `${y}px`;
-      noButton.style.zIndex = '10';
-      noHasMoved = true;
-      reply.textContent = 'Hehe, too slow! Try again 😄';
-    }
-    noButton.addEventListener('pointerenter', dodgeNo);
-    noButton.addEventListener('pointerdown', (event) => {
-      if (event.pointerType === 'touch') {
-        event.preventDefault();
-        dodgeNo();
-      }
-    });
-    window.addEventListener('resize', () => {
-      if (noHasMoved) dodgeNo();
-    });
-    function sprinkle(symbols) {
-      for (let i = 0; i < 14; i++) {
-        const bit = document.createElement('span');
-        bit.className = 'sparkle'; bit.textContent = symbols[i % symbols.length];
-        bit.style.left = `${12 + Math.random() * 76}vw`;
-        bit.style.top = `${28 + Math.random() * 55}vh`;
-        bit.style.animationDelay = `${Math.random() * .35}s`;
-        document.body.append(bit);
-        setTimeout(() => bit.remove(), 1900);
-      }
-    }
-    document.querySelector('#yes').addEventListener('click', () => {
-      reply.textContent = 'Excellent choice. I knew you had great taste 🍫';
-      sprinkle(['🍫','♥','✦','🍓']);
-    });
-    noButton.addEventListener('click', () => {
-      reply.textContent = 'No worries! I’ll save you the good chocolate anyway 💛';
-      sprinkle(['💛','✿','✦']);
-    });
-  </script>
+<header class="top"><span>A little keepsake</span><span>Red flowers · high places</span></header>
+<main>
+<section class="hero" aria-label="A little story of red and snow">
+<img src="AC04DF31-99AB-4D1D-AC16-4DFC044CAFD3.jpg" alt="A woman holding a vivid red flower">
+<div class="hero-copy"><div class="overline">A little story in three photographs</div><h1>Red flowers<br><em>&</em> high places</h1><p>Small moments, held onto.</p><a class="down" href="#begin" aria-label="Scroll to the story">↓</a></div>
+</section>
+<section class="intro" id="begin"><small>First, a little colour</small><h2>A flower for an ordinary day.</h2><p>Then the world opened up, all snow and sky and one more step ahead.</p></section>
+<section class="gallery" aria-label="Mountain memories">
+<figure><div class="pic"><img src="79B5D018-B770-47BD-8119-C60B7B2BAC6D.jpg" alt="A hiker beneath a sweeping glacier"><figcaption><span>Under the glacier</span><span>01</span></figcaption></div></figure>
+<figure class="pic2"><div class="pic"><img src="DC506655-CA5E-4DD6-980F-03717F673A58.jpg" alt="A hiker crossing a snowy trail"><figcaption><span>One step at a time</span><span>02</span></figcaption></div></figure>
+<div class="gallery-note">The long way was the lovely way.</div>
+</section>
+<section class="end"><div class="flower">✿</div><h2>More little moments.</h2><p>More places to remember.</p></section>
+</main>
+<footer class="foot"><span>Kept close</span><span>Made with love · ✿</span></footer>
 </body>
 </html>
